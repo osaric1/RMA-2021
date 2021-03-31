@@ -8,7 +8,7 @@ Ne mijenjajte naziv aplikacije niti početnih paketa.
 
 | Ime i prezime  | Index  | Grupa     |
 |----------------|--------|-----------|
-| Neko Nekić     | 12345  | PON 09:00 |
+| Omar Sarić     | 18717  | PON 14:00 |
 
 &nbsp;
 
