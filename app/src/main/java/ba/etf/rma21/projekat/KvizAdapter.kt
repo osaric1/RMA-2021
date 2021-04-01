@@ -20,7 +20,7 @@ class KvizAdapter(private var kvizovi: List<Kviz>): RecyclerView.Adapter<KvizAda
 
     override fun onBindViewHolder(holder: KvizAdapter.KvizViewHolder, position: Int) {
         holder.kvizTitle.text = kvizovi[position].naziv
-        holder.kvizDate.text = kvizovi[position].datumPocetka.toString()
+        holder.kvizDate.text = kvizovi[position].datumPocetka.day.toString() + "." + kvizovi[position].datumPocetka.month.toString() + "." + kvizovi[position].datumPocetka.year.toString() + "."
         holder.kvizPoints.text = kvizovi[position].osvojeniBodovi.toString()
         holder.kvizDuration.text = kvizovi[position].trajanje.toString()
         holder.imageView.setImageResource(R.drawable.crvena)

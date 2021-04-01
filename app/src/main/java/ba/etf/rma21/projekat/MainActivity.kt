@@ -3,9 +3,7 @@ package ba.etf.rma21.projekat
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.appcompat.app.AppCompatActivity import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -32,13 +30,12 @@ class MainActivity : AppCompatActivity() {
         listaKvizova.setHasFixedSize(true)
         listaKvizova.layoutManager = GridLayoutManager(
                 this,
-                3
+                2
         )
         kvizAdapter = KvizAdapter(listOf())
         listaKvizova.adapter = kvizAdapter
         kvizAdapter.updateKvizovi(kvizListViewModel.getAll())
-        listaKvizova.addItemDecoration(DividerItemDecoration(this,
-                DividerItemDecoration.VERTICAL))
+
 
 
 
