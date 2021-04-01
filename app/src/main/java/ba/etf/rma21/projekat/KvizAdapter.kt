@@ -24,6 +24,7 @@ class KvizAdapter(private var kvizovi: List<Kviz>): RecyclerView.Adapter<KvizAda
     override fun onBindViewHolder(holder: KvizAdapter.KvizViewHolder, position: Int) {
         holder.kvizTitle.text = kvizovi[position].naziv
         holder.kvizDate.text = kvizovi[position].datumPocetka.day.toString() + "." + kvizovi[position].datumPocetka.month.toString() + "." + kvizovi[position].datumPocetka.year.toString() + "."
+        holder.predmetName.text = kvizovi[position].nazivPredmeta
 
         if(kvizovi[position].osvojeniBodovi == null) holder.kvizPoints.text = ""
         else holder.kvizPoints.text = kvizovi[position].osvojeniBodovi.toString()
@@ -41,7 +42,9 @@ class KvizAdapter(private var kvizovi: List<Kviz>): RecyclerView.Adapter<KvizAda
         else if(kvizovi[position].datumPocetka.after(Calendar.getInstance().time)){
                 holder.imageView.setImageResource(R.drawable.zuta)
         }
-        else if(kvizovi[position].datumKraj.before(Calendar.getInstance().time) && kvizovi[position].osvojeniBodovi == null)
+        Log.d("DATUM TESTA", kvizovi[position].datumKraj.toString())
+        Log.d("TESTNI DAUTM", Calendar.getInstance().time.toString())
+         if(kvizovi[position].datumKraj.before(Calendar.getInstance().time) && kvizovi[position].osvojeniBodovi == null)
             holder.imageView.setImageResource(R.drawable.crvena)
     }
 
@@ -58,6 +61,7 @@ class KvizAdapter(private var kvizovi: List<Kviz>): RecyclerView.Adapter<KvizAda
         val kvizDuration: TextView = itemView.findViewById(R.id.kvizDuration)
         val kvizDate: TextView = itemView.findViewById(R.id.kvizDate)
         val kvizPoints: TextView = itemView.findViewById(R.id.kvizPoints)
+        val predmetName: TextView = itemView.findViewById(R.id.predmetName)
     }
 
 }
