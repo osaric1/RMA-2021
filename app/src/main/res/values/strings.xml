@@ -7,4 +7,11 @@
         <item>Budući kvizovi</item>
         <item>Prošli kvizovi (neurađeni)</item>
     </string-array>
+    <string-array name="godine">
+        <item>Prva godina</item>
+        <item>Druga godina</item>
+        <item>Treća godina</item>
+        <item>Četvrta godina</item>
+        <item>Peta godina</item>
+    </string-array>
 </resources>
