@@ -6,12 +6,12 @@ class GrupaRepository {
     companion object {
         private var grupe: List<Grupa>
         init {
-            grupe = listOf(Grupa("Grupa 1", "IM"),
-            Grupa("Grupa 1", "IM"),
-            Grupa("Grupa 1", "OE"),
-            Grupa("Grupa 2", "OE"),
-            Grupa("Grupa 1", "RMA"),
-            Grupa("Grupa 2", "RMA"))
+            grupe = listOf(Grupa("IM_Grupa_1", "IM"),
+            Grupa("IM_Grupa_2", "IM"),
+            Grupa("OE_Grupa_1", "OE"),
+            Grupa("OE_Grupa_2", "OE"),
+            Grupa("RMA_Grupa_1", "RMA"),
+            Grupa("RMA_Grupa_2", "RMA"))
         }
 
         fun getGroupsByPredmet(nazivPredmeta: String): List<Grupa> {

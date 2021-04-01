@@ -11,12 +11,14 @@ class KvizRepository {
         private var kvizovi: List<Kviz>
         init {
             kvizovi = listOf(
-                Kviz("Kviz 1", "IM", Date(2021, 4,1),Date(2021,4,1), Date(2021,4,1), 30,"Grupa 1", 10f),
-                Kviz("Kviz 2", "IM", Date(2021, 5,6),Date(2021,5,6), Date(2021,5,6), 30,"Grupa 2", 10f),
-                Kviz("Kviz 3", "OE", Date(2021, 4,7),Date(2021,4,7), Date(2021,4,7), 60,"Grupa 1", 40f),
-                Kviz("Kviz 4", "OE", Date(2021, 4,7),Date(2021,4,7), Date(2021,4,7), 60,"Grupa 2", 40f),
-                Kviz("Kviz 5", "RMA", Date(2021, 4,8),Date(2021,4,8), Date(2021,4,8), 90,"Grupa 1", 5f),
-                Kviz("Kviz 6", "RMA", Date(2021, 4,8),Date(2021,4,8), Date(2021,4,8), 90,"Grupa 2", 5f))
+                Kviz("IM Kviz", "IM", Date(2021, 4,1),Date(2021,4,1), Date(2021,4,1), 30,"IM_Grupa_1", 10f),
+                Kviz("IM Kviz", "IM", Date(2021, 5,6),Date(2021,5,6), Date(2021,5,6), 30,"IM_Grupa_2", 10f),
+                Kviz("OE Kviz", "OE", Date(2021, 4,7),Date(2021,4,7), Date(2021,4,7), 60,"OE_Grupa_1", 40f),
+                Kviz("OE Kviz", "OE", Date(2021, 4,7),Date(2021,4,7), Date(2021,4,7), 60,"OE_Grupa_2", 40f),
+                Kviz("RMA Kviz", "RMA", Date(2021, 4,8),Date(2021,4,8), Date(2021,4,8), 90,"RMA_Grupa_1", 5f),
+                Kviz("RMA Kviz", "RMA", Date(2021, 4,8),Date(2021,4,8), Date(2021,4,8), 90,"RMA_Grupa_2", 5f),
+                Kviz("DM Kviz", "RMA", Date(2021, 4,8),Date(2021,4,8), Date(2021,4,8), 90,"DM_Grupa_1", 6f),
+                Kviz("DM Kviz", "RMA", Date(2021, 4,8),Date(2021,4,8), Date(2021,4,8), 90,"DM_Grupa_2", 6f))
         }
 
         fun getMyKvizes(): List<Kviz> {
