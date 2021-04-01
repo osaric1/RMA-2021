@@ -4,16 +4,21 @@ import ba.etf.rma21.projekat.data.models.Predmet
 
 class PredmetRepository {
     companion object {
+        private var predmeti : List<Predmet> = listOf(Predmet("IM",1),
+            Predmet("OE", 1),Predmet("RMA", 2),
+            Predmet("DM", 2))
+
         fun getUpisani(): List<Predmet> {
             return listOf(Predmet("DM", 2))
         }
 
         fun getAll(): List<Predmet> {
-            return listOf(Predmet("IM",1),
-                Predmet("OE", 1),Predmet("RMA", 2),
-                Predmet("DM", 2))
+            return predmeti
         }
-        // TODO: Implementirati i ostale potrebne metode
+
+        fun getPredmetsByGodinama(godina: Int): List<Predmet> {
+            return predmeti.filter { predmet -> predmet.godina == godina }.toList()
+        }
     }
 
 }

@@ -42,8 +42,6 @@ class KvizAdapter(private var kvizovi: List<Kviz>): RecyclerView.Adapter<KvizAda
         else if(kvizovi[position].datumPocetka.after(Calendar.getInstance().time)){
                 holder.imageView.setImageResource(R.drawable.zuta)
         }
-        Log.d("DATUM TESTA", kvizovi[position].datumKraj.toString())
-        Log.d("TESTNI DAUTM", Calendar.getInstance().time.toString())
          if(kvizovi[position].datumKraj.before(Calendar.getInstance().time) && kvizovi[position].osvojeniBodovi == null)
             holder.imageView.setImageResource(R.drawable.crvena)
     }

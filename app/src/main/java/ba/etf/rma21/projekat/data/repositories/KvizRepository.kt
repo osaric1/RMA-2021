@@ -26,15 +26,15 @@ class KvizRepository {
         }
 
         fun getDone(): List<Kviz> {
-            return getMyKvizes().filter { kviz -> kviz.datumKraj.before(Date()) }.toList()
+            return getMyKvizes().filter { kviz -> kviz.nazivGrupe ==  "DM_Grupa_1" && kviz.datumKraj.before(Calendar.getInstance().time) && kviz.osvojeniBodovi != null }.toList()
         }
 
         fun getFuture(): List<Kviz> {
-            return getMyKvizes().filter { kviz -> kviz.datumKraj.after(Date()) }.toList()
+            return getMyKvizes().filter { kviz -> kviz.nazivGrupe ==  "DM_Grupa_1" && kviz.datumKraj.after(Calendar.getInstance().time) }.toList()
         }
 
         fun getNotTaken(): List<Kviz> {
-            return kvizovi.filter{kviz -> kviz.nazivGrupe == "DM_Grupa_1" }.toList()
+            return kvizovi.filter{kviz -> kviz.nazivGrupe ==  "DM_Grupa_1" && kviz.datumKraj.before(Calendar.getInstance().time) && kviz.osvojeniBodovi == null }.toList()
         }
 
     }
