@@ -15,7 +15,12 @@ class KvizRepository {
                 Kviz("IM Kviz", "IM", Date(2021, 5,6),Date(2021,5,6), Date(2021,5,6), 30,"IM_Grupa_2", 10f),
                 Kviz("OE Kviz", "OE", Date(2021, 4,7),Date(2021,4,7), Date(2021,4,7), 60,"OE_Grupa_1", 40f),
                 Kviz("OE Kviz", "OE", Date(2021, 4,7),Date(2021,4,7), Date(2021,4,7), 60,"OE_Grupa_2", 40f),
-                Kviz("RMA Kviz", "RMA", Date(2021, 4,8),Date(2021,4,8), Date(2021,4,8), 90,"RMA_Grupa_1", 5f))
+                Kviz("RMA Kviz", "RMA", Date(2021, 4,8),Date(2021,4,8), Date(2021,4,8), 90,"RMA_Grupa_1", 5f),
+                    Kviz("IM Kviz", "IM", Date(2021, 4,1),Date(2021,4,1), Date(2021,4,1), 30,"IM_Grupa_1", 10f),
+                    Kviz("IM Kviz", "IM", Date(2021, 5,6),Date(2021,5,6), Date(2021,5,6), 30,"IM_Grupa_2", 10f),
+                    Kviz("OE Kviz", "OE", Date(2021, 4,7),Date(2021,4,7), Date(2021,4,7), 60,"OE_Grupa_1", 40f),
+                    Kviz("OE Kviz", "OE", Date(2021, 4,7),Date(2021,4,7), Date(2021,4,7), 60,"OE_Grupa_2", 40f),
+                    Kviz("OE Kviz", "OE", Date(2021, 4,7),Date(2021,4,7), Date(2021,4,7), 60,"OE_Grupa_2", 40f))
         }
 
         fun getMyKvizes(): List<Kviz> {
