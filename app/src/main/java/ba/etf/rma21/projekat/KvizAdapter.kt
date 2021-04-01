@@ -1,5 +1,6 @@
 package ba.etf.rma21.projekat
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,8 @@ import androidx.appcompat.view.menu.MenuView
 import androidx.recyclerview.widget.RecyclerView
 import ba.etf.rma21.projekat.data.models.Kviz
 import org.w3c.dom.Text
+import java.text.SimpleDateFormat
+import java.util.*
 
 class KvizAdapter(private var kvizovi: List<Kviz>): RecyclerView.Adapter<KvizAdapter.KvizViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KvizAdapter.KvizViewHolder {
@@ -21,9 +24,25 @@ class KvizAdapter(private var kvizovi: List<Kviz>): RecyclerView.Adapter<KvizAda
     override fun onBindViewHolder(holder: KvizAdapter.KvizViewHolder, position: Int) {
         holder.kvizTitle.text = kvizovi[position].naziv
         holder.kvizDate.text = kvizovi[position].datumPocetka.day.toString() + "." + kvizovi[position].datumPocetka.month.toString() + "." + kvizovi[position].datumPocetka.year.toString() + "."
-        holder.kvizPoints.text = kvizovi[position].osvojeniBodovi.toString()
-        holder.kvizDuration.text = kvizovi[position].trajanje.toString()
-        holder.imageView.setImageResource(R.drawable.crvena)
+
+        if(kvizovi[position].osvojeniBodovi == null) holder.kvizPoints.text = ""
+        else holder.kvizPoints.text = kvizovi[position].osvojeniBodovi.toString()
+
+        holder.kvizDuration.text = kvizovi[position].trajanje.toString() + " min"
+        if(kvizovi[position].datumKraj.before(Calendar.getInstance().time) && kvizovi[position].osvojeniBodovi != null){
+            holder.imageView.setImageResource(R.drawable.plava)
+        }
+        else if(kvizovi[position].datumPocetka.before(Calendar.getInstance().time)
+                && (kvizovi[position].datumKraj.equals(Calendar.getInstance().time)
+                    || kvizovi[position].datumKraj.after(Calendar.getInstance().time)) && kvizovi[position].osvojeniBodovi == null){
+
+            holder.imageView.setImageResource(R.drawable.zelena)
+        }
+        else if(kvizovi[position].datumPocetka.after(Calendar.getInstance().time)){
+                holder.imageView.setImageResource(R.drawable.zuta)
+        }
+        else if(kvizovi[position].datumKraj.before(Calendar.getInstance().time) && kvizovi[position].osvojeniBodovi == null)
+            holder.imageView.setImageResource(R.drawable.crvena)
     }
 
     fun updateKvizovi(kvizovi: List<Kviz>) {
