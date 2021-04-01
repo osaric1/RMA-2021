@@ -1,5 +1,6 @@
 package ba.etf.rma21.projekat
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -9,6 +10,7 @@ import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import ba.etf.rma21.projekat.data.models.Kviz
 
 
 class MainActivity : AppCompatActivity() {
@@ -37,7 +39,7 @@ class MainActivity : AppCompatActivity() {
             2
         )
 
-        kvizAdapter = KvizAdapter(listOf())
+        kvizAdapter = KvizAdapter(listOf(),  { kviz->  showUpisPredmeta(kviz) })
         listaKvizova.adapter = kvizAdapter
 
         spinner.onItemSelectedListener = object : OnItemSelectedListener {
@@ -67,9 +69,13 @@ class MainActivity : AppCompatActivity() {
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+    }
 
+    fun showUpisPredmeta(kviz : Kviz){
+        val intent = Intent(this, UpisPredmet::class.java).apply{
 
-
+        }
+        startActivity(intent)
     }
 }
 
