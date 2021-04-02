@@ -1,5 +1,6 @@
 package ba.etf.rma21.projekat
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,49 +21,60 @@ class KvizAdapter(
         return KvizViewHolder(view)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: KvizAdapter.KvizViewHolder, position: Int) {
         var datumPocetkaCalendar = toCalendar(kvizovi[position].datumPocetka)
         var datumKrajaCalendar = toCalendar(kvizovi[position].datumKraj)
+        var datumRadaCalendar = toCalendar(kvizovi[position].datumRada)
 
         if(kvizovi[position].osvojeniBodovi == null) holder.kvizPoints.text = ""
         else holder.kvizPoints.text = kvizovi[position].osvojeniBodovi.toString()
 
         holder.kvizDuration.text = kvizovi[position].trajanje.toString() + " min"
 
-//        if(datumKrajaCalendar.before(Calendar.getInstance()) && kvizovi[position].datumRada != null){
-//            var datumRadaCalendar = toCalendar(kvizovi[position].datumRada)
-//            holder.kvizDate.text = datumRadaCalendar?.get(Calendar.DAY_OF_MONTH).toString() + "." + datumRadaCalendar?.get(Calendar.MONTH).toString() + "." + datumRadaCalendar?.get(Calendar.YEAR).toString() + "."
-//            holder.imageView.setImageResource(R.drawable.plava)
-//        }
-//
-//        else if(datumPocetkaCalendar.before(Calendar.getInstance().time)
-//                && datumKrajaCalendar.after(Calendar.getInstance().time) && kvizovi[position].datumRada == null){
-//
-//            holder.kvizDate.text = datumKrajaCalendar?.get(Calendar.DAY_OF_MONTH).toString() + "." + datumKrajaCalendar?.get(Calendar.MONTH).toString() + "." + datumKrajaCalendar?.get(Calendar.YEAR).toString() + "."
-//            holder.imageView.setImageResource(R.drawable.zelena)
-//        }
-//
-//        else if(datumPocetkaCalendar.after(Calendar.getInstance())){
-//            holder.kvizDate.text = datumPocetkaCalendar?.get(Calendar.DAY_OF_MONTH).toString() + "." + datumPocetkaCalendar?.get(Calendar.MONTH).toString() + "." + datumPocetkaCalendar?.get(Calendar.YEAR).toString() + "."
-//            holder.imageView.setImageResource(R.drawable.zuta)
-//        }
-//
-//         if(datumKrajaCalendar.before(Calendar.getInstance()) && kvizovi[position].osvojeniBodovi == null) {
-//             holder.kvizDate.text = datumKrajaCalendar?.get(Calendar.DAY_OF_MONTH).toString() + "." + datumKrajaCalendar?.get(Calendar.MONTH).toString() + "." + datumKrajaCalendar?.get(Calendar.YEAR).toString() + "."
-//             holder.imageView.setImageResource(R.drawable.crvena)
-//         }
-
-        Log.d("DATUM POCETKA", datumPocetkaCalendar.time.toString())
-        Log.d("DATUM KRAJA", datumKrajaCalendar.time.toString())
-        Log.d("DANAS", Calendar.getInstance().time.toString())
-        if(
-                kvizovi[position].datumRada == null
+        if(datumRadaCalendar.get(Calendar.YEAR)  == 1970
                 && datumPocetkaCalendar < Calendar.getInstance()
                 && (datumKrajaCalendar > Calendar.getInstance()
                         || datumKrajaCalendar.compareTo(Calendar.getInstance()) == 0)
                 ){
-            holder.kvizDate.text = datumKrajaCalendar.get(Calendar.DAY_OF_MONTH).toString() + "." + datumKrajaCalendar.get(Calendar.MONTH).toString() + "." + datumKrajaCalendar.get(Calendar.YEAR).toString() + "."
+
+            holder.kvizDate.text =  (if(datumKrajaCalendar.get(Calendar.DAY_OF_MONTH) < 10) "0"  else "") +
+                                    datumKrajaCalendar.get(Calendar.DAY_OF_MONTH).toString() + "." +
+                                    (if(datumKrajaCalendar.get(Calendar.MONTH) + 1 < 10) "0"  else "") +
+                                    (datumKrajaCalendar.get(Calendar.MONTH)+1).toString() +
+                                    "." + datumKrajaCalendar.get(Calendar.YEAR).toString() + "."
+
             holder.imageView.setImageResource(R.drawable.zelena)
+        }
+
+        else if(datumRadaCalendar.get(Calendar.YEAR) == 1970 && datumKrajaCalendar < Calendar.getInstance()){
+            holder.kvizDate.text =  (if(datumKrajaCalendar.get(Calendar.DAY_OF_MONTH) < 10) "0"  else "") +
+                                    datumKrajaCalendar.get(Calendar.DAY_OF_MONTH).toString() + "." +
+                                    (if(datumKrajaCalendar.get(Calendar.MONTH) + 1 < 10) "0"  else "") +
+                                    (datumKrajaCalendar.get(Calendar.MONTH)+1).toString() +
+                                    "." + datumKrajaCalendar.get(Calendar.YEAR).toString() + "."
+
+            holder.imageView.setImageResource(R.drawable.crvena)
+        }
+
+        else if(datumRadaCalendar.get(Calendar.YEAR) == 1970 && datumPocetkaCalendar > Calendar.getInstance()){
+            holder.kvizDate.text =  if(datumPocetkaCalendar.get(Calendar.DAY_OF_MONTH) < 10) "0" else "" +
+                                    datumPocetkaCalendar.get(Calendar.DAY_OF_MONTH).toString() + "." +
+                                    (if(datumPocetkaCalendar.get(Calendar.MONTH) + 1 < 10) "0"  else "") +
+                                    (datumPocetkaCalendar.get(Calendar.MONTH)+1).toString()  +
+                                    "." + datumPocetkaCalendar.get(Calendar.YEAR).toString() + "."
+
+            holder.imageView.setImageResource(R.drawable.zuta)
+        }
+
+        else{
+            holder.kvizDate.text =  (if(datumRadaCalendar.get(Calendar.DAY_OF_MONTH) < 10) "0" else "") +
+                                    datumRadaCalendar.get(Calendar.DAY_OF_MONTH).toString() + "." +
+                                    (if(datumRadaCalendar.get(Calendar.MONTH) + 1 < 10) "0"  else "") +
+                                    (datumRadaCalendar.get(Calendar.MONTH)+1).toString() + "." +
+                                    datumRadaCalendar.get(Calendar.YEAR).toString() + "."
+
+            holder.imageView.setImageResource(R.drawable.plava)
         }
 
         holder.kvizTitle.text = kvizovi[position].naziv

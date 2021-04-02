@@ -6,7 +6,7 @@ class PredmetRepository {
     companion object {
         private var predmeti : List<Predmet> = listOf(Predmet("IM",1),
             Predmet("OE", 1),Predmet("RMA", 2),
-            Predmet("DM", 2))
+            Predmet("DM", 2), Predmet("OOAD", 2))
 
         private var upisaniPredmeti: MutableList<Predmet> = mutableListOf()
         fun getUpisani(): List<Predmet> {

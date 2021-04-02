@@ -12,7 +12,8 @@ class GrupaRepository {
             Grupa("OE_Grupa_2", "OE"),
             Grupa("RMA_Grupa_1", "RMA"),
             Grupa("RMA_Grupa_2", "RMA"),
-            Grupa("DM_Grupa_1", "DM"))
+            Grupa("DM_Grupa_1", "DM"),
+            Grupa("OOAD Grupa 1", "OOAD"))
         }
 
         fun getGroupsByPredmet(nazivPredmeta: String): List<Grupa> {
