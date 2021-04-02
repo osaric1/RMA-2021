@@ -32,11 +32,10 @@ class KvizAdapter(
 
         holder.kvizDuration.text = kvizovi[position].trajanje.toString() + " min"
 
-        if(datumRadaCalendar.get(Calendar.YEAR)  == 1970
+        if(     datumRadaCalendar.get(Calendar.YEAR)  == 1970
                 && datumPocetkaCalendar < Calendar.getInstance()
                 && (datumKrajaCalendar > Calendar.getInstance()
-                        || datumKrajaCalendar.compareTo(Calendar.getInstance()) == 0)
-                ){
+                || datumKrajaCalendar.compareTo(Calendar.getInstance()) == 0)) {
 
             holder.kvizDate.text =  (if(datumKrajaCalendar.get(Calendar.DAY_OF_MONTH) < 10) "0"  else "") +
                                     datumKrajaCalendar.get(Calendar.DAY_OF_MONTH).toString() + "." +

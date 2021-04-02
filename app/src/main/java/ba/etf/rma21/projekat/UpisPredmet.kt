@@ -2,6 +2,7 @@ package ba.etf.rma21.projekat
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -32,23 +33,9 @@ class UpisPredmet : AppCompatActivity() {
 
         dodajPredmet.setOnClickListener {
                 intent = Intent(applicationContext, MainActivity::class.java)
-                var godina: Int = 0
-                if(odabirGodine.selectedItem.toString() == "Prva godina")
-                    godina = 1
 
-                else if(odabirGodine.selectedItem.toString() == "Druga godina")
-                    godina = 2
 
-                else if(odabirGodine.selectedItem.toString() == "Treća godina")
-                    godina = 3
-
-                else if(odabirGodine.selectedItem.toString() == "Četvrta godina")
-                    godina = 4
-
-                else if(odabirGodine.selectedItem.toString() == "Peta godina")
-                    godina = 5
-
-                intent.putExtra("godina", godina.toString())
+                intent.putExtra("godina",odabirGodine.selectedItem.toString())
                 intent.putExtra("grupa", odabirGrupe.selectedItem.toString())
                 intent.putExtra("predmet", odabirPredmeta.selectedItem.toString())
                 setResult(RESULT_OK, intent)
@@ -71,24 +58,8 @@ class UpisPredmet : AppCompatActivity() {
                     position: Int,
                     id: Long)
             {
-                var godina : Int = 0
 
-                if(odabirGodine.selectedItem.toString() == "Prva godina")
-                    godina = 1
-
-                else if(odabirGodine.selectedItem.toString() == "Druga godina")
-                    godina = 2
-
-                else if(odabirGodine.selectedItem.toString() == "Treća godina")
-                    godina = 3
-
-                else if(odabirGodine.selectedItem.toString() == "Četvrta godina")
-                    godina = 4
-
-                else if(odabirGodine.selectedItem.toString() == "Peta gxDodina")
-                    godina = 5
-
-                val predmeti : List<Predmet> = predmetViewModel.getSlobodni(godina)
+                val predmeti : List<Predmet> = predmetViewModel.getSlobodni(Integer.parseInt(odabirGodine.selectedItem.toString()))
 
                 val dataAdapter: ArrayAdapter<Predmet> = ArrayAdapter<Predmet>(applicationContext, android.R.layout.simple_spinner_item, predmeti)
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -123,9 +94,6 @@ class UpisPredmet : AppCompatActivity() {
 
     }
 
-    fun passData(){
-        intent = Intent()
-    }
 
 
 }
