@@ -10,14 +10,14 @@ class KvizRepository() {
         private var upisaneGrupe : MutableList<Grupa> = mutableListOf()
         init {
             kvizovi = listOf(
-                Kviz("IM Kviz", "IM",GregorianCalendar(2021,3,1).time,GregorianCalendar(2021,3,16).time, GregorianCalendar(1970,0,1).time, 30,"IM_Grupa_1", null),
-                Kviz("IM Kviz", "IM", GregorianCalendar(2021,3,1).time, GregorianCalendar(2021,3,18).time, GregorianCalendar(1970,0,1).time,30 ,"IM_Grupa_2", null),
-                Kviz("OE Kviz", "OE", GregorianCalendar(2021,3,2).time,GregorianCalendar(2021,3,4).time, GregorianCalendar(1970,0,1).time, 40, "OE_Grupa_1", null),
-                Kviz("OE Kviz", "OE", GregorianCalendar(2021,3,1).time,GregorianCalendar(2021,3,6).time,  GregorianCalendar(1970,0,1).time, 40, "OE_Grupa_2", null),
-                Kviz("RMA Kviz", "RMA", GregorianCalendar(2021,2,31).time,GregorianCalendar(2021,2,31).time, GregorianCalendar(1970,0,1).time, 40, "RMA_Grupa_1", null),
-                Kviz("RMA Kviz", "RMA", GregorianCalendar(2021,3,1).time,GregorianCalendar(2021,3,1).time, GregorianCalendar(1970,0,1).time, 40, "RMA_Grupa_2", null),
+                Kviz("IM Kviz", "IM",GregorianCalendar(2021,3,1).time,GregorianCalendar(2021,3,16).time, GregorianCalendar(1970,0,1).time, 30,"IM Grupa 1", null),
+                Kviz("IM Kviz", "IM", GregorianCalendar(2021,3,1).time, GregorianCalendar(2021,3,18).time, GregorianCalendar(1970,0,1).time,30 ,"IM Grupa 2", null),
+                Kviz("OE Kviz", "OE", GregorianCalendar(2021,3,2).time,GregorianCalendar(2021,3,4).time, GregorianCalendar(1970,0,1).time, 40, "OE Grupa 1", null),
+                Kviz("OE Kviz", "OE", GregorianCalendar(2021,3,1).time,GregorianCalendar(2021,3,6).time,  GregorianCalendar(1970,0,1).time, 40, "OE Grupa 2", null),
+                Kviz("RMA Kviz", "RMA", GregorianCalendar(2021,2,31).time,GregorianCalendar(2021,2,31).time, GregorianCalendar(1970,0,1).time, 40, "RMA Grupa 1", null),
+                Kviz("RMA Kviz", "RMA", GregorianCalendar(2021,3,1).time,GregorianCalendar(2021,3,1).time, GregorianCalendar(1970,0,1).time, 40, "RMA Grupa 2", null),
                 Kviz("OOAD Kviz", "OOAD", GregorianCalendar(2021,3,15).time,GregorianCalendar(2021,3,15).time,  GregorianCalendar(1970,0,1).time, 90, "OOAD Grupa 1", null),
-                Kviz("DM Kviz", "DM", GregorianCalendar(2020,9,20).time,GregorianCalendar(2020,9,20).time, GregorianCalendar(2020,9,20).time, 90, "OOAD Grupa 1", 5f) )
+                Kviz("DM Kviz", "DM", GregorianCalendar(2020,9,20).time,GregorianCalendar(2020,9,20).time, GregorianCalendar(2020,9,20).time, 90, "DM Grupa 1", 5f) )
         }
 
         fun getMyKvizes(): List<Kviz> {

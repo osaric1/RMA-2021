@@ -112,9 +112,10 @@ class MainActivity : AppCompatActivity() {
                 val odabranaGrupa  = data?.getStringExtra("grupa")
                 val odabranaGodina = data?.getStringExtra("godina")
 
-                kvizListViewModel.addGroup(Grupa(odabranaGrupa.toString(), odabraniPredmet.toString()))
-                predmetViewModel.addPredmet(Predmet(odabraniPredmet.toString(), Integer.parseInt(odabranaGodina.toString())))
-
+                if(odabraniPredmet != "-Empty-" && odabranaGrupa != "-Empty-" && odabranaGodina != "-Empty-") {
+                    kvizListViewModel.addGroup(Grupa(odabranaGrupa.toString(), odabraniPredmet.toString()))
+                    predmetViewModel.addPredmet(Predmet(odabraniPredmet.toString(), Integer.parseInt(odabranaGodina.toString())))
+                }
                 kvizAdapter.updateKvizovi(kvizListViewModel.getMyKvizes())
                 spinner.setSelection(0)
             }

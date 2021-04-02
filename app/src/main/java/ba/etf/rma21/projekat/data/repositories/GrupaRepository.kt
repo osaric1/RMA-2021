@@ -6,13 +6,13 @@ class GrupaRepository {
     companion object {
         private var grupe: List<Grupa>
         init {
-            grupe = listOf(Grupa("IM_Grupa_1", "IM"),
-            Grupa("IM_Grupa_2", "IM"),
-            Grupa("OE_Grupa_1", "OE"),
-            Grupa("OE_Grupa_2", "OE"),
-            Grupa("RMA_Grupa_1", "RMA"),
-            Grupa("RMA_Grupa_2", "RMA"),
-            Grupa("DM_Grupa_1", "DM"),
+            grupe = listOf(Grupa("IM Grupa 1", "IM"),
+            Grupa("IM Grupa 2", "IM"),
+            Grupa("OE Grupa 1", "OE"),
+            Grupa("OE Grupa 2", "OE"),
+            Grupa("RMA Grupa 1", "RMA"),
+            Grupa("RMA Grupa 2", "RMA"),
+            Grupa("DM Grupa 1", "DM"),
             Grupa("OOAD Grupa 1", "OOAD"))
         }
 

@@ -59,8 +59,11 @@ class UpisPredmet : AppCompatActivity() {
                     id: Long)
             {
 
-                val predmeti : List<String> = predmetViewModel.getSlobodni(Integer.parseInt(odabirGodine.selectedItem.toString())).map { predmet -> predmet.toString()  }
+                var predmeti : List<String> = predmetViewModel.getSlobodni(Integer.parseInt(odabirGodine.selectedItem.toString())).map { predmet -> predmet.toString()  }
 
+                if(predmeti.isEmpty()){
+                    predmeti = listOf("-Empty-")
+                }
                 val dataAdapter: ArrayAdapter<String> = ArrayAdapter<String>(applicationContext, android.R.layout.simple_spinner_item, predmeti)
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
@@ -79,7 +82,11 @@ class UpisPredmet : AppCompatActivity() {
                     id: Long)
             {
 
-                val grupe : List<String> = grupaViewModel.getGroupsByPredmet(odabirPredmeta.selectedItem.toString()).map { grupa -> grupa.toString() }
+                var grupe : List<String> = grupaViewModel.getGroupsByPredmet(odabirPredmeta.selectedItem.toString()).map { grupa -> grupa.toString() }
+
+                if(grupe.isEmpty()){
+                    grupe = listOf("-Empty-")
+                }
 
                 val dataAdapter: ArrayAdapter<String> = ArrayAdapter<String>(applicationContext, android.R.layout.simple_spinner_item, grupe)
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
