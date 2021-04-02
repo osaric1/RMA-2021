@@ -1,9 +1,8 @@
 package ba.etf.rma21.projekat
 
-import android.app.Activity
+import android.R.attr.data
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
@@ -15,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import ba.etf.rma21.projekat.data.models.Grupa
 import ba.etf.rma21.projekat.data.models.Predmet
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.util.*
+import kotlin.Comparator
 
 
 class MainActivity : AppCompatActivity() {
@@ -36,9 +37,9 @@ class MainActivity : AppCompatActivity() {
 
 
         ArrayAdapter.createFromResource(
-            this,
-            R.array.spinner_choices,
-            android.R.layout.simple_spinner_item
+                this,
+                R.array.spinner_choices,
+                android.R.layout.simple_spinner_item
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner.adapter = adapter
@@ -51,11 +52,13 @@ class MainActivity : AppCompatActivity() {
         listaKvizova = findViewById(R.id.listaKvizova)
         listaKvizova.setHasFixedSize(true)
         listaKvizova.layoutManager = GridLayoutManager(
-            this,
-            2
+                this,
+                2
         )
 
         kvizAdapter = KvizAdapter(listOf())
+
+
         listaKvizova.adapter = kvizAdapter
 
 
@@ -63,12 +66,14 @@ class MainActivity : AppCompatActivity() {
         upisDugme.setOnClickListener{
             showUpisPredmeta()
         }
+
+        spinner.setSelection(1)
         spinner.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
+                    parent: AdapterView<*>,
+                    view: View?,
+                    position: Int,
+                    id: Long
             ) {
                 val selectedItem = parent.getItemAtPosition(position).toString()
                 if(spinner.selectedItem.toString() == "Svi kvizovi"){
@@ -83,7 +88,7 @@ class MainActivity : AppCompatActivity() {
                 else if(spinner.selectedItem.toString() == "Budući kvizovi"){
                     kvizAdapter.updateKvizovi(kvizListViewModel.getFuture())
                 }
-                else if(spinner.selectedItem.toString() == "Prošli kvizovi (neurađeni)"){
+                else if(spinner.selectedItem.toString() == "Prošli kvizovi"){
                     kvizAdapter.updateKvizovi(kvizListViewModel.getNotTaken())
                 }
             }

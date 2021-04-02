@@ -7,9 +7,11 @@ import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.ViewAssertion
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import ba.etf.rma21.projekat.data.models.Kviz
 import junit.framework.Assert
 import org.hamcrest.CoreMatchers
+import org.junit.runner.RunWith
 
 class UtilTestClass {
     companion object {

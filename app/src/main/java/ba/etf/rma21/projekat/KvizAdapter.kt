@@ -1,5 +1,6 @@
 package ba.etf.rma21.projekat
 
+import android.R.attr.data
 import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ba.etf.rma21.projekat.data.models.Kviz
 import java.util.*
+
 
 class KvizAdapter(
         private var kvizovi: List<Kviz>
@@ -82,7 +84,12 @@ class KvizAdapter(
 
     fun updateKvizovi(kvizovi: List<Kviz>) {
         this.kvizovi = kvizovi
-        Collections.sort(kvizovi, Comparator { kviz2, kviz1 -> kviz1.datumPocetka.compareTo(kviz2.datumPocetka) })
+        Collections.sort(this.kvizovi, Comparator { kviz1, kviz2 ->
+            if(toCalendar(kviz1.datumPocetka).timeInMillis  > toCalendar(kviz2.datumPocetka).timeInMillis) -1
+            else if(toCalendar(kviz1.datumPocetka).timeInMillis  < toCalendar(kviz2.datumPocetka).timeInMillis ) 1
+            else 0
+        })
+
         notifyDataSetChanged()
     }
 
@@ -101,6 +108,10 @@ class KvizAdapter(
         val cal = Calendar.getInstance()
         cal.time = date
         return cal
+    }
+
+    fun compareDates(){
+
     }
 
 }

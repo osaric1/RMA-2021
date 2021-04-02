@@ -59,9 +59,9 @@ class UpisPredmet : AppCompatActivity() {
                     id: Long)
             {
 
-                val predmeti : List<Predmet> = predmetViewModel.getSlobodni(Integer.parseInt(odabirGodine.selectedItem.toString()))
+                val predmeti : List<String> = predmetViewModel.getSlobodni(Integer.parseInt(odabirGodine.selectedItem.toString())).map { predmet -> predmet.toString()  }
 
-                val dataAdapter: ArrayAdapter<Predmet> = ArrayAdapter<Predmet>(applicationContext, android.R.layout.simple_spinner_item, predmeti)
+                val dataAdapter: ArrayAdapter<String> = ArrayAdapter<String>(applicationContext, android.R.layout.simple_spinner_item, predmeti)
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
                 odabirPredmeta.adapter = dataAdapter
@@ -79,9 +79,9 @@ class UpisPredmet : AppCompatActivity() {
                     id: Long)
             {
 
-                val grupe : List<Grupa> = grupaViewModel.getGroupsByPredmet(odabirPredmeta.selectedItem.toString())
+                val grupe : List<String> = grupaViewModel.getGroupsByPredmet(odabirPredmeta.selectedItem.toString()).map { grupa -> grupa.toString() }
 
-                val dataAdapter: ArrayAdapter<Grupa> = ArrayAdapter<Grupa>(applicationContext, android.R.layout.simple_spinner_item, grupe)
+                val dataAdapter: ArrayAdapter<String> = ArrayAdapter<String>(applicationContext, android.R.layout.simple_spinner_item, grupe)
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
                 odabirGrupe.adapter = dataAdapter
