@@ -14,8 +14,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class KvizAdapter(
-    private var kvizovi: List<Kviz>,
-    private val onItemClicked : (kviz : Kviz) -> Unit
+    private var kvizovi: List<Kviz>
 ): RecyclerView.Adapter<KvizAdapter.KvizViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KvizAdapter.KvizViewHolder {
         val view = LayoutInflater
@@ -25,7 +24,6 @@ class KvizAdapter(
     }
 
     override fun onBindViewHolder(holder: KvizAdapter.KvizViewHolder, position: Int) {
-        holder.itemView.setOnClickListener{ onItemClicked(kvizovi[position]) }
         holder.kvizTitle.text = kvizovi[position].naziv
         holder.kvizDate.text = kvizovi[position].datumPocetka.day.toString() + "." + kvizovi[position].datumPocetka.month.toString() + "." + kvizovi[position].datumPocetka.year.toString() + "."
         holder.predmetName.text = kvizovi[position].nazivPredmeta

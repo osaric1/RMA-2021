@@ -2,6 +2,7 @@ package ba.etf.rma21.projekat
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
@@ -11,18 +12,22 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ba.etf.rma21.projekat.data.models.Kviz
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var listaKvizova: RecyclerView
     private lateinit var  spinner: Spinner
     private lateinit var kvizAdapter: KvizAdapter
+    private lateinit var upisDugme : FloatingActionButton
     private var kvizListViewModel =  KvizListViewModel()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         spinner = findViewById(R.id.filterKvizova)
+
         ArrayAdapter.createFromResource(
             this,
             R.array.spinner_choices,
@@ -32,6 +37,7 @@ class MainActivity : AppCompatActivity() {
             spinner.adapter = adapter
 
         }
+
         listaKvizova = findViewById(R.id.listaKvizova)
         listaKvizova.setHasFixedSize(true)
         listaKvizova.layoutManager = GridLayoutManager(
@@ -39,9 +45,14 @@ class MainActivity : AppCompatActivity() {
             2
         )
 
-        kvizAdapter = KvizAdapter(listOf(),  { kviz->  showUpisPredmeta(kviz) })
+        kvizAdapter = KvizAdapter(listOf())
         listaKvizova.adapter = kvizAdapter
 
+
+        upisDugme = findViewById(R.id.upisDugme)
+        upisDugme.setOnClickListener{
+            showUpisPredmeta()
+        }
         spinner.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>,
@@ -71,10 +82,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun showUpisPredmeta(kviz : Kviz){
-        val intent = Intent(this, UpisPredmet::class.java).apply{
-
-        }
+    fun showUpisPredmeta(){
+        Log.d("Usao", "sasasasasas")
+        val intent = Intent(applicationContext, UpisPredmet::class.java)
         startActivity(intent)
     }
 }

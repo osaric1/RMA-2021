@@ -19,6 +19,7 @@ class PredmetRepository {
         fun getPredmetsByGodinama(godina: Int): List<Predmet> {
             return predmeti.filter { predmet -> predmet.godina == godina }.toList()
         }
+
     }
 
 }
