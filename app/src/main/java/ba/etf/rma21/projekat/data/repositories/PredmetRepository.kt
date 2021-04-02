@@ -28,6 +28,9 @@ class PredmetRepository {
         fun getSlobodni(godina: Int): List<Predmet>{
             return predmeti.filter { predmet -> predmet.godina == godina && !upisaniPredmeti.contains(predmet) }.toList()
         }
+        fun getSlobodniAll(): List<Predmet>{
+            return predmeti.filter { predmet ->  !upisaniPredmeti.contains(predmet) }.toList()
+        }
 
     }
 

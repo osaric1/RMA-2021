@@ -23,4 +23,8 @@ class PredmetViewModel {
     fun getSlobodni(godina: Int): List<Predmet>{
         return PredmetRepository.getSlobodni(godina)
     }
+
+    fun getSlobodniAll(): List<Predmet>{
+        return PredmetRepository.getSlobodniAll()
+    }
 }

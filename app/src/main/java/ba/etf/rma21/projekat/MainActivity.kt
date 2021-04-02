@@ -8,6 +8,7 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -98,8 +99,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun showUpisPredmeta(){
-        val intent = Intent(applicationContext, UpisPredmet::class.java)
-        startActivityForResult(intent, SECOND_ACTIVITY_REQUEST_CODE)
+        if(predmetViewModel.getSlobodniAll().isEmpty()){
+            Toast.makeText(this, "Nema raspolozivih predmeta", Toast.LENGTH_LONG).show()
+        }
+        else {
+            val intent = Intent(applicationContext, UpisPredmet::class.java)
+            startActivityForResult(intent, SECOND_ACTIVITY_REQUEST_CODE)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

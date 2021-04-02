@@ -64,6 +64,7 @@ class UpisPredmet : AppCompatActivity() {
                 if(predmeti.isEmpty()){
                     predmeti = listOf("-Empty-")
                 }
+
                 val dataAdapter: ArrayAdapter<String> = ArrayAdapter<String>(applicationContext, android.R.layout.simple_spinner_item, predmeti)
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
