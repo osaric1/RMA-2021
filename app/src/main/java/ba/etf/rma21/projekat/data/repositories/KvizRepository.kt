@@ -10,13 +10,11 @@ class KvizRepository() {
         private var kvizovi: List<Kviz>
         private var upisaneGrupe : MutableList<Grupa> = mutableListOf()
         init {
+            var calendar: Calendar = Calendar.getInstance()
             kvizovi = listOf(
-                Kviz("IM Kviz", "IM", Date(2021, 4,1),Date(2021,4,1), Date(2021,4,1), 30,"IM_Grupa_1", null),
-                Kviz("IM Kviz", "IM", Date(2021, 5,6),Date(2021,5,6), Date(2021,5,6), 30,"IM_Grupa_2", null),
-                Kviz("OE Kviz", "OE", Date(2021, 4,7),Date(2021,4,7), Date(2021,4,7), 60,"OE_Grupa_1", null),
-                Kviz("OE Kviz", "OE", Date(2021, 4,7),Date(2021,4,7), Date(2021,4,7), 60,"OE_Grupa_2", null),
-                Kviz("RMA Kviz", "RMA", Date(1, 4,8),Date(1,4,8), Date(2021,4,8), 90,"RMA_Grupa_1", null),
-                Kviz("DM Kviz", "DM", Date(1, 3,25),Date(1,3,25), null, 4,"DM_Grupa_1", 500f))
+                Kviz("IM Kviz", "IM",GregorianCalendar(2021,3,1).time,GregorianCalendar(2021,3,16).time, null, 30,"IM_Grupa_1", null),
+                Kviz("IM Kviz", "IM", GregorianCalendar(2021,3,1).time, GregorianCalendar(2021,3,18).time,null,30 ,"IM_Grupa_2", null),
+                Kviz("OE Kviz", "OE", GregorianCalendar(2021,3,2).time,GregorianCalendar(2021,3,4).time, null, 40, "OE_Grupa_1", null))
         }
 
         fun getMyKvizes(): List<Kviz> {

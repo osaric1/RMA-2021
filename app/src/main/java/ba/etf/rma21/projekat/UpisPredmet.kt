@@ -85,7 +85,7 @@ class UpisPredmet : AppCompatActivity() {
                 else if(odabirGodine.selectedItem.toString() == "Četvrta godina")
                     godina = 4
 
-                else if(odabirGodine.selectedItem.toString() == "Peta godina")
+                else if(odabirGodine.selectedItem.toString() == "Peta gxDodina")
                     godina = 5
 
                 val predmeti : List<Predmet> = predmetViewModel.getSlobodni(godina)

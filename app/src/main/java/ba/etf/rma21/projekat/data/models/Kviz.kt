@@ -7,4 +7,5 @@ data class Kviz(
         val datumRada: Date?, val trajanje: Int, val nazivGrupe: String, val osvojeniBodovi: Float?
 ) {
 
+
 }
