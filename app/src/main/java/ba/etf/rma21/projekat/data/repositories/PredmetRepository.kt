@@ -8,8 +8,9 @@ class PredmetRepository {
             Predmet("OE", 1),Predmet("RMA", 2),
             Predmet("DM", 2))
 
+        private var upisaniPredmeti: MutableList<Predmet> = mutableListOf()
         fun getUpisani(): List<Predmet> {
-            return listOf(Predmet("DM", 2))
+            return upisaniPredmeti
         }
 
         fun getAll(): List<Predmet> {
@@ -18,6 +19,14 @@ class PredmetRepository {
 
         fun getPredmetsByGodinama(godina: Int): List<Predmet> {
             return predmeti.filter { predmet -> predmet.godina == godina }.toList()
+        }
+
+        fun addPredmet(predmet: Predmet){
+            upisaniPredmeti.add(predmet)
+        }
+
+        fun getSlobodni(godina: Int): List<Predmet>{
+            return predmeti.filter { predmet -> predmet.godina == godina && !upisaniPredmeti.contains(predmet) }.toList()
         }
 
     }

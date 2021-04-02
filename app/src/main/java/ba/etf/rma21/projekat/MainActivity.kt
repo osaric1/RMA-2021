@@ -1,5 +1,6 @@
 package ba.etf.rma21.projekat
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -11,7 +12,8 @@ import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ba.etf.rma21.projekat.data.models.Kviz
+import ba.etf.rma21.projekat.data.models.Grupa
+import ba.etf.rma21.projekat.data.models.Predmet
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
@@ -20,13 +22,18 @@ class MainActivity : AppCompatActivity() {
     private lateinit var  spinner: Spinner
     private lateinit var kvizAdapter: KvizAdapter
     private lateinit var upisDugme : FloatingActionButton
+
     private var kvizListViewModel =  KvizListViewModel()
+    private var grupaViewModel = GrupaViewModel()
+    private var predmetViewModel = PredmetViewModel()
 
-
+    private val SECOND_ACTIVITY_REQUEST_CODE  = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         spinner = findViewById(R.id.filterKvizova)
+
+
 
         ArrayAdapter.createFromResource(
             this,
@@ -37,6 +44,9 @@ class MainActivity : AppCompatActivity() {
             spinner.adapter = adapter
 
         }
+
+        kvizListViewModel.addGroup(grupaViewModel.getAll()[6])
+        predmetViewModel.addPredmet(predmetViewModel.getAll()[3])
 
         listaKvizova = findViewById(R.id.listaKvizova)
         listaKvizova.setHasFixedSize(true)
@@ -83,9 +93,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun showUpisPredmeta(){
-        Log.d("Usao", "sasasasasas")
         val intent = Intent(applicationContext, UpisPredmet::class.java)
-        startActivity(intent)
+        startActivityForResult(intent, SECOND_ACTIVITY_REQUEST_CODE)
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode == SECOND_ACTIVITY_REQUEST_CODE){
+            if(resultCode == RESULT_OK){
+
+                val odabraniPredmet = data?.getStringExtra("predmet")
+                val odabranaGrupa  = data?.getStringExtra("grupa")
+                val odabranaGodina = data?.getStringExtra("godina")
+
+                kvizListViewModel.addGroup(Grupa(odabranaGrupa.toString(), odabraniPredmet.toString()))
+                predmetViewModel.addPredmet(Predmet(odabraniPredmet.toString(), Integer.parseInt(odabranaGodina.toString())))
+
+                kvizAdapter.updateKvizovi(kvizListViewModel.getMyKvizes())
+                spinner.setSelection(0)
+            }
+        }
+    }
+
 }
 

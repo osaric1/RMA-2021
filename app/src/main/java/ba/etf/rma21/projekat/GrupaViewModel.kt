@@ -7,4 +7,8 @@ class GrupaViewModel {
     fun getGroupsByPredmet(nazivPredmeta: String): List<Grupa> {
         return GrupaRepository.getGroupsByPredmet(nazivPredmeta)
     }
+
+    fun getAll(): List<Grupa>{
+        return GrupaRepository.getAll()
+    }
 }
