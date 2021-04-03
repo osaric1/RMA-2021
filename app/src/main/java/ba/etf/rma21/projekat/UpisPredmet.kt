@@ -2,15 +2,14 @@ package ba.etf.rma21.projekat
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
-import ba.etf.rma21.projekat.data.models.Grupa
-import ba.etf.rma21.projekat.data.models.Predmet
+import ba.etf.rma21.projekat.viewmodel.GrupaViewModel
+import ba.etf.rma21.projekat.viewmodel.PredmetViewModel
 
 class UpisPredmet : AppCompatActivity() {
     private lateinit var  odabirGodine: Spinner

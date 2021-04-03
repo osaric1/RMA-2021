@@ -1,8 +1,6 @@
 package ba.etf.rma21.projekat
 
-import android.R.attr.data
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +14,7 @@ import java.util.*
 class KvizAdapter(
         private var kvizovi: List<Kviz>
 ): RecyclerView.Adapter<KvizAdapter.KvizViewHolder>(){
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KvizAdapter.KvizViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KvizViewHolder {
         val view = LayoutInflater
                 .from(parent.context)
                 .inflate(R.layout.element_liste, parent, false)
@@ -24,7 +22,7 @@ class KvizAdapter(
     }
 
     @SuppressLint("SetTextI18n")
-    override fun onBindViewHolder(holder: KvizAdapter.KvizViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: KvizViewHolder, position: Int) {
         var datumPocetkaCalendar = toCalendar(kvizovi[position].datumPocetka)
         var datumKrajaCalendar = toCalendar(kvizovi[position].datumKraj)
         var datumRadaCalendar = toCalendar(kvizovi[position].datumRada)
@@ -110,8 +108,5 @@ class KvizAdapter(
         return cal
     }
 
-    fun compareDates(){
-
-    }
 
 }

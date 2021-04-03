@@ -1,24 +1,23 @@
 package ba.etf.rma21.projekat.data.repositories
 
+import ba.etf.rma21.projekat.data.allPredmeti
 import ba.etf.rma21.projekat.data.models.Predmet
 
 class PredmetRepository {
     companion object {
-        private var predmeti : List<Predmet> = listOf(Predmet("IM",1),
-            Predmet("OE", 1),Predmet("RMA", 2),
-            Predmet("DM", 2), Predmet("OOAD", 2))
 
-        private var upisaniPredmeti: MutableList<Predmet> = mutableListOf()
+        private var upisaniPredmeti: MutableList<Predmet> = mutableListOf(Predmet("RMA", 2), Predmet("TP", 2), Predmet("DM",2))
+
         fun getUpisani(): List<Predmet> {
             return upisaniPredmeti
         }
 
         fun getAll(): List<Predmet> {
-            return predmeti
+            return allPredmeti()
         }
 
         fun getPredmetsByGodinama(godina: Int): List<Predmet> {
-            return predmeti.filter { predmet -> predmet.godina == godina }.toList()
+            return getAll().filter { predmet -> predmet.godina == godina  }.toList()
         }
 
         fun addPredmet(predmet: Predmet){
@@ -26,10 +25,10 @@ class PredmetRepository {
         }
 
         fun getSlobodni(godina: Int): List<Predmet>{
-            return predmeti.filter { predmet -> predmet.godina == godina && !upisaniPredmeti.contains(predmet) }.toList()
+            return allPredmeti().filter { predmet -> predmet.godina == godina && !upisaniPredmeti.contains(predmet) }.toList()
         }
         fun getSlobodniAll(): List<Predmet>{
-            return predmeti.filter { predmet ->  !upisaniPredmeti.contains(predmet) }.toList()
+            return allPredmeti().filter { predmet ->  !upisaniPredmeti.contains(predmet) }.toList()
         }
 
     }

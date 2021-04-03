@@ -1,6 +1,5 @@
 package ba.etf.rma21.projekat
 
-import android.R.attr.data
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -14,9 +13,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ba.etf.rma21.projekat.data.models.Grupa
 import ba.etf.rma21.projekat.data.models.Predmet
+import ba.etf.rma21.projekat.viewmodel.KvizViewModel
+import ba.etf.rma21.projekat.viewmodel.PredmetViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.util.*
-import kotlin.Comparator
 
 
 class MainActivity : AppCompatActivity() {
@@ -25,8 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var kvizAdapter: KvizAdapter
     private lateinit var upisDugme : FloatingActionButton
 
-    private var kvizListViewModel =  KvizListViewModel()
-    private var grupaViewModel = GrupaViewModel()
+    private var kvizViewModel =  KvizViewModel()
     private var predmetViewModel = PredmetViewModel()
 
     private val SECOND_ACTIVITY_REQUEST_CODE  = 0
@@ -47,8 +45,7 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        kvizListViewModel.addGroup(grupaViewModel.getAll()[6])
-        predmetViewModel.addPredmet(predmetViewModel.getAll()[3])
+
 
         listaKvizova = findViewById(R.id.listaKvizova)
         listaKvizova.setHasFixedSize(true)
@@ -78,19 +75,19 @@ class MainActivity : AppCompatActivity() {
             ) {
                 val selectedItem = parent.getItemAtPosition(position).toString()
                 if(spinner.selectedItem.toString() == "Svi kvizovi"){
-                    kvizAdapter.updateKvizovi(kvizListViewModel.getAll())
+                    kvizAdapter.updateKvizovi(kvizViewModel.getAll())
                 }
                 else if(spinner.selectedItem.toString() == "Svi moji kvizovi"){
-                    kvizAdapter.updateKvizovi(kvizListViewModel.getMyKvizes())
+                    kvizAdapter.updateKvizovi(kvizViewModel.getMyKvizes())
                 }
                 else if(spinner.selectedItem.toString() == "Urađeni kvizovi"){
-                    kvizAdapter.updateKvizovi(kvizListViewModel.getDone())
+                    kvizAdapter.updateKvizovi(kvizViewModel.getDone())
                 }
                 else if(spinner.selectedItem.toString() == "Budući kvizovi"){
-                    kvizAdapter.updateKvizovi(kvizListViewModel.getFuture())
+                    kvizAdapter.updateKvizovi(kvizViewModel.getFuture())
                 }
                 else if(spinner.selectedItem.toString() == "Prošli kvizovi"){
-                    kvizAdapter.updateKvizovi(kvizListViewModel.getNotTaken())
+                    kvizAdapter.updateKvizovi(kvizViewModel.getNotTaken())
                 }
             }
 
@@ -100,7 +97,7 @@ class MainActivity : AppCompatActivity() {
 
     fun showUpisPredmeta(){
         if(predmetViewModel.getSlobodniAll().isEmpty()){
-            Toast.makeText(this, "Nema raspolozivih predmeta", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Nema raspoloživih predmeta", Toast.LENGTH_LONG).show()
         }
         else {
             val intent = Intent(applicationContext, UpisPredmet::class.java)
@@ -119,10 +116,10 @@ class MainActivity : AppCompatActivity() {
                 val odabranaGodina = data?.getStringExtra("godina")
 
                 if(odabraniPredmet != "-Empty-" && odabranaGrupa != "-Empty-" && odabranaGodina != "-Empty-") {
-                    kvizListViewModel.addGroup(Grupa(odabranaGrupa.toString(), odabraniPredmet.toString()))
+                    kvizViewModel.addGroup(Grupa(odabranaGrupa.toString(), odabraniPredmet.toString()))
                     predmetViewModel.addPredmet(Predmet(odabraniPredmet.toString(), Integer.parseInt(odabranaGodina.toString())))
                 }
-                kvizAdapter.updateKvizovi(kvizListViewModel.getMyKvizes())
+                kvizAdapter.updateKvizovi(kvizViewModel.getMyKvizes())
                 spinner.setSelection(0)
             }
         }

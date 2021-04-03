@@ -36,7 +36,7 @@
 
             <TextView
                 android:id="@+id/predmetName"
-                android:layout_width="63dp"
+                android:layout_width="wrap_content"
                 android:layout_height="26dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
