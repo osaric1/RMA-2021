@@ -7,7 +7,8 @@ import java.util.*
 
 class KvizRepository() {
     companion object {
-        private var upisaneGrupe : MutableList<Grupa> = mutableListOf(Grupa("RMA Grupa 2", "RMA"), Grupa("TP Grupa 1", "TP"), Grupa("DM Grupa 1", "DM"))
+        private var upisaneGrupe : MutableList<Grupa> = mutableListOf(Grupa("RMA Grupa 2", "RMA"), Grupa("TP Grupa 1", "TP"), Grupa("DM Grupa 1", "DM"),
+        Grupa("RPR Grupa 1", "RPR"))
         init {
 
         }

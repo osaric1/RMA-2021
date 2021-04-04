@@ -11,5 +11,14 @@ fun allGrupe(): List<Grupa> {
             Grupa("RMA Grupa 2", "RMA"),
             Grupa("DM Grupa 1", "DM"),
             Grupa("OOAD Grupa 1", "OOAD"),
-            Grupa("TP Grupa 1", "TP"))
+            Grupa("TP Grupa 1", "TP"),
+            Grupa("RPR Grupa 1", "RPR"),
+            Grupa("WT Grupa 1", "WT"),
+            Grupa("WT Grupa 2", "WT"),
+            Grupa("WT Grupa 3", "WT"),
+            Grupa("OIS Grupa 1", "OIS"),
+            Grupa("OIS Grupa 2", "OIS"),
+            Grupa("RG Grupa 1", "RG"),
+            Grupa("RG Grupa 2", "RG")
+    )
 }

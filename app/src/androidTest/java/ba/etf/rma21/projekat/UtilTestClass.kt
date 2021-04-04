@@ -21,9 +21,9 @@ class UtilTestClass {
                 Assert.assertTrue("View nije tipa RecyclerView", view is RecyclerView)
                 var rv: RecyclerView = view as RecyclerView
                 ViewMatchers.assertThat(
-                        "GetItemCount RecyclerView broj elementa: ",
-                        rv.adapter?.itemCount,
-                        CoreMatchers.`is`(n)
+                    "GetItemCount RecyclerView broj elementa: ",
+                    rv.adapter?.itemCount,
+                    CoreMatchers.`is`(n)
                 )
             }
 
@@ -31,12 +31,12 @@ class UtilTestClass {
 
         fun itemTest(id: Int, k: Kviz) {
             Espresso.onView(ViewMatchers.withId(R.id.listaKvizova)).perform(
-                    RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(
-                            CoreMatchers.allOf(
-                                    ViewMatchers.hasDescendant(ViewMatchers.withText(k.naziv)),
-                                    ViewMatchers.hasDescendant(ViewMatchers.withText(k.nazivPredmeta))
-                            )
+                RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(
+                    CoreMatchers.allOf(
+                        ViewMatchers.hasDescendant(ViewMatchers.withText(k.naziv)),
+                        ViewMatchers.hasDescendant(ViewMatchers.withText(k.nazivPredmeta))
                     )
+                )
             )
         }
     }
