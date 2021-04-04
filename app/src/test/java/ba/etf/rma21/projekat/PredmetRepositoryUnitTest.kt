@@ -15,7 +15,7 @@ class PredmetRepositoryUnitTest {
     @Test
     fun testGetAll(){
         val predmeti = PredmetRepository.getAll()
-        assertEquals(predmeti.size, 6)
+        assertEquals(predmeti.size, 10)
         assertThat(predmeti, hasItem(hasProperty("naziv", Is("IM"))))
         assertThat(predmeti, not(hasItem(hasProperty("naziv", Is("Neka vrijednsost")))))
     }
@@ -23,8 +23,8 @@ class PredmetRepositoryUnitTest {
     @Test
     fun testGetPredmetsByGodinama(){
         assertEquals(PredmetRepository.getPredmetsByGodinama(1).size, 2)
-        assertEquals(PredmetRepository.getPredmetsByGodinama(2).size, 4)
-        assertEquals(PredmetRepository.getPredmetsByGodinama(3).size, 0)
+        assertEquals(PredmetRepository.getPredmetsByGodinama(2).size, 5)
+        assertEquals(PredmetRepository.getPredmetsByGodinama(3).size, 3)
         assertEquals(PredmetRepository.getPredmetsByGodinama(4).size, 0)
         assertEquals(PredmetRepository.getPredmetsByGodinama(5).size, 0)
     }
@@ -39,7 +39,7 @@ class PredmetRepositoryUnitTest {
 
     @Test
     fun testGetSlobodniAll(){
-        assertEquals(PredmetRepository.getSlobodniAll().size, 1)
+        assertEquals(PredmetRepository.getSlobodniAll().size, 5)
 
         assertThat(PredmetRepository.getSlobodniAll(), not(hasItem(hasProperty("naziv", Is("OE")))))
         assertThat(PredmetRepository.getSlobodniAll(), not(hasItem(hasProperty("naziv", Is("IM")))))

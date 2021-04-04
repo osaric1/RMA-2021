@@ -17,15 +17,15 @@ class KvizRepositoryUnitTest {
     @Test
     fun testGetAll(){
         val kvizovi = KvizRepository.getAll()
-        assertEquals(kvizovi.size, 9)
-        assertThat(kvizovi, hasItem<Kviz>(hasProperty("naziv", Is("IM Kviz"))))
+        assertEquals(kvizovi.size, 17)
+        assertThat(kvizovi, hasItem<Kviz>(hasProperty("naziv", Is("IM Kviz 1"))))
         assertThat(kvizovi, not(hasItem(hasProperty("naziv", Is("Neka vrijednsost")))))
     }
 
     @Test
     fun testGetMyKvizes(){
         val kvizovi = KvizRepository.getMyKvizes()
-        assertEquals(kvizovi.size, 3)
+        assertEquals(kvizovi.size, 7)
         assertThat(kvizovi, hasItem(hasProperty("nazivGrupe", Is("RMA Grupa 2"))))
         assertThat(kvizovi, not(hasItem(hasProperty("nazivGrupe", Is("OOAD Grupa 1")))))
     }
@@ -33,7 +33,7 @@ class KvizRepositoryUnitTest {
     @Test
     fun testGetDone(){
         val kvizovi = KvizRepository.getDone()
-        assertEquals(kvizovi.size, 1)
+        assertEquals(kvizovi.size, 3)
         assertThat(kvizovi, hasItem(hasProperty("datumRada", Is(GregorianCalendar(2020,9,20).time))))
     }
 
@@ -49,7 +49,7 @@ class KvizRepositoryUnitTest {
     @Test
     fun testGetNotTaken(){
         val kvizovi = KvizRepository.getNotTaken()
-        assertEquals(kvizovi.size, 1)
+        assertEquals(kvizovi.size, 2)
         assertThat(kvizovi, not(hasItem(hasProperty("nazivPredmeta", Is("TP")))))
         assertThat(kvizovi, hasItem(hasProperty("nazivPredmeta", Is("RMA"))))
     }

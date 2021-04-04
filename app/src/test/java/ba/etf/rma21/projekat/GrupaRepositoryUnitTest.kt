@@ -32,7 +32,7 @@ class GrupaRepositoryUnitTest {
     fun testGetAll(){
         val grupe = GrupaRepository.getAll()
 
-        assertEquals(grupe.size, 9)
+        assertEquals(grupe.size, 17)
         Assert.assertThat(grupe, CoreMatchers.hasItem(Matchers.hasProperty("nazivPredmeta", CoreMatchers.`is`("IM"))))
         Assert.assertThat(grupe, CoreMatchers.hasItem(Matchers.hasProperty("nazivPredmeta", CoreMatchers.`is`("RMA"))))
         Assert.assertThat(grupe, CoreMatchers.hasItem(Matchers.hasProperty("nazivPredmeta", CoreMatchers.`is`("TP"))))
