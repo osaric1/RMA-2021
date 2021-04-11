@@ -26,8 +26,9 @@ class MainActivity : AppCompatActivity() {
 
     private var kvizViewModel =  KvizViewModel()
     private var predmetViewModel = PredmetViewModel()
-
+    private var godinaDefault : Int = -1
     private val SECOND_ACTIVITY_REQUEST_CODE  = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -101,6 +102,7 @@ class MainActivity : AppCompatActivity() {
         }
         else {
             val intent = Intent(applicationContext, UpisPredmet::class.java)
+            intent.putExtra("godinaDefault", godinaDefault.toString())
             startActivityForResult(intent, SECOND_ACTIVITY_REQUEST_CODE)
         }
     }
@@ -114,6 +116,7 @@ class MainActivity : AppCompatActivity() {
                 val odabraniPredmet = data?.getStringExtra("predmet")
                 val odabranaGrupa  = data?.getStringExtra("grupa")
                 val odabranaGodina = data?.getStringExtra("godina")
+                godinaDefault = Integer.parseInt(data?.getStringExtra("godinaDefault"))
 
                 if(odabraniPredmet != "-Empty-" && odabranaGrupa != "-Empty-" && odabranaGodina != "-Empty-") {
                     kvizViewModel.addGroup(Grupa(odabranaGrupa.toString(), odabraniPredmet.toString()))

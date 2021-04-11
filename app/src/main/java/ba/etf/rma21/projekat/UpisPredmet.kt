@@ -2,6 +2,7 @@ package ba.etf.rma21.projekat
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -19,7 +20,7 @@ class UpisPredmet : AppCompatActivity() {
 
     private var predmetViewModel  = PredmetViewModel()
     private var grupaViewModel  = GrupaViewModel()
-
+    private var defaultGodina: Int = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_upis_predmet)
@@ -37,6 +38,7 @@ class UpisPredmet : AppCompatActivity() {
                 intent.putExtra("godina",odabirGodine.selectedItem.toString())
                 intent.putExtra("grupa", odabirGrupe.selectedItem.toString())
                 intent.putExtra("predmet", odabirPredmeta.selectedItem.toString())
+                intent.putExtra("godinaDefault", defaultGodina.toString())
                 setResult(RESULT_OK, intent)
                 finish()
         }
@@ -48,6 +50,9 @@ class UpisPredmet : AppCompatActivity() {
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             odabirGodine.adapter = adapter
+            defaultGodina = Integer.parseInt(intent.getStringExtra("godinaDefault"))
+            if(defaultGodina >= 0)
+                odabirGodine.setSelection(defaultGodina)
         }
 
         odabirGodine.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -57,7 +62,7 @@ class UpisPredmet : AppCompatActivity() {
                     position: Int,
                     id: Long)
             {
-
+                defaultGodina = odabirGodine.selectedItemPosition
                 var predmeti : List<String> = predmetViewModel.getSlobodni(Integer.parseInt(odabirGodine.selectedItem.toString())).map { predmet -> predmet.toString()  }
 
                 if(predmeti.isEmpty()){
