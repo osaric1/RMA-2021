@@ -23,7 +23,6 @@ class UpisPredmet : AppCompatActivity() {
     private var defaultGodina: Int = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_upis_predmet)
 
         odabirGodine = findViewById(R.id.odabirGodina)
         odabirPredmeta = findViewById(R.id.odabirPredmet)

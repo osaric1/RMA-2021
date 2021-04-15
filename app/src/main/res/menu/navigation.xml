@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/kvizovi"
+        android:icon="@drawable/calendar"
+        android:title="Kvizovi" />
+    <item
+        android:id="@+id/predmeti"
+        android:icon="@drawable/graduation"
+        android:title="Predmeti" />
+</menu>
