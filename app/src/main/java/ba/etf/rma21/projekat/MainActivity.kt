@@ -16,12 +16,12 @@ class MainActivity : AppCompatActivity() {
         when(item.itemId){
             R.id.kvizovi -> {
                 val kvizoviFragment = FragmentKvizovi.newInstance()
+                setFragmentArguments(kvizoviFragment)
                 openFragment(kvizoviFragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.predmeti -> {
                 val predmetiFragment = FragmentPredmeti.newInstance()
-                setFragmentArguments(predmetiFragment)
                 openFragment(predmetiFragment)
                 return@OnNavigationItemSelectedListener true
             }

@@ -10,6 +10,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import ba.etf.rma21.projekat.data.models.Grupa
 import ba.etf.rma21.projekat.data.models.Predmet
@@ -48,6 +49,7 @@ class FragmentPredmeti : Fragment() {
             bundle.putString("predmet", odabirPredmeta.selectedItem.toString())
 
             val fragmentPoruka = FragmentPoruka.newInstance()
+            fragmentPoruka.arguments = bundleOf(Pair("poruka", "Uspješno ste upisani u grupu " + odabirGrupe.selectedItem.toString() + " predmeta " + odabirPredmeta.selectedItem.toString() + "!"))
             MainActivity.passData(bundle)
 
             val transaction = activity?.supportFragmentManager?.beginTransaction()
