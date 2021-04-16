@@ -1,28 +1,15 @@
 package ba.etf.rma21.projekat
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemSelectedListener
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import ba.etf.rma21.projekat.data.models.Grupa
-import ba.etf.rma21.projekat.data.models.Predmet
-import ba.etf.rma21.projekat.viewmodel.KvizViewModel
-import ba.etf.rma21.projekat.viewmodel.PredmetViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var bottomNavigation: BottomNavigationView
-    private val myOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener {item ->
+    private var godinaDefault: Int = -1
+    private val myOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when(item.itemId){
             R.id.kvizovi -> {
                 val kvizoviFragment = FragmentKvizovi.newInstance()
@@ -52,61 +39,20 @@ class MainActivity : AppCompatActivity() {
         bottomNavigation.setOnNavigationItemSelectedListener(myOnNavigationItemSelectedListener)
         bottomNavigation.selectedItemId= R.id.kvizovi
         val kvizoviFragment = FragmentKvizovi.newInstance()
+
+
+        var intent = intent
+        val godina = intent.getStringExtra("godina")
+        val grupa = intent.getStringExtra("grupa")
+        val predmet = intent.getStringExtra("predmet")
+
+        val bundle = Bundle()
+        bundle.putString("godina", godina)
+        bundle.putString("grupa", grupa)
+        bundle.putString("predmet", predmet)
+
+        kvizoviFragment.arguments = bundle
         openFragment(kvizoviFragment)
-//
-//
-//        ArrayAdapter.createFromResource(
-//                this,
-//                R.array.spinner_choices,
-//                android.R.layout.simple_spinner_item
-//        ).also { adapter ->
-//            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//            spinner.adapter = adapter
-//
-//        }
-//
-//
-//
-//        listaKvizova = findViewById(R.id.listaKvizova)
-//        listaKvizova.setHasFixedSize(true)
-//        listaKvizova.layoutManager = GridLayoutManager(
-//                this,
-//                2
-//        )
-//
-//        kvizAdapter = KvizAdapter(listOf())
-//
-//
-//        listaKvizova.adapter = kvizAdapter
-//
-//        spinner.setSelection(1)
-//        spinner.onItemSelectedListener = object : OnItemSelectedListener {
-//            override fun onItemSelected(
-//                    parent: AdapterView<*>,
-//                    view: View?,
-//                    position: Int,
-//                    id: Long
-//            ) {
-//                val selectedItem = parent.getItemAtPosition(position).toString()
-//                if(spinner.selectedItem.toString() == "Svi kvizovi"){
-//                    kvizAdapter.updateKvizovi(kvizViewModel.getAll())
-//                }
-//                else if(spinner.selectedItem.toString() == "Svi moji kvizovi"){
-//                    kvizAdapter.updateKvizovi(kvizViewModel.getMyKvizes())
-//                }
-//                else if(spinner.selectedItem.toString() == "Urađeni kvizovi"){
-//                    kvizAdapter.updateKvizovi(kvizViewModel.getDone())
-//                }
-//                else if(spinner.selectedItem.toString() == "Budući kvizovi"){
-//                    kvizAdapter.updateKvizovi(kvizViewModel.getFuture())
-//                }
-//                else if(spinner.selectedItem.toString() == "Prošli kvizovi"){
-//                    kvizAdapter.updateKvizovi(kvizViewModel.getNotTaken())
-//                }
-//            }
-//
-//            override fun onNothingSelected(parent: AdapterView<*>?) {}
-//        }
     }
 
 

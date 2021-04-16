@@ -1,5 +1,6 @@
 package ba.etf.rma21.projekat
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,9 +8,12 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import ba.etf.rma21.projekat.data.models.Grupa
+import ba.etf.rma21.projekat.data.models.Predmet
 import ba.etf.rma21.projekat.viewmodel.KvizViewModel
 import ba.etf.rma21.projekat.viewmodel.PredmetViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -48,6 +52,17 @@ class FragmentKvizovi: Fragment() {
 
         kvizAdapter = KvizAdapter(listOf())
 
+        val godina = arguments?.getString("godina")
+        val grupa = arguments?.getString("grupa")
+        val predmet = arguments?.getString("predmet")
+
+        if(predmet != "-Empty-" && grupa != "-Empty-" && godina != "-Empty-" && grupa != null && godina != null && predmet != null) {
+            kvizViewModel.addGroup(Grupa(grupa.toString(), predmet.toString()))
+            predmetViewModel.addPredmet(Predmet(predmet.toString(), Integer.parseInt(godina.toString())))
+            kvizAdapter.updateKvizovi(kvizViewModel.getMyKvizes())
+            spinner.setSelection(0)
+        }
+
 
         listaKvizova.adapter = kvizAdapter
         spinner.setSelection(1)
@@ -80,6 +95,7 @@ class FragmentKvizovi: Fragment() {
         }
         return view
     }
+
     companion object{
         fun newInstance(): FragmentKvizovi = FragmentKvizovi()
     }

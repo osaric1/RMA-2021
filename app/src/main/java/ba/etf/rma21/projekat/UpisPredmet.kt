@@ -30,17 +30,17 @@ class UpisPredmet : AppCompatActivity() {
 
         dodajPredmet = findViewById(R.id.dodajPredmetDugme)
 
-        dodajPredmet.setOnClickListener {
-                intent = Intent(applicationContext, MainActivity::class.java)
-
-
-                intent.putExtra("godina",odabirGodine.selectedItem.toString())
-                intent.putExtra("grupa", odabirGrupe.selectedItem.toString())
-                intent.putExtra("predmet", odabirPredmeta.selectedItem.toString())
-                intent.putExtra("godinaDefault", defaultGodina.toString())
-                setResult(RESULT_OK, intent)
-                finish()
-        }
+//        dodajPredmet.setOnClickListener {
+//                intent = Intent(applicationContext, MainActivity::class.java)
+//
+//
+//                intent.putExtra("godina",odabirGodine.selectedItem.toString())
+//                intent.putExtra("grupa", odabirGrupe.selectedItem.toString())
+//                intent.putExtra("predmet", odabirPredmeta.selectedItem.toString())
+//                intent.putExtra("godinaDefault", defaultGodina.toString())
+//                setResult(RESULT_OK, intent)
+//                finish()
+//        }
 
         ArrayAdapter.createFromResource(
                 this,
