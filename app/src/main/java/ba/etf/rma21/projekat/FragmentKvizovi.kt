@@ -52,16 +52,16 @@ class FragmentKvizovi: Fragment() {
 
         kvizAdapter = KvizAdapter(listOf())
 
-        val godina = arguments?.getString("godina")
-        val grupa = arguments?.getString("grupa")
-        val predmet = arguments?.getString("predmet")
-
-        if(predmet != "-Empty-" && grupa != "-Empty-" && godina != "-Empty-" && grupa != null && godina != null && predmet != null) {
-            kvizViewModel.addGroup(Grupa(grupa.toString(), predmet.toString()))
-            predmetViewModel.addPredmet(Predmet(predmet.toString(), Integer.parseInt(godina.toString())))
-            kvizAdapter.updateKvizovi(kvizViewModel.getMyKvizes())
-            spinner.setSelection(0)
-        }
+//        val godina = arguments?.getString("godina")
+//        val grupa = arguments?.getString("grupa")
+//        val predmet = arguments?.getString("predmet")
+//
+//        if(predmet != "-Empty-" && grupa != "-Empty-" && godina != "-Empty-" && grupa != null && godina != null && predmet != null) {
+//            kvizViewModel.addGroup(Grupa(grupa.toString(), predmet.toString()))
+//            predmetViewModel.addPredmet(Predmet(predmet.toString(), Integer.parseInt(godina.toString())))
+//            kvizAdapter.updateKvizovi(kvizViewModel.getMyKvizes())
+//            spinner.setSelection(0)
+//        }
 
 
         listaKvizova.adapter = kvizAdapter
@@ -98,5 +98,6 @@ class FragmentKvizovi: Fragment() {
 
     companion object{
         fun newInstance(): FragmentKvizovi = FragmentKvizovi()
+
     }
 }

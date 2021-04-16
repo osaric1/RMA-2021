@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import ba.etf.rma21.projekat.viewmodel.GrupaViewModel
 import ba.etf.rma21.projekat.viewmodel.PredmetViewModel
 
@@ -34,12 +35,19 @@ class FragmentPredmeti : Fragment() {
 
         dodajPredmet.setOnClickListener {
 
-            val intent = Intent(activity!!.baseContext, MainActivity::class.java)
-            intent.putExtra("godina",odabirGodine.selectedItem.toString())
-            intent.putExtra("grupa", odabirGrupe.selectedItem.toString())
-            intent.putExtra("predmet", odabirPredmeta.selectedItem.toString())
-            intent.putExtra("godinaDefault", defaultGodina.toString())
-            startActivity(intent)
+            val fragmentPoruka = FragmentPoruka.newInstance()
+            val transaction = activity?.supportFragmentManager?.beginTransaction()
+            transaction?.replace(R.id.container, fragmentPoruka)
+            transaction?.addToBackStack(null)
+            transaction?.commit()
+
+//
+//            val intent = Intent(activity!!.baseContext, MainActivity::class.java)
+//            intent.putExtra("godina",odabirGodine.selectedItem.toString())
+//            intent.putExtra("grupa", odabirGrupe.selectedItem.toString())
+//            intent.putExtra("predmet", odabirPredmeta.selectedItem.toString())
+//            intent.putExtra("godinaDefault", defaultGodina.toString())
+//            startActivity(intent)
         }
 
         ArrayAdapter.createFromResource(
