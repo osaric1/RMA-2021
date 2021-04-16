@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/predajKviz"
+        android:icon="@drawable/tick"
+        android:title="Predaj kviz" />
+    <item
+        android:id="@+id/zaustaviKviz"
+        android:icon="@drawable/stop"
+        android:title="Zaustavi kviz" />
+</menu>
