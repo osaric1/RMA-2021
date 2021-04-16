@@ -2,6 +2,7 @@ package ba.etf.rma21.projekat
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +10,9 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
+import ba.etf.rma21.projekat.data.models.Grupa
+import ba.etf.rma21.projekat.data.models.Predmet
 import ba.etf.rma21.projekat.viewmodel.GrupaViewModel
 import ba.etf.rma21.projekat.viewmodel.PredmetViewModel
 
@@ -23,7 +24,13 @@ class FragmentPredmeti : Fragment() {
 
     private var predmetViewModel  = PredmetViewModel()
     private var grupaViewModel  = GrupaViewModel()
-    private var defaultGodina: Int = -1
+
+    companion object{
+        private var presetGodina: Int? = null
+        private var presetGrupa: Int? = null
+        private var presetPredmet: Int? = null
+        fun newInstance(): FragmentPredmeti = FragmentPredmeti()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view = inflater.inflate(R.layout.predmeti_fragment, container, false)
@@ -35,19 +42,19 @@ class FragmentPredmeti : Fragment() {
 
         dodajPredmet.setOnClickListener {
 
+            val bundle = Bundle()
+            bundle.putString("godina", odabirGodine.selectedItem.toString())
+            bundle.putString("grupa", odabirGrupe.selectedItem.toString())
+            bundle.putString("predmet", odabirPredmeta.selectedItem.toString())
+
             val fragmentPoruka = FragmentPoruka.newInstance()
+            MainActivity.passData(bundle)
+
             val transaction = activity?.supportFragmentManager?.beginTransaction()
             transaction?.replace(R.id.container, fragmentPoruka)
             transaction?.addToBackStack(null)
             transaction?.commit()
 
-//
-//            val intent = Intent(activity!!.baseContext, MainActivity::class.java)
-//            intent.putExtra("godina",odabirGodine.selectedItem.toString())
-//            intent.putExtra("grupa", odabirGrupe.selectedItem.toString())
-//            intent.putExtra("predmet", odabirPredmeta.selectedItem.toString())
-//            intent.putExtra("godinaDefault", defaultGodina.toString())
-//            startActivity(intent)
         }
 
         ArrayAdapter.createFromResource(
@@ -57,9 +64,8 @@ class FragmentPredmeti : Fragment() {
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             odabirGodine.adapter = adapter
+
 //            defaultGodina = Integer.parseInt(intent.getStringExtra("godinaDefault"))
-            if(defaultGodina >= 0)
-                odabirGodine.setSelection(defaultGodina)
         }
 
         odabirGodine.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -69,7 +75,6 @@ class FragmentPredmeti : Fragment() {
                     position: Int,
                     id: Long)
             {
-                defaultGodina = odabirGodine.selectedItemPosition
                 var predmeti : List<String> = predmetViewModel.getSlobodni(Integer.parseInt(odabirGodine.selectedItem.toString())).map { predmet -> predmet.toString()  }
 
                 if(predmeti.isEmpty()){
@@ -80,6 +85,7 @@ class FragmentPredmeti : Fragment() {
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
                 odabirPredmeta.adapter = dataAdapter
+
 
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -111,8 +117,29 @@ class FragmentPredmeti : Fragment() {
         }
         return view
     }
-    companion object{
-        fun newInstance(): FragmentPredmeti = FragmentPredmeti()
+
+
+    override fun onPause() {
+        presetGodina = odabirGodine.selectedItemPosition
+        presetGrupa = odabirGrupe.selectedItemPosition
+        presetPredmet = odabirPredmeta.selectedItemPosition
+        Log.d("DENINA", presetGodina.toString() + "$" + presetGrupa.toString() + "$" + presetPredmet.toString())
+
+        super.onPause()
+    }
+
+    override fun onResume() {
+        if(presetGodina != null){
+            odabirGodine.setSelection(presetGodina!!)
+        }
+        if(presetGrupa != null){
+            odabirGrupe.setSelection(presetGrupa!!)
+        }
+        if(presetPredmet != null){
+            odabirPredmeta.setSelection(presetPredmet!!)
+        }
+        Log.d("DENINA RESUME", presetGodina.toString() + "$" + presetGrupa.toString() + "$" + presetPredmet.toString())
+        super.onResume()
     }
 
 }

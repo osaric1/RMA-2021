@@ -2,6 +2,7 @@ package ba.etf.rma21.projekat
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,8 +27,6 @@ class FragmentKvizovi: Fragment() {
 
     private var kvizViewModel =  KvizViewModel()
     private var predmetViewModel = PredmetViewModel()
-    private var godinaDefault : Int = -1
-    private val SECOND_ACTIVITY_REQUEST_CODE  = 0
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val view  = inflater.inflate(R.layout.kvizovi_fragment, container, false)
@@ -52,20 +51,21 @@ class FragmentKvizovi: Fragment() {
 
         kvizAdapter = KvizAdapter(listOf())
 
-//        val godina = arguments?.getString("godina")
-//        val grupa = arguments?.getString("grupa")
-//        val predmet = arguments?.getString("predmet")
-//
-//        if(predmet != "-Empty-" && grupa != "-Empty-" && godina != "-Empty-" && grupa != null && godina != null && predmet != null) {
-//            kvizViewModel.addGroup(Grupa(grupa.toString(), predmet.toString()))
-//            predmetViewModel.addPredmet(Predmet(predmet.toString(), Integer.parseInt(godina.toString())))
-//            kvizAdapter.updateKvizovi(kvizViewModel.getMyKvizes())
-//            spinner.setSelection(0)
-//        }
+        if(arguments != null){
+            val godina = arguments?.getString("godina")
+            val grupa = arguments?.getString("grupa")
+            val predmet = arguments?.getString("predmet")
 
+            if(godina != "Empty" && grupa != "Empty" && predmet != "Empty") {
+                kvizViewModel.addGroup(Grupa(grupa.toString(), predmet.toString()))
+                predmetViewModel.addPredmet(Predmet(predmet.toString(), Integer.parseInt(godina.toString())))
+                kvizAdapter.updateKvizovi(kvizViewModel.getMyKvizes())
+                spinner.setSelection(0)
+            }
+        }
+        else spinner.setSelection(1)
 
         listaKvizova.adapter = kvizAdapter
-        spinner.setSelection(1)
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                     parent: AdapterView<*>,

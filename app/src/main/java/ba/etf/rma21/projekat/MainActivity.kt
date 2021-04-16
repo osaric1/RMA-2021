@@ -11,7 +11,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
     private lateinit var bottomNavigation: BottomNavigationView
-    private var godinaDefault: Int = -1
+
     private val myOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when(item.itemId){
             R.id.kvizovi -> {
@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.predmeti -> {
                 val predmetiFragment = FragmentPredmeti.newInstance()
+                setFragmentArguments(predmetiFragment)
                 openFragment(predmetiFragment)
                 return@OnNavigationItemSelectedListener true
             }
@@ -39,6 +40,12 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         if(supportFragmentManager.backStackEntryCount > 0){
             supportFragmentManager.popBackStack(supportFragmentManager.getBackStackEntryAt(0).id, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            if(bundle != null){ //posto skidamo sa stacka fragmente sve dok ne dodjemo do main fragmenta, kako ne bi stvorili dvije instance izbrisemo postojecu i proslijedimo argumente novoj
+                supportFragmentManager.popBackStack()
+                val kvizovi = FragmentKvizovi.newInstance()
+                setFragmentArguments(kvizovi)
+                openFragment(kvizovi)
+            }
         }
         else{
             super.onBackPressed()
@@ -56,27 +63,18 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    companion object{
+        private var bundle : Bundle? = null
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//        if(requestCode == SECOND_ACTIVITY_REQUEST_CODE){
-//            if(resultCode == RESULT_OK){
-//
-//                val odabraniPredmet = data?.getStringExtra("predmet")
-//                val odabranaGrupa  = data?.getStringExtra("grupa")
-//                val odabranaGodina = data?.getStringExtra("godina")
-//                godinaDefault = Integer.parseInt(data?.getStringExtra("godinaDefault"))
-//
-//                if(odabraniPredmet != "-Empty-" && odabranaGrupa != "-Empty-" && odabranaGodina != "-Empty-") {
-//                    kvizViewModel.addGroup(Grupa(odabranaGrupa.toString(), odabraniPredmet.toString()))
-//                    predmetViewModel.addPredmet(Predmet(odabraniPredmet.toString(), Integer.parseInt(odabranaGodina.toString())))
-//                }
-//                kvizAdapter.updateKvizovi(kvizViewModel.getMyKvizes())
-//                spinner.setSelection(0)
-//            }
-//        }
-//    }
+        fun passData(bundle: Bundle){
+            this.bundle = bundle
+        }
+    }
+
+    fun setFragmentArguments(fragment: Fragment){
+        if(fragment is FragmentKvizovi && bundle != null)
+            fragment.arguments = bundle
+    }
 
 }
 
