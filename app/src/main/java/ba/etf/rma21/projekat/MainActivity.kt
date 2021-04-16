@@ -31,13 +31,14 @@ class MainActivity : AppCompatActivity() {
     private fun openFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.container, fragment)
-        transaction.addToBackStack(null)
+        if(fragment !is FragmentKvizovi)
+            transaction.addToBackStack(null)
         transaction.commit()
     }
 
     override fun onBackPressed() {
         if(supportFragmentManager.backStackEntryCount > 0){
-            supportFragmentManager.popBackStack(supportFragmentManager.getBackStackEntryAt(1).id, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            supportFragmentManager.popBackStack(supportFragmentManager.getBackStackEntryAt(0).id, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
         else{
             super.onBackPressed()
@@ -51,20 +52,8 @@ class MainActivity : AppCompatActivity() {
         bottomNavigation.setOnNavigationItemSelectedListener(myOnNavigationItemSelectedListener)
         bottomNavigation.selectedItemId= R.id.kvizovi
         val kvizoviFragment = FragmentKvizovi.newInstance()
-
-
-//        var intent = intent
-//        val godina = intent.getStringExtra("godina")
-//        val grupa = intent.getStringExtra("grupa")
-//        val predmet = intent.getStringExtra("predmet")
-//
-//        val bundle = Bundle()
-//        bundle.putString("godina", godina)
-//        bundle.putString("grupa", grupa)
-//        bundle.putString("predmet", predmet)
-//
-//        kvizoviFragment.arguments = bundle
         openFragment(kvizoviFragment)
+
     }
 
 
