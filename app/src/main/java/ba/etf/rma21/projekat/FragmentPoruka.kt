@@ -6,14 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class FragmentPoruka: Fragment() {
 
 
     private lateinit var poruka: TextView
+    private lateinit var bottomNavigationView: BottomNavigationView
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.poruka_fragment, container, false)
         poruka = view.findViewById(R.id.tvPoruka)
+        bottomNavigationView = activity?.findViewById(R.id.bottomNav)!!
         if(arguments != null){
             poruka.text = arguments?.getString("poruka")
         }
@@ -23,6 +26,16 @@ class FragmentPoruka: Fragment() {
 
     companion object{
         fun newInstance(): FragmentPoruka = FragmentPoruka()
+    }
+
+    override fun onStop() {
+        bottomNavigationView.visibility = View.VISIBLE
+        super.onStop()
+    }
+
+    override fun onStart() {
+        bottomNavigationView.visibility = View.GONE
+        super.onStart()
     }
 
 }

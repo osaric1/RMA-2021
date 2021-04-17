@@ -25,6 +25,7 @@ class FragmentPredmeti : Fragment() {
 
     private var predmetViewModel  = PredmetViewModel()
     private var grupaViewModel  = GrupaViewModel()
+    private var zavrsenUpis: Boolean = false
 
     companion object{
         private var presetGodina: Int? = null
@@ -42,13 +43,14 @@ class FragmentPredmeti : Fragment() {
         dodajPredmet = view.findViewById(R.id.dodajPredmetDugme)
 
         dodajPredmet.setOnClickListener {
-
+            zavrsenUpis = true
             val bundle = Bundle()
             bundle.putString("godina", odabirGodine.selectedItem.toString())
             bundle.putString("grupa", odabirGrupe.selectedItem.toString())
             bundle.putString("predmet", odabirPredmeta.selectedItem.toString())
 
-            if(odabirGrupe.selectedItem.toString() != "-Empty-") {
+            if(odabirPredmeta.selectedItem.toString() != "-Empty-") {
+
                 val fragmentPoruka = FragmentPoruka.newInstance()
                 fragmentPoruka.arguments = bundleOf(Pair("poruka", "Uspješno ste upisani u grupu " + odabirGrupe.selectedItem.toString() + " predmeta " + odabirPredmeta.selectedItem.toString() + "!"))
                 MainActivity.passData(bundle)
@@ -125,22 +127,25 @@ class FragmentPredmeti : Fragment() {
 
 
     override fun onPause() {
-        presetGodina = odabirGodine.selectedItemPosition
-        presetGrupa = odabirGrupe.selectedItemPosition
-        presetPredmet = odabirPredmeta.selectedItemPosition
-
+        if(!zavrsenUpis) {
+            presetGodina = odabirGodine.selectedItemPosition
+            presetGrupa = odabirGrupe.selectedItemPosition
+            presetPredmet = odabirPredmeta.selectedItemPosition
+        }
         super.onPause()
     }
 
     override fun onResume() {
-        if(presetGodina != null){
-            odabirGodine.setSelection(presetGodina!!)
-        }
-        if(presetGrupa != null){
-            odabirGrupe.setSelection(presetGrupa!!)
-        }
-        if(presetPredmet != null){
-            odabirPredmeta.setSelection(presetPredmet!!)
+        if(!zavrsenUpis) {
+            if (presetGodina != null) {
+                odabirGodine.setSelection(presetGodina!!)
+            }
+            if (presetGrupa != null) {
+                odabirGrupe.setSelection(presetGrupa!!)
+            }
+            if (presetPredmet != null) {
+                odabirPredmeta.setSelection(presetPredmet!!)
+            }
         }
         super.onResume()
     }

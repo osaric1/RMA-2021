@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#004CAF50"
-    tools:context=".UpisPredmet">
+    >
 
     <Button
         android:id="@+id/dodajPredmetDugme"
