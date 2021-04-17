@@ -4,7 +4,8 @@ import java.util.*
 
 data class PitanjeKviz(
         val naziv: String,
-        val kviz: String
+        val kviz: String,
+        val predmet: String
 ) {
 
 

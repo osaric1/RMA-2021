@@ -22,9 +22,8 @@ class FragmentPokusaj(): Fragment() {
     private val mOnNavigationItemSelectedListener = NavigationView.OnNavigationItemSelectedListener { item ->
         if(id >= 0){
             val fragmentPitanje = FragmentPitanje()
-            val transaction = childFragmentManager.beginTransaction()
-            transaction?.replace(R.id.framePitanja, fragmentPitanje)
-            transaction?.addToBackStack(null)
+            val transaction = activity?.supportFragmentManager?.beginTransaction()
+            transaction?.add(R.id.framePitanja, fragmentPitanje)
             transaction?.commit()
             return@OnNavigationItemSelectedListener true
         }

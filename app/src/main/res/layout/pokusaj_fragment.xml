@@ -22,9 +22,8 @@
 
     <FrameLayout
         android:id="@+id/framePitanja"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="-1dp"
+        android:layout_width="330dp"
+        android:layout_height="728dp"
         android:background="#00000000"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
