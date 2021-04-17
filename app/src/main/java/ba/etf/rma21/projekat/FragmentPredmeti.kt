@@ -48,14 +48,17 @@ class FragmentPredmeti : Fragment() {
             bundle.putString("grupa", odabirGrupe.selectedItem.toString())
             bundle.putString("predmet", odabirPredmeta.selectedItem.toString())
 
-            val fragmentPoruka = FragmentPoruka.newInstance()
-            fragmentPoruka.arguments = bundleOf(Pair("poruka", "Uspješno ste upisani u grupu " + odabirGrupe.selectedItem.toString() + " predmeta " + odabirPredmeta.selectedItem.toString() + "!"))
-            MainActivity.passData(bundle)
+            if(odabirGrupe.selectedItem.toString() != "-Empty-") {
+                val fragmentPoruka = FragmentPoruka.newInstance()
+                fragmentPoruka.arguments = bundleOf(Pair("poruka", "Uspješno ste upisani u grupu " + odabirGrupe.selectedItem.toString() + " predmeta " + odabirPredmeta.selectedItem.toString() + "!"))
+                MainActivity.passData(bundle)
 
-            val transaction = activity?.supportFragmentManager?.beginTransaction()
-            transaction?.replace(R.id.container, fragmentPoruka)
-            transaction?.addToBackStack(null)
-            transaction?.commit()
+                val transaction = activity?.supportFragmentManager?.beginTransaction()
+                transaction?.replace(R.id.container, fragmentPoruka)
+                transaction?.addToBackStack(null)
+                transaction?.commit()
+            }
+            else activity?.supportFragmentManager?.popBackStack()
 
         }
 
@@ -125,7 +128,6 @@ class FragmentPredmeti : Fragment() {
         presetGodina = odabirGodine.selectedItemPosition
         presetGrupa = odabirGrupe.selectedItemPosition
         presetPredmet = odabirPredmeta.selectedItemPosition
-        Log.d("DENINA", presetGodina.toString() + "$" + presetGrupa.toString() + "$" + presetPredmet.toString())
 
         super.onPause()
     }
@@ -140,7 +142,6 @@ class FragmentPredmeti : Fragment() {
         if(presetPredmet != null){
             odabirPredmeta.setSelection(presetPredmet!!)
         }
-        Log.d("DENINA RESUME", presetGodina.toString() + "$" + presetGrupa.toString() + "$" + presetPredmet.toString())
         super.onResume()
     }
 

@@ -3,6 +3,7 @@ package ba.etf.rma21.projekat
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
@@ -26,11 +27,13 @@ class MainActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.predajKviz -> {
-
+                val porukaFragment = FragmentPoruka.newInstance()
+                openFragment(porukaFragment)
+                porukaFragment.arguments = bundleOf(Pair("poruka", "Zavrsili ste kviz sa tacnosti"))
                 return@OnNavigationItemSelectedListener true
             }
             R.id.zaustaviKviz -> {
-
+                supportFragmentManager.popBackStack()
                 return@OnNavigationItemSelectedListener true
             }
         }
