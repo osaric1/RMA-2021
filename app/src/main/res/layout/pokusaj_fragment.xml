@@ -10,9 +10,8 @@
         android:id="@+id/navigacijaPitanja"
         android:layout_width="67dp"
         android:layout_height="667dp"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNav"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="4dp" />
 
     <FrameLayout
         android:id="@+id/framePitanja"
@@ -23,15 +22,5 @@
         app:layout_constraintEnd_toEndOf="parent">
 
     </FrameLayout>
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNav"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/pokusaj_navigation" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

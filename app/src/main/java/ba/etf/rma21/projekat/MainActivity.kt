@@ -25,6 +25,14 @@ class MainActivity : AppCompatActivity() {
                 openFragment(predmetiFragment)
                 return@OnNavigationItemSelectedListener true
             }
+            R.id.predajKviz -> {
+
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.zaustaviKviz -> {
+
+                return@OnNavigationItemSelectedListener true
+            }
         }
         false
     }
@@ -56,6 +64,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         bottomNavigation= findViewById(R.id.bottomNav)
+
+        bottomNavigation.menu.findItem(R.id.predajKviz).setVisible(false)
+        bottomNavigation.menu.findItem(R.id.zaustaviKviz).setVisible(false)
+        bottomNavigation.menu.findItem(R.id.kvizovi).setVisible(true)
+        bottomNavigation.menu.findItem(R.id.predmeti).setVisible(true)
+
         bottomNavigation.setOnNavigationItemSelectedListener(myOnNavigationItemSelectedListener)
         bottomNavigation.selectedItemId= R.id.kvizovi
         val kvizoviFragment = FragmentKvizovi.newInstance()
@@ -75,6 +89,8 @@ class MainActivity : AppCompatActivity() {
         if(fragment is FragmentKvizovi && bundle != null)
             fragment.arguments = bundle
     }
+
+
 
 }
 
