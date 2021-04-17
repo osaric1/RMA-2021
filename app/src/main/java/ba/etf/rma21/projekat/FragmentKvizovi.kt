@@ -49,7 +49,8 @@ class FragmentKvizovi: Fragment() {
                 2
         )
 
-        kvizAdapter = KvizAdapter(listOf())
+
+        kvizAdapter = KvizAdapter(listOf(), activity?.supportFragmentManager)
 
         if(arguments != null){
             val godina = arguments?.getString("godina")

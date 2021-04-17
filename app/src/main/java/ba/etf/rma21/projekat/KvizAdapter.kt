@@ -1,18 +1,23 @@
 package ba.etf.rma21.projekat
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import ba.etf.rma21.projekat.data.models.Kviz
 import java.util.*
 
 
 class KvizAdapter(
-        private var kvizovi: List<Kviz>
+        private var kvizovi: List<Kviz>,
+        private var manager: FragmentManager?
 ): RecyclerView.Adapter<KvizAdapter.KvizViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KvizViewHolder {
         val view = LayoutInflater
@@ -29,7 +34,6 @@ class KvizAdapter(
 
         if(kvizovi[position].osvojeniBodovi == null) holder.kvizPoints.text = ""
         else holder.kvizPoints.text = kvizovi[position].osvojeniBodovi.toString()
-
         holder.kvizDuration.text = kvizovi[position].trajanje.toString() + " min"
 
         if(     datumRadaCalendar.get(Calendar.YEAR)  == 1970
@@ -78,6 +82,13 @@ class KvizAdapter(
 
         holder.kvizTitle.text = kvizovi[position].naziv
         holder.predmetName.text = kvizovi[position].nazivPredmeta
+        holder.itemView.setOnClickListener {
+            val fragmentPokusaj = FragmentPokusaj.newInstance()
+            val transaction = manager?.beginTransaction()
+            transaction?.replace(R.id.container, fragmentPokusaj)
+            transaction?.addToBackStack(null)
+            transaction?.commit()
+        }
     }
 
     fun updateKvizovi(kvizovi: List<Kviz>) {

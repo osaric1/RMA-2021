@@ -7,9 +7,10 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="411dp"
-        android:layout_height="wrap_content"
-        android:text="TextView"
+        android:layout_width="412dp"
+        android:layout_height="61dp"
+        android:text="1. Koje sve divlje zivotinje imamo?"
+        android:textSize="18sp"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp" />
 
