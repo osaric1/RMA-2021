@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment
 import ba.etf.rma21.projekat.data.models.Pitanje
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
@@ -21,10 +23,19 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
     private lateinit var navigationView: NavigationView
 
     private val mOnNavigationItemSelectedListener = NavigationView.OnNavigationItemSelectedListener { item ->
-        if(id >= 0){
+        var indeks = Integer.parseInt(item.title.toString())
+        if(indeks <= pitanja.size){
             val fragmentPitanje = FragmentPitanje()
+            val bundle: Bundle = Bundle()
+
+            bundle.putString("pitanje", pitanja.get(indeks-1).tekst)
+
+            val novaList: ArrayList<String> = ArrayList(pitanja.get(indeks-1).opcije)
+            bundle.putStringArrayList("odgovori", novaList)
+
+            fragmentPitanje.arguments = bundle
             val transaction = activity?.supportFragmentManager?.beginTransaction()
-            transaction?.add(R.id.framePitanja, fragmentPitanje)
+            transaction?.replace(R.id.framePitanja, fragmentPitanje)
             transaction?.addToBackStack(null)
             transaction?.commit()
             return@OnNavigationItemSelectedListener true
@@ -35,11 +46,10 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
         val view = inflater.inflate(R.layout.pokusaj_fragment, container, false)
         navigationView = view.findViewById(R.id.navigacijaPitanja)
         bottomNavigation = activity?.findViewById(R.id.bottomNav)!!
-        val pitanja: List<Int> = listOf(1, 2, 3, 4, 7)
         var meni: Menu = navigationView.menu
 
         for(i in 1..pitanja.size){
-            var tekst: SpannableString = SpannableString(i.toString())
+            var tekst = SpannableString(i.toString())
             tekst.setSpan(RelativeSizeSpan(2f), 0, i.toString().length, 0)
             tekst.setSpan(ForegroundColorSpan(Color.WHITE), 0, i.toString().length, 0)
             tekst.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, i.toString().length, 0)

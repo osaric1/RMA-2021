@@ -85,7 +85,7 @@ class KvizAdapter(
         holder.kvizTitle.text = kvizovi[position].naziv
         holder.predmetName.text = kvizovi[position].nazivPredmeta
         holder.itemView.setOnClickListener {
-            val fragmentPokusaj = FragmentPokusaj.newInstance(pitanjeKvizViewModel.getPitanja(holder.kvizTitle.toString(), holder.predmetName.toString()))
+            val fragmentPokusaj = FragmentPokusaj.newInstance(pitanjeKvizViewModel.getPitanja(holder.kvizTitle.text.toString(), holder.predmetName.text.toString()))
             val transaction = manager?.beginTransaction()
             transaction?.replace(R.id.container, fragmentPokusaj)
             transaction?.addToBackStack(null)
