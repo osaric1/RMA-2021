@@ -12,12 +12,14 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import ba.etf.rma21.projekat.data.models.Kviz
+import ba.etf.rma21.projekat.viewmodel.PitanjeKvizViewModel
 import java.util.*
 
 
 class KvizAdapter(
         private var kvizovi: List<Kviz>,
-        private var manager: FragmentManager?
+        private var manager: FragmentManager?,
+        private var pitanjeKvizViewModel: PitanjeKvizViewModel = PitanjeKvizViewModel()
 ): RecyclerView.Adapter<KvizAdapter.KvizViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KvizViewHolder {
         val view = LayoutInflater
@@ -83,7 +85,7 @@ class KvizAdapter(
         holder.kvizTitle.text = kvizovi[position].naziv
         holder.predmetName.text = kvizovi[position].nazivPredmeta
         holder.itemView.setOnClickListener {
-            val fragmentPokusaj = FragmentPokusaj.newInstance()
+            val fragmentPokusaj = FragmentPokusaj.newInstance(pitanjeKvizViewModel.getPitanja(holder.kvizTitle.toString(), holder.predmetName.toString()))
             val transaction = manager?.beginTransaction()
             transaction?.replace(R.id.container, fragmentPokusaj)
             transaction?.addToBackStack(null)

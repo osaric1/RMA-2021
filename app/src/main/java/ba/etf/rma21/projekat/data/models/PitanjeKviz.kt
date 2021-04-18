@@ -1,5 +1,6 @@
 package ba.etf.rma21.projekat.data.models
 
+import ba.etf.rma21.projekat.data.repositories.PitanjeKvizRepository
 import java.util.*
 
 data class PitanjeKviz(
@@ -7,6 +8,7 @@ data class PitanjeKviz(
         val kviz: String,
         val predmet: String
 ) {
-
-
+    override fun toString(): String {
+        return naziv
+    }
 }

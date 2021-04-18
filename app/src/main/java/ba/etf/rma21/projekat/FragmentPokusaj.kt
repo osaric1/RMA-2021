@@ -11,11 +11,12 @@ import android.util.Log
 import android.view.*
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import ba.etf.rma21.projekat.data.models.Pitanje
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 
 
-class FragmentPokusaj(): Fragment() {
+class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
     private lateinit var bottomNavigation: BottomNavigationView
     private lateinit var navigationView: NavigationView
 
@@ -24,6 +25,7 @@ class FragmentPokusaj(): Fragment() {
             val fragmentPitanje = FragmentPitanje()
             val transaction = activity?.supportFragmentManager?.beginTransaction()
             transaction?.add(R.id.framePitanja, fragmentPitanje)
+            transaction?.addToBackStack(null)
             transaction?.commit()
             return@OnNavigationItemSelectedListener true
         }
@@ -50,7 +52,7 @@ class FragmentPokusaj(): Fragment() {
 
 
     companion object{
-        fun newInstance(): FragmentPokusaj = FragmentPokusaj()
+        fun newInstance(pitanja: List<Pitanje>): FragmentPokusaj = FragmentPokusaj(pitanja)
     }
 
     fun switchVisibility(visibility: Boolean){

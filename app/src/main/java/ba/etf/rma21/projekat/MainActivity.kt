@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
     private fun openFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.container, fragment)
-        if(fragment !is FragmentKvizovi)
+        if(fragment !is FragmentKvizovi || supportFragmentManager.backStackEntryCount > 0)
             transaction.addToBackStack(null)
         transaction.commit()
     }
