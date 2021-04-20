@@ -9,5 +9,7 @@
     <color name="white">#EEEEEE</color>
     <color name="light_gray">#E7E7E7</color>
     <color name="light_blue">#8BB3B6</color>
+    <color name="correct">#3DDC84</color>
+    <color name="wrong">#DB4F3D</color>
 
 </resources>

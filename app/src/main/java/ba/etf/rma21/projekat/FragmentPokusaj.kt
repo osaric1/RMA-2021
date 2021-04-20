@@ -11,6 +11,8 @@ import android.util.Log
 import android.view.*
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import ba.etf.rma21.projekat.data.models.Pitanje
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
@@ -21,23 +23,31 @@ import kotlin.collections.ArrayList
 class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
     private lateinit var bottomNavigation: BottomNavigationView
     private lateinit var navigationView: NavigationView
-
+    private var prethodniIndeks: Int = 0
     private val mOnNavigationItemSelectedListener = NavigationView.OnNavigationItemSelectedListener { item ->
         var indeks = Integer.parseInt(item.title.toString())
         if(indeks <= pitanja.size){
-            val fragmentPitanje = FragmentPitanje()
-            val bundle: Bundle = Bundle()
+            val fragmentManager = activity?.supportFragmentManager
+            val transaction = fragmentManager?.beginTransaction()
+            var fragment = fragmentManager?.findFragmentByTag(indeks.toString())
 
-            bundle.putString("pitanje", pitanja.get(indeks-1).tekst)
+            if(fragment == null) {
+                val fragmentPitanje = FragmentPitanje.newInstance()
+                val bundle: Bundle = Bundle()
 
-            val novaList: ArrayList<String> = ArrayList(pitanja.get(indeks-1).opcije)
-            bundle.putStringArrayList("odgovori", novaList)
+                bundle.putString("pitanje", pitanja.get(indeks - 1).tekst)
+                val novaList: ArrayList<String> = ArrayList(pitanja.get(indeks - 1).opcije)
+                bundle.putStringArrayList("odgovori", novaList)
+                bundle.putInt("tacan", pitanja.get(indeks - 1).tacan)
 
-            fragmentPitanje.arguments = bundle
-            val transaction = activity?.supportFragmentManager?.beginTransaction()
-            transaction?.replace(R.id.framePitanja, fragmentPitanje)
+                fragmentPitanje.arguments = bundle
+                transaction?.replace(R.id.framePitanja, fragmentPitanje, indeks.toString())
+            }
+            else transaction?.replace(R.id.framePitanja, fragment, indeks.toString())
             transaction?.addToBackStack(null)
             transaction?.commit()
+
+
             return@OnNavigationItemSelectedListener true
         }
         false
@@ -53,7 +63,7 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
             tekst.setSpan(RelativeSizeSpan(2f), 0, i.toString().length, 0)
             tekst.setSpan(ForegroundColorSpan(Color.WHITE), 0, i.toString().length, 0)
             tekst.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, i.toString().length, 0)
-            meni.add(tekst)
+            meni.add(0,i-1,i-1, tekst)
         }
         navigationView.setNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         switchVisibility(true)

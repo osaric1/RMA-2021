@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
             R.id.predajKviz -> {
                 val porukaFragment = FragmentPoruka.newInstance()
                 openFragment(porukaFragment)
-                porukaFragment.arguments = bundleOf(Pair("poruka", "Zavrsili ste kviz sa tacnosti"))
+                porukaFragment.arguments = bundleOf(Pair("poruka", "Završili ste kviz"))
                 return@OnNavigationItemSelectedListener true
             }
             R.id.zaustaviKviz -> {

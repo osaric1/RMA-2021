@@ -29,12 +29,10 @@ class FragmentPoruka: Fragment() {
     }
 
     override fun onStop() {
-        bottomNavigationView.visibility = View.VISIBLE
         super.onStop()
     }
 
     override fun onStart() {
-        bottomNavigationView.visibility = View.GONE
         super.onStart()
     }
 
