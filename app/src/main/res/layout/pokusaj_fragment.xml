@@ -8,11 +8,11 @@
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigacijaPitanja"
-        android:layout_width="80dp"
+        android:layout_width="100dp"
         android:layout_height="0dp"
         android:background="#000000"
         android:paddingBottom="?attr/actionBarSize"
-        android:textAlignment="textEnd"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/framePitanja"
         app:layout_constraintStart_toStartOf="parent"

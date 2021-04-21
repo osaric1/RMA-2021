@@ -43,5 +43,10 @@ class KvizRepository() {
             return cal
         }
 
+//        fun changeStatus(bodovi: Float, nazivKviza: String, nazivGrupe: String){
+//            val kviz = allKvizes().find{ kviz -> kviz.naziv == nazivKviza && kviz.nazivGrupe == nazivGrupe }
+//            kviz?.osvojeniBodovi = bodovi
+//        }
+
     }
 }

@@ -96,11 +96,11 @@ class KvizAdapter(
         if(lista.isNotEmpty()) {
             holder.itemView.setOnClickListener {
                 val transaction = manager?.beginTransaction()
-                var fragment = manager?.findFragmentByTag("Kviz" + kvizovi[position].naziv + "-" + kvizovi[position].nazivGrupe)
+                var fragment = manager?.findFragmentByTag("Kviz" + kvizovi[position].naziv)
                 if (fragment == null) {
                     val fragmentPokusaj = FragmentPokusaj.newInstance(lista)
-                    fragmentPokusaj.arguments = bundleOf(Pair("argumenti","Kviz" + kvizovi[position].naziv + "-" + kvizovi[position].nazivGrupe))
-                    transaction?.replace(R.id.container, fragmentPokusaj, "Kviz" + kvizovi[position].naziv + "-" + kvizovi[position].nazivGrupe)
+                    fragmentPokusaj.arguments = bundleOf(Pair("argument",kvizovi[position].naziv))
+                    transaction?.replace(R.id.container, fragmentPokusaj, "Kviz" + kvizovi[position].naziv)
                 } else
                     transaction?.replace(R.id.container, fragment)
                 transaction?.addToBackStack(null)
@@ -108,6 +108,7 @@ class KvizAdapter(
 
             }
         }
+
 
     }
 

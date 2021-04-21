@@ -2,6 +2,9 @@ package ba.etf.rma21.projekat
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Layout
+import android.text.SpannableString
+import android.text.style.AlignmentSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
@@ -12,6 +15,7 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ba.etf.rma21.projekat.data.models.Grupa
@@ -67,6 +71,18 @@ class FragmentKvizovi: Fragment() {
             }
         }
         else spinner.setSelection(1)
+
+//        setFragmentResultListener("status") { requestKey, bundle ->
+//            val result  = bundle.getFloat("tacnost")
+//            val nazivKviza = bundle.getString("kviz")
+//            val nazivGrupe = bundle.getString("grupa")
+//
+//            if (nazivGrupe != null && nazivKviza != null) {
+//                kvizViewModel.changeStatus(result, nazivKviza,nazivGrupe)
+//            }
+//
+//        }
+
 
         listaKvizova.adapter = kvizAdapter
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
