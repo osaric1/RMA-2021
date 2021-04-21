@@ -102,7 +102,7 @@ class KvizAdapter(
                     fragmentPokusaj.arguments = bundleOf(Pair("argument",kvizovi[position].naziv))
                     transaction?.replace(R.id.container, fragmentPokusaj, "Kviz" + kvizovi[position].naziv)
                 } else
-                    transaction?.replace(R.id.container, fragment)
+                transaction?.replace(R.id.container, fragment)
                 transaction?.addToBackStack(null)
                 transaction?.commit()
 

@@ -57,14 +57,8 @@ class FragmentPitanje(var pitanje: Pitanje): Fragment() {
             listaOdgovora.setOnItemClickListener { parent, view, position, id ->
                 var textview: TextView = listaOdgovora.getChildAt(position) as TextView
                 if (textview.text.toString() != odgovori.get(tacno)) {
-
-                    tacanOdgovor = false
-                    for (element in parent.children) {
-                        if (element != parent.getChildAt(tacno))
-                            (element as TextView).setTextColor(ContextCompat.getColor(view.context, R.color.wrong))
-                    }
+                    textview.setTextColor(ContextCompat.getColor(view.context, R.color.wrong))
                     (parent.getChildAt(tacno) as TextView).setTextColor(ContextCompat.getColor(view.context, R.color.correct))
-
                 }
                 else{
                     textview.setTextColor(ContextCompat.getColor(view.context, R.color.correct))

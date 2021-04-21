@@ -16,6 +16,7 @@ import androidx.fragment.app.*
 import ba.etf.rma21.projekat.data.models.Pitanje
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import java.math.RoundingMode
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -75,13 +76,25 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
         if(arguments != null){
             tagovi = arguments?.getString("argument").toString()
 
-            if(arguments?.containsKey("uradjenKviz")!!){
-                uradjenKviz = arguments?.getBoolean("uradjenKviz")!!
-            }
+//            if(arguments?.containsKey("uradjenKviz")!!){
+//                uradjenKviz = arguments?.getBoolean("uradjenKviz")!!
+//            }
         }
+
 
         if(savedState?.isEmpty == false){
             listaBoja = savedState?.getStringArray("COLORS") as Array<String>
+        }
+
+       setFragmentResultListener("uradjenKviz") { requestKey, bundle ->
+            uradjenKviz = bundle.getBoolean("uradjenKviz")
+            if(uradjenKviz) {
+                var tekst = SpannableString("Rezultat")
+                tekst.setSpan(RelativeSizeSpan(2f), 0, 8, 0)
+                tekst.setSpan(ForegroundColorSpan(Color.WHITE), 0, 8, 0)
+                tekst.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, 8, 0)
+                meni.add(0, pitanja.size, pitanja.size, tekst)
+            }
         }
 
         for (i in 1..pitanja.size) {
@@ -94,30 +107,26 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
                 tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.wrong)), 0, i.toString().length, 0)
             }
             else tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.correct)), 0, i.toString().length, 0)
+            tekst.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, i.toString().length, 0)
             meni.add(0, i - 1, i - 1, tekst)
 
         }
 
-        if(!uradjenKviz) {
-            var tekst = SpannableString("Rezultat")
-            tekst.setSpan(ForegroundColorSpan(Color.WHITE), 0, 8, 0)
-            meni.add(0, pitanja.size, pitanja.size, tekst)
-        }
 
-            setFragmentResultListener("odgovoreno") { requestKey, bundle ->
+        setFragmentResultListener("odgovoreno") { requestKey, bundle ->
             val result:Boolean = bundle.getBoolean("odgovor")
-                var tekst = SpannableString(meni[indeks-1].title)
+            var tekst = SpannableString(meni[indeks-1].title)
 
-                if(result){
-                    tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.correct)), 0, meni[indeks-1].title.length, 0)
-                    tacnost+=1
-                    listaBoja[indeks-1] = "zelena"
-                }
-                else{
-                    tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.wrong)), 0, meni[indeks-1].title.length, 0)
-                    listaBoja[indeks-1] = "crvena"
-                }
-                meni[indeks-1].title = tekst
+            if(result){
+                tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.correct)), 0, meni[indeks-1].title.length, 0)
+                tacnost+=1
+                listaBoja[indeks-1] = "zelena"
+            }
+            else{
+                tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.wrong)), 0, meni[indeks-1].title.length, 0)
+                listaBoja[indeks-1] = "crvena"
+            }
+            meni[indeks-1].title = tekst
         }
 
         navigationView.setNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
@@ -139,7 +148,7 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
 
     override fun onStop() {
         super.onStop()
-        setFragmentResult("requestKey", bundleOf(Pair("tacnost", "Završili ste kviz " + tagovi + " sa tačnošću " + tacnost/pitanja.size )))
+        setFragmentResult("requestKey", bundleOf(Pair("tacnost", "Završili ste kviz " + tagovi + " sa tačnošću " + (tacnost/pitanja.size).toBigDecimal().setScale(2, RoundingMode.UP).toDouble() )))
     }
     override fun onPause() {
         switchVisibility(false)

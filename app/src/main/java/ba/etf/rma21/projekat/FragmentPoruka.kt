@@ -25,6 +25,7 @@ class FragmentPoruka: Fragment() {
     private lateinit var poruka: TextView
     private lateinit var bottomNavigationView: BottomNavigationView
     private var  result: String? = null
+    private var uradjenKviz = false
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.poruka_fragment, container, false)
         poruka = view.findViewById(R.id.tvPoruka)
@@ -45,6 +46,8 @@ class FragmentPoruka: Fragment() {
                 tekst.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, poruka.text.toString().length, 0)
                 poruka.text = tekst
             }
+            uradjenKviz = true
+            setFragmentResult("uradjenKviz", bundleOf(Pair("uradjenKviz", uradjenKviz)))
         }
         return view
     }
