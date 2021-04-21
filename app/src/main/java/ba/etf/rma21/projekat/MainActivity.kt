@@ -1,10 +1,14 @@
 package ba.etf.rma21.projekat
 
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
@@ -30,11 +34,11 @@ class MainActivity : AppCompatActivity() {
             R.id.predajKviz -> {
                 val porukaFragment = FragmentPoruka.newInstance()
                 openFragment(porukaFragment)
-                porukaFragment.arguments = bundleOf(Pair("poruka", "Završili ste kviz"))
                 return@OnNavigationItemSelectedListener true
             }
             R.id.zaustaviKviz -> {
-                supportFragmentManager.popBackStack()
+                val kvizoviFragment = FragmentKvizovi.newInstance()
+                openFragment(kvizoviFragment)
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -70,6 +74,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
         bottomNavigation= findViewById(R.id.bottomNav)
         bottomNavigation.menu.findItem(R.id.predajKviz).setVisible(false)
         bottomNavigation.menu.findItem(R.id.zaustaviKviz).setVisible(false)
@@ -88,8 +93,10 @@ class MainActivity : AppCompatActivity() {
 
         fun passData(bundle: Bundle){
             this.bundle = bundle
+            Log.d("Sta se prije desilo", "0")
         }
         fun setFragmentArguments(fragment: Fragment){
+            Log.d("Tip Fragmenta koji krade", fragment.javaClass.name.toString())
             if(bundle != null) {
                 fragment.arguments = bundle
                 bundle = null

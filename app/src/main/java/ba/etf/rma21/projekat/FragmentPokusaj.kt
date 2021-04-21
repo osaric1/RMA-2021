@@ -24,19 +24,25 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
     private lateinit var bottomNavigation: BottomNavigationView
     private lateinit var navigationView: NavigationView
     private var indeks: Int = 0
+    private var tacnost: Double = 0.0
+    private lateinit var meni: Menu
+    private var savedState: Bundle? = Bundle()
+    private var listaBoja = Array(pitanja.size) { i -> "bijela"}
+    private var tagovi: String = ""
+
     private val mOnNavigationItemSelectedListener = NavigationView.OnNavigationItemSelectedListener { item ->
         indeks = Integer.parseInt(item.title.toString())
         if(indeks <= pitanja.size){
 
             val fragmentManager = activity?.supportFragmentManager
             val transaction = fragmentManager?.beginTransaction()
-            var fragment = fragmentManager?.findFragmentByTag(indeks.toString())
+            var fragment = fragmentManager?.findFragmentByTag(tagovi + indeks.toString())
 
             if(fragment == null) {
                 val fragmentPitanje = FragmentPitanje.newInstance(pitanja.get(indeks-1))
-                transaction?.replace(R.id.framePitanja, fragmentPitanje, indeks.toString())
+                transaction?.replace(R.id.framePitanja, fragmentPitanje, tagovi + indeks.toString())
             }
-            else transaction?.replace(R.id.framePitanja, fragment, indeks.toString())
+            else transaction?.replace(R.id.framePitanja, fragment)
             transaction?.addToBackStack(null)
             transaction?.commit()
 
@@ -50,26 +56,52 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
         val view = inflater.inflate(R.layout.pokusaj_fragment, container, false)
         navigationView = view.findViewById(R.id.navigacijaPitanja)
         bottomNavigation = activity?.findViewById(R.id.bottomNav)!!
-        var meni: Menu = navigationView.menu
+        meni = navigationView.menu
 
-        for(i in 1..pitanja.size){
-            var tekst = SpannableString(i.toString())
-            tekst.setSpan(RelativeSizeSpan(2f), 0, i.toString().length, 0)
-            tekst.setSpan(ForegroundColorSpan(Color.WHITE), 0, i.toString().length, 0)
-            tekst.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, i.toString().length, 0)
-            meni.add(0,i-1,i-1, tekst)
+        if(arguments != null){
+            tagovi = arguments?.getString("argumenti").toString()
         }
-        setFragmentResultListener("requestKey") { requestKey, bundle ->
+
+        if(savedState?.isEmpty == false){
+            listaBoja = savedState?.getStringArray("COLORS") as Array<String>
+            for (i in 1..pitanja.size) {
+                var tekst = SpannableString(i.toString())
+                tekst.setSpan(RelativeSizeSpan(2f), 0, i.toString().length, 0)
+                if(listaBoja[i-1] == "bijela")
+                    tekst.setSpan(ForegroundColorSpan(Color.WHITE), 0, i.toString().length, 0)
+                else if(listaBoja[i-1] == "crvena"){
+                    tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.wrong)), 0, i.toString().length, 0)
+                }
+                else tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.correct)), 0, i.toString().length, 0)
+                tekst.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, i.toString().length, 0)
+                meni.add(0, i - 1, i - 1, tekst)
+            }
+        }
+        else {
+
+            for (i in 1..pitanja.size) {
+                var tekst = SpannableString(i.toString())
+                tekst.setSpan(RelativeSizeSpan(2f), 0, i.toString().length, 0)
+                tekst.setSpan(ForegroundColorSpan(Color.WHITE), 0, i.toString().length, 0)
+                tekst.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, i.toString().length, 0)
+                meni.add(0, i - 1, i - 1, tekst)
+            }
+        }
+
+        setFragmentResultListener("odgovoreno") { requestKey, bundle ->
             val result:Boolean = bundle.getBoolean("odgovor")
-            Log.d("REZULTAT", result.toString())
-            var tekst = SpannableString(meni[indeks-1].title)
-            if(result){
-                tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.correct)), 0, meni[indeks-1].title.length, 0)
-            }
-            else{
-                tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.wrong)), 0, meni[indeks-1].title.length, 0)
-            }
-            meni[indeks-1].title = tekst
+                var tekst = SpannableString(meni[indeks-1].title)
+
+                if(result){
+                    tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.correct)), 0, meni[indeks-1].title.length, 0)
+                    tacnost+=1
+                    listaBoja[indeks-1] = "zelena"
+                }
+                else{
+                    tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.wrong)), 0, meni[indeks-1].title.length, 0)
+                    listaBoja[indeks-1] = "crvena"
+                }
+                meni[indeks-1].title = tekst
         }
 
         navigationView.setNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
@@ -89,6 +121,10 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
         bottomNavigation.menu.findItem(R.id.predmeti).setVisible(!visibility)
     }
 
+    override fun onStop() {
+        super.onStop()
+        setFragmentResult("requestKey", bundleOf(Pair("tacnost", "Završili ste kviz sa tačnošću " + tacnost/pitanja.size )))
+    }
     override fun onPause() {
         switchVisibility(false)
         super.onPause()
@@ -98,5 +134,20 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
         switchVisibility(true)
         super.onResume()
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        savedState?.putStringArray("COLORS", listaBoja)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        Log.d("when is this called?", "0")
+        super.onPrepareOptionsMenu(menu)
+    }
+
 
 }

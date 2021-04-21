@@ -22,10 +22,9 @@ class FragmentPitanje(var pitanje: Pitanje): Fragment() {
     private lateinit var tekstPitanja: TextView
     private lateinit var listaOdgovora: ListView
     private var tacno: Int = 0
-    private var odgovoreno: Boolean = false
     private var enabled : Boolean = true
-    private var savedState: Bundle = Bundle()
     private var tacanOdgovor: Boolean = false
+    private var savedState: Bundle = Bundle()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
         val view = inflater.inflate(R.layout.pitanje_fragment, container, false)
@@ -35,7 +34,6 @@ class FragmentPitanje(var pitanje: Pitanje): Fragment() {
         listaOdgovora = view.findViewById(R.id.odgovoriLista)
 
         if(savedState.size() > 0){
-            odgovoreno = savedState.getBoolean("odgovoreno")
             enabled = savedState.getBoolean("enabled")
         }
 
@@ -63,35 +61,23 @@ class FragmentPitanje(var pitanje: Pitanje): Fragment() {
                     textview.setTextColor(ContextCompat.getColor(view.context, R.color.correct))
                     tacanOdgovor = true
                 }
-                setFragmentResult("requestKey", bundleOf(Pair("odgovor",tacanOdgovor)))
                 listaOdgovora.isEnabled = false
                 listaOdgovora.onItemClickListener = null
                 enabled = false
+                setFragmentResult("odgovoreno", bundleOf(Pair("odgovor",tacanOdgovor)))
             }
         }
 
         return view
     }
 
-
-
-    override fun onSaveInstanceState(savedInstanceState: Bundle) {
-        super.onSaveInstanceState(savedInstanceState)
-        savedInstanceState.putBoolean("odgovoreno", odgovoreno)
-        savedInstanceState.putBoolean("enabled", enabled)
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
-        savedState.putBoolean("odgovoreno", odgovoreno)
         savedState.putBoolean("enabled", enabled)
-    }
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
     }
+
+
 
     companion object{
         fun newInstance(pitanje: Pitanje): FragmentPitanje = FragmentPitanje(pitanje)

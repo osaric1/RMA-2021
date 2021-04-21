@@ -2,12 +2,14 @@ package ba.etf.rma21.projekat
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
@@ -50,6 +52,7 @@ class KvizAdapter(
                                     "." + datumKrajaCalendar.get(Calendar.YEAR).toString() + "."
 
             holder.imageView.setImageResource(R.drawable.zelena)
+            holder.imageView.tag = R.drawable.zelena
         }
 
         else if(datumRadaCalendar.get(Calendar.YEAR) == 1970 && datumKrajaCalendar < Calendar.getInstance()){
@@ -60,6 +63,7 @@ class KvizAdapter(
                                     "." + datumKrajaCalendar.get(Calendar.YEAR).toString() + "."
 
             holder.imageView.setImageResource(R.drawable.crvena)
+            holder.imageView.tag = R.drawable.crvena
         }
 
         else if(datumRadaCalendar.get(Calendar.YEAR) == 1970 && datumPocetkaCalendar > Calendar.getInstance()){
@@ -70,6 +74,7 @@ class KvizAdapter(
                                     "." + datumPocetkaCalendar.get(Calendar.YEAR).toString() + "."
 
             holder.imageView.setImageResource(R.drawable.zuta)
+            holder.imageView.tag = R.drawable.zuta
         }
 
         else{
@@ -80,17 +85,30 @@ class KvizAdapter(
                                     datumRadaCalendar.get(Calendar.YEAR).toString() + "."
 
             holder.imageView.setImageResource(R.drawable.plava)
+            holder.imageView.tag = R.drawable.plava
         }
 
         holder.kvizTitle.text = kvizovi[position].naziv
         holder.predmetName.text = kvizovi[position].nazivPredmeta
-        holder.itemView.setOnClickListener {
-            val fragmentPokusaj = FragmentPokusaj.newInstance(pitanjeKvizViewModel.getPitanja(holder.kvizTitle.text.toString(), holder.predmetName.text.toString()))
-            val transaction = manager?.beginTransaction()
-            transaction?.replace(R.id.container, fragmentPokusaj)
-            transaction?.addToBackStack(null)
-            transaction?.commit()
+
+        val lista = pitanjeKvizViewModel.getPitanja(holder.kvizTitle.text.toString(), holder.predmetName.text.toString())
+
+        if(lista.isNotEmpty()) {
+            holder.itemView.setOnClickListener {
+                val transaction = manager?.beginTransaction()
+                var fragment = manager?.findFragmentByTag("Kviz" + kvizovi[position].naziv + "-" + kvizovi[position].nazivGrupe)
+                if (fragment == null) {
+                    val fragmentPokusaj = FragmentPokusaj.newInstance(lista)
+                    fragmentPokusaj.arguments = bundleOf(Pair("argumenti","Kviz" + kvizovi[position].naziv + "-" + kvizovi[position].nazivGrupe))
+                    transaction?.replace(R.id.container, fragmentPokusaj, "Kviz" + kvizovi[position].naziv + "-" + kvizovi[position].nazivGrupe)
+                } else
+                    transaction?.replace(R.id.container, fragment)
+                transaction?.addToBackStack(null)
+                transaction?.commit()
+
+            }
         }
+
     }
 
     fun updateKvizovi(kvizovi: List<Kviz>) {
