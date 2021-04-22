@@ -23,7 +23,10 @@ fun allPitanjaKviz(): List<PitanjeKviz>{
                   PitanjeKviz("DM-p3", "DM Kviz 2", "DM"),
                   PitanjeKviz("DM-p4", "DM Kviz 1", "DM"),
                   PitanjeKviz("DM-p5", "DM Kviz 1", "DM"),
-                  PitanjeKviz("DM-p6", "DM Kviz 1", "DM")
-
+                  PitanjeKviz("DM-p6", "DM Kviz 1", "DM"),
+                  PitanjeKviz("TP-p1", "TP Kviz 1", "TP"),
+                    PitanjeKviz("TP-p2", "TP Kviz 1", "TP"),
+                    PitanjeKviz("TP-p3", "TP Kviz 1", "TP"),
+                    PitanjeKviz("TP-p4", "TP Kviz 1", "TP")
     )
 }

@@ -1,5 +1,6 @@
 package ba.etf.rma21.projekat
 
+import android.content.Context
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -37,12 +38,13 @@ class FragmentPitanje(var pitanje: Pitanje): Fragment() {
         tekstPitanja = view.findViewById(R.id.tekstPitanja)
         listaOdgovora = view.findViewById(R.id.odgovoriLista)
 
-        if(savedState.size() > 0){
-            enabled = savedState.getBoolean("enabled")
+        if(arguments != null){
+            enabled = arguments?.getBoolean("enabled")!!
+
         }
 
-        setFragmentResultListener("b") { _, _ ->
-            enabled = false
+        if(savedState.size() > 0){
+            enabled = savedState.getBoolean("enabled")
         }
 
 
@@ -52,6 +54,9 @@ class FragmentPitanje(var pitanje: Pitanje): Fragment() {
         val dataAdapter: ArrayAdapter<String> = ArrayAdapter<String>(view.context, android.R.layout.simple_list_item_1, odgovori)
         listaOdgovora.adapter = dataAdapter
 
+        if(!enabled){
+            listaOdgovora.isEnabled = false
+        }
 
         if(enabled) {
             listaOdgovora.setOnItemClickListener { parent, view, position, id ->
@@ -78,6 +83,15 @@ class FragmentPitanje(var pitanje: Pitanje): Fragment() {
         super.onDestroyView()
         savedState.putBoolean("enabled", enabled)
 
+    }
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        setFragmentResultListener("disable") { requestKey, bundle ->
+            enabled = bundle.getBoolean("disableList")
+            Log.d("enabled", enabled.toString())
+        }
     }
 
 

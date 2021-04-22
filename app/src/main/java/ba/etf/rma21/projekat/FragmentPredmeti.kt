@@ -13,6 +13,7 @@ import android.widget.Spinner
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
 import ba.etf.rma21.projekat.data.models.Grupa
 import ba.etf.rma21.projekat.data.models.Predmet
 import ba.etf.rma21.projekat.viewmodel.GrupaViewModel
@@ -55,6 +56,7 @@ class FragmentPredmeti() : Fragment() {
                 val fragmentPoruka = FragmentPoruka.newInstance()
                 fragmentPoruka.arguments = bundleOf(Pair("poruka", "Uspješno ste upisani u grupu " + odabirGrupe.selectedItem.toString() + " predmeta " + odabirPredmeta.selectedItem.toString() + "!"))
                 MainActivity.passData(bundle)
+                setFragmentResult("upisi", bundle)
 
                 val transaction = activity?.supportFragmentManager?.beginTransaction()
                 transaction?.replace(R.id.container, fragmentPoruka)
@@ -149,6 +151,11 @@ class FragmentPredmeti() : Fragment() {
             }
         }
         super.onResume()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
     }
 
 }

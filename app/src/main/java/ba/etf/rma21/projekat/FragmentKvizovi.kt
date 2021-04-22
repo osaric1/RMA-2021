@@ -14,7 +14,9 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -59,29 +61,24 @@ class FragmentKvizovi: Fragment() {
         kvizAdapter = KvizAdapter(listOf(), activity?.supportFragmentManager)
 
         if(arguments != null){
-            val godina = arguments?.getString("godina")
-            val grupa = arguments?.getString("grupa")
-            val predmet = arguments?.getString("predmet")
+            if(arguments?.containsKey("godina")!! && arguments?.containsKey("grupa")!! && arguments?.containsKey("predmet")!!) {
+                val godina = arguments?.getString("godina")
+                val grupa = arguments?.getString("grupa")
+                val predmet = arguments?.getString("predmet")
 
-            if(godina != "Empty" && grupa != "Empty" && predmet != "Empty") {
-                kvizViewModel.addGroup(Grupa(grupa.toString(), predmet.toString()))
-                predmetViewModel.addPredmet(Predmet(predmet.toString(), Integer.parseInt(godina.toString())))
-                kvizAdapter.updateKvizovi(kvizViewModel.getMyKvizes())
-                spinner.setSelection(0)
+                if (godina != "Empty" && grupa != "Empty" && predmet != "Empty") {
+                    kvizViewModel.addGroup(Grupa(grupa.toString(), predmet.toString()))
+                    predmetViewModel.addPredmet(Predmet(predmet.toString(), Integer.parseInt(godina.toString())))
+                    kvizAdapter.updateKvizovi(kvizViewModel.getMyKvizes())
+                    spinner.setSelection(0)
+                }
+            }
+            else{
+                kvizViewModel.changeStatus(10.0F, "TP Kviz 2","TP Grupa 1")
+
             }
         }
         else spinner.setSelection(1)
-
-//        setFragmentResultListener("status") { requestKey, bundle ->
-//            val result  = bundle.getFloat("tacnost")
-//            val nazivKviza = bundle.getString("kviz")
-//            val nazivGrupe = bundle.getString("grupa")
-//
-//            if (nazivGrupe != null && nazivKviza != null) {
-//                kvizViewModel.changeStatus(result, nazivKviza,nazivGrupe)
-//            }
-//
-//        }
 
 
         listaKvizova.adapter = kvizAdapter
@@ -92,7 +89,6 @@ class FragmentKvizovi: Fragment() {
                     position: Int,
                     id: Long
             ) {
-                val selectedItem = parent.getItemAtPosition(position).toString()
                 if(spinner.selectedItem.toString() == "Svi kvizovi"){
                     kvizAdapter.updateKvizovi(kvizViewModel.getAll())
                 }

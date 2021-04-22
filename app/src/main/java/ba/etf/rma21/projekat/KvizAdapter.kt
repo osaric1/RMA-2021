@@ -2,6 +2,7 @@ package ba.etf.rma21.projekat
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -97,12 +98,24 @@ class KvizAdapter(
             holder.itemView.setOnClickListener {
                 val transaction = manager?.beginTransaction()
                 var fragment = manager?.findFragmentByTag("Kviz" + kvizovi[position].naziv)
+                var bundle: Bundle = Bundle()
+                val fragmentPokusaj = FragmentPokusaj.newInstance(lista)
+
+                bundle.putString("argument",kvizovi[position].naziv)
+                if(holder.imageView.tag == R.drawable.plava) {
+                    bundle.putBoolean("uradjenKviz", true)
+                }
+                else if(holder.imageView.tag == R.drawable.zelena){
+                    bundle.putBoolean("uradjenKviz", false)
+                }
                 if (fragment == null) {
-                    val fragmentPokusaj = FragmentPokusaj.newInstance(lista)
-                    fragmentPokusaj.arguments = bundleOf(Pair("argument",kvizovi[position].naziv))
+                    fragmentPokusaj.arguments = bundle
                     transaction?.replace(R.id.container, fragmentPokusaj, "Kviz" + kvizovi[position].naziv)
-                } else
-                transaction?.replace(R.id.container, fragment)
+                }
+                else{
+                    fragment.arguments = bundle
+                    transaction?.replace(R.id.container, fragment)
+                }
                 transaction?.addToBackStack(null)
                 transaction?.commit()
 

@@ -30,6 +30,8 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
     private var savedState: Bundle? = Bundle()
     private var listaBoja = Array(pitanja.size) { i -> "bijela"}
     private var tagovi: String = ""
+    private var switch : Boolean = true
+    private var uradjenKviz: Boolean = false
 
     private val mOnNavigationItemSelectedListener = NavigationView.OnNavigationItemSelectedListener { item ->
         if(item.title.toString() != "Rezultat") {
@@ -42,6 +44,9 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
 
                 if (fragment == null) {
                     val fragmentPitanje = FragmentPitanje.newInstance(pitanja.get(indeks - 1))
+                    if(uradjenKviz){
+                        fragmentPitanje.arguments =  bundleOf(Pair("disableList",!uradjenKviz))
+                    }
                     transaction?.replace(R.id.framePitanja, fragmentPitanje, tagovi + indeks.toString())
                 } else transaction?.replace(R.id.framePitanja, fragment)
                 transaction?.addToBackStack(null)
@@ -55,9 +60,7 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
             val porukaFragment = FragmentPoruka.newInstance()
             val transaction = activity?.supportFragmentManager?.beginTransaction()
             transaction?.replace(R.id.container, porukaFragment)
-
-            if(activity?.supportFragmentManager?.backStackEntryCount!! > 0)
-                transaction?.addToBackStack(null)
+            transaction?.addToBackStack(null)
             transaction?.commit()
 
             return@OnNavigationItemSelectedListener true
@@ -69,33 +72,15 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
         val view = inflater.inflate(R.layout.pokusaj_fragment, container, false)
         navigationView = view.findViewById(R.id.navigacijaPitanja)
         bottomNavigation = activity?.findViewById(R.id.bottomNav)!!
-        meni = navigationView.menu
-
-        var uradjenKviz: Boolean = false
-
-        if(arguments != null){
-            tagovi = arguments?.getString("argument").toString()
-
-//            if(arguments?.containsKey("uradjenKviz")!!){
-//                uradjenKviz = arguments?.getBoolean("uradjenKviz")!!
-//            }
-        }
 
 
         if(savedState?.isEmpty == false){
             listaBoja = savedState?.getStringArray("COLORS") as Array<String>
         }
+        switchVisibility(true)
 
-       setFragmentResultListener("uradjenKviz") { requestKey, bundle ->
-            uradjenKviz = bundle.getBoolean("uradjenKviz")
-            if(uradjenKviz) {
-                var tekst = SpannableString("Rezultat")
-                tekst.setSpan(RelativeSizeSpan(2f), 0, 8, 0)
-                tekst.setSpan(ForegroundColorSpan(Color.WHITE), 0, 8, 0)
-                tekst.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, 8, 0)
-                meni.add(0, pitanja.size, pitanja.size, tekst)
-            }
-        }
+        meni = navigationView.menu
+
 
         for (i in 1..pitanja.size) {
 
@@ -110,6 +95,26 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
             tekst.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, i.toString().length, 0)
             meni.add(0, i - 1, i - 1, tekst)
 
+        }
+
+        var tekst = SpannableString("Rezultat")
+        tekst.setSpan(RelativeSizeSpan(2f), 0, 8, 0)
+        tekst.setSpan(ForegroundColorSpan(Color.WHITE), 0, 8, 0)
+        tekst.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, 8, 0)
+        meni.add(0, pitanja.size, pitanja.size, tekst)
+        meni.getItem(pitanja.size).isVisible = false
+
+        if(arguments != null){
+            tagovi = arguments?.getString("argument").toString()
+//            if(arguments?.containsKey("uradjenKviz")!!){
+//                uradjenKviz = arguments?.getBoolean("uradjenKviz")!!
+//            }
+            if(arguments?.containsKey("uradjenKviz")!!){
+                uradjenKviz = arguments?.getBoolean("uradjenKviz")!!
+                if(uradjenKviz == true) {
+                    meni.getItem(pitanja.size).isVisible = true
+                }
+            }
         }
 
 
@@ -151,19 +156,26 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
         setFragmentResult("requestKey", bundleOf(Pair("tacnost", "Završili ste kviz " + tagovi + " sa tačnošću " + (tacnost/pitanja.size).toBigDecimal().setScale(2, RoundingMode.UP).toDouble() )))
     }
     override fun onPause() {
-        switchVisibility(false)
-        setFragmentResult("b", bundleOf())
+        if (!uradjenKviz) {
+            MainActivity.passData(bundleOf(Pair("tacnost", (tacnost / pitanja.size).toBigDecimal().setScale(2, RoundingMode.UP).toDouble())))
+            switchVisibility(false)
+        }
         super.onPause()
     }
 
     override fun onResume() {
-        switchVisibility(true)
+        if(!uradjenKviz){
+            switchVisibility(true)
+        }
+        else switchVisibility(false)
         super.onResume()
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         savedState?.putStringArray("COLORS", listaBoja)
+        savedState?.putBoolean("switch", switch)
     }
 
 

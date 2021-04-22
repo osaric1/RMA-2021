@@ -1,5 +1,6 @@
 package ba.etf.rma21.projekat.data.repositories
 
+import android.util.Log
 import ba.etf.rma21.projekat.data.*
 import ba.etf.rma21.projekat.data.models.Grupa
 import ba.etf.rma21.projekat.data.models.Kviz
@@ -43,10 +44,9 @@ class KvizRepository() {
             return cal
         }
 
-//        fun changeStatus(bodovi: Float, nazivKviza: String, nazivGrupe: String){
-//            val kviz = allKvizes().find{ kviz -> kviz.naziv == nazivKviza && kviz.nazivGrupe == nazivGrupe }
-//            kviz?.osvojeniBodovi = bodovi
-//        }
+        fun changeStatus(bodovi: Float, nazivKviza: String, nazivGrupe: String){
+            kvizStatus(bodovi, nazivKviza, nazivGrupe)
+        }
 
     }
 }

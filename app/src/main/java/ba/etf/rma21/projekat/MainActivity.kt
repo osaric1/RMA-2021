@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
             Log.d("Sta se prije desilo", "0")
         }
         fun setFragmentArguments(fragment: Fragment){
-            Log.d("Tip Fragmenta koji krade", fragment.javaClass.name.toString())
+            Log.d("Tip Fragmenta koji krade", bundle.toString())
             if(bundle != null) {
                 fragment.arguments = bundle
                 bundle = null
