@@ -62,25 +62,14 @@ class FragmentKvizovi: Fragment() {
         kvizAdapter = KvizAdapter(listOf(), activity?.supportFragmentManager, spinner.selectedItem.toString())
 
         if(arguments != null){
-            if(arguments?.containsKey("godina")!! && arguments?.containsKey("grupa")!! && arguments?.containsKey("predmet")!!) {
-                val godina = arguments?.getString("godina")
-                val grupa = arguments?.getString("grupa")
-                val predmet = arguments?.getString("predmet")
 
-                if (godina != "Empty" && grupa != "Empty" && predmet != "Empty") {
-                    kvizViewModel.addGroup(Grupa(grupa.toString(), predmet.toString()))
-                    predmetViewModel.addPredmet(Predmet(predmet.toString(), Integer.parseInt(godina.toString())))
-                    kvizAdapter.updateKvizovi(kvizViewModel.getMyKvizes())
-                }
-            }
-            else{
-                val kviz = arguments?.getString("nazivKviza")
-                val grupa = arguments?.getString("nazivGrupe")
-                val multiplier = arguments?.getFloat("tacnost")
+            val kviz = arguments?.getString("nazivKviza")
+            val grupa = arguments?.getString("nazivGrupe")
+            val multiplier = arguments?.getFloat("tacnost")
 
-                kvizViewModel.changeStatus( pitanjeKvizViewModel.dajBodove(kviz!!)* multiplier!!, kviz!!, grupa!!)
+            kvizViewModel.changeStatus( pitanjeKvizViewModel.dajBodove(kviz!!)* multiplier!!, kviz!!, grupa!!)
 
-            }
+
         }
 
 

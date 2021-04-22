@@ -10,7 +10,7 @@ var sviKvizovi: MutableList<Kviz> = mutableListOf(
         Kviz("OE Kviz 1", "OE", GregorianCalendar(2021,3,2).time, GregorianCalendar(2021,3,4).time, GregorianCalendar(1970,0,1).time, 40, "OE Grupa 1", null),
         Kviz("OE Kviz 2", "OE", GregorianCalendar(2021,3,1).time, GregorianCalendar(2021,3,6).time,  GregorianCalendar(1970,0,1).time, 40, "OE Grupa 2", null),
         Kviz("RMA Kviz 1", "RMA", GregorianCalendar(2021,2,31).time, GregorianCalendar(2021,2,31).time, GregorianCalendar(1970,0,1).time, 40, "RMA Grupa 1", null),
-        Kviz("RMA Kviz 2", "RMA", GregorianCalendar(2021,3,1).time, GregorianCalendar(2021,3,1).time, GregorianCalendar(1970,0,1).time, 40, "RMA Grupa 2", null),
+        Kviz("RMA Kviz 2", "RMA", GregorianCalendar(2021,1,15).time, GregorianCalendar(2021,4,15).time, GregorianCalendar(1970,0,1).time, 40, "RMA Grupa 2", null),
         Kviz("OOAD Kviz 1", "OOAD", GregorianCalendar(2021,3,15).time, GregorianCalendar(2021,3,15).time,  GregorianCalendar(1970,0,1).time, 90, "OOAD Grupa 1", null),
         Kviz("DM Kviz 1", "DM", GregorianCalendar(2020,9,20).time, GregorianCalendar(2021,9,20).time, GregorianCalendar(1970,0,1).time, 90, "DM Grupa 1", null),
         Kviz("TP Kviz 1", "TP", GregorianCalendar(2021,4,15).time, GregorianCalendar(2021,4,15).time,  GregorianCalendar(1970,0,1).time, 45, "TP Grupa 1", null),

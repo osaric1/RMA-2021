@@ -99,7 +99,7 @@ class KvizAdapter(
         Log.d("spinner", spinnerTekst)
         val lista = pitanjeKvizViewModel.getPitanja(holder.kvizTitle.text.toString(), holder.predmetName.text.toString())
         holder.itemView.setOnClickListener {
-            if(spinnerTekst == "Svi moji kvizovi" && holder.imageView.tag != R.drawable.crvena ) {
+            if(spinnerTekst != "Svi kvizovi") {
                 val transaction = manager?.beginTransaction()
                 var fragment = manager?.findFragmentByTag("Kviz" + kvizovi[position].naziv)
                 var bundle: Bundle = Bundle()

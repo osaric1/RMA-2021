@@ -21,9 +21,16 @@ class MainActivity : AppCompatActivity() {
     private val myOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when(item.itemId){
             R.id.kvizovi -> {
-                val kvizoviFragment = FragmentKvizovi.newInstance()
-                setFragmentArguments(kvizoviFragment)
-                openFragment(kvizoviFragment)
+                val fragment = supportFragmentManager.findFragmentByTag("kviz")
+                if(fragment == null){
+                    val kvizoviFragment = FragmentKvizovi.newInstance()
+                    setFragmentArguments(kvizoviFragment)
+                    openFragment(kvizoviFragment)
+                }
+                else{
+                    setFragmentArguments(fragment)
+                    openFragment(fragment)
+                }
                 return@OnNavigationItemSelectedListener true
             }
             R.id.predmeti -> {
@@ -49,25 +56,44 @@ class MainActivity : AppCompatActivity() {
 
     private fun openFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
-         transaction.replace(R.id.container, fragment)
-        if(fragment !is FragmentKvizovi || supportFragmentManager.backStackEntryCount > 0)
-            transaction.addToBackStack(null)
+        if(fragment is FragmentKvizovi){
+            transaction.replace(R.id.container, fragment, "kviz")
+        }
+        else{
+            transaction.replace(R.id.container, fragment)
+        }
+
+        transaction.addToBackStack(null)
+
         transaction.commit()
     }
 
     override fun onBackPressed() {
+//            supportFragmentManager.popBackStackImmediate(supportFragmentManager.getBackStackEntryAt(0).name, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+//            if(bundle != null){//posto skidamo sa stacka fragmente sve dok ne dodjemo do main fragmenta, kako ne bi stvorili dvije instance izbrisemo postojecu i proslijedimo argumente novoj
+//                supportFragmentManager.popBackStack()
+//                val kvizovi = FragmentKvizovi.newInstance()
+//                setFragmentArguments(kvizovi)
+//                openFragment(kvizovi)
+//            }
+
         if(supportFragmentManager.backStackEntryCount > 0){
-            supportFragmentManager.popBackStackImmediate(supportFragmentManager.getBackStackEntryAt(0).name, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-            if(bundle != null){//posto skidamo sa stacka fragmente sve dok ne dodjemo do main fragmenta, kako ne bi stvorili dvije instance izbrisemo postojecu i proslijedimo argumente novoj
+            val index = supportFragmentManager.backStackEntryCount -1
+            val fragment = supportFragmentManager.findFragmentByTag("kviz")
+
+            if(supportFragmentManager.getBackStackEntryAt(index).name == "poruka"){
                 supportFragmentManager.popBackStack()
-                val kvizovi = FragmentKvizovi.newInstance()
-                setFragmentArguments(kvizovi)
-                openFragment(kvizovi)
+            }
+            else if(fragment!!.isVisible){
+                moveTaskToBack(true)
+            }
+            else {
+                val fragment = supportFragmentManager.findFragmentByTag("kviz")
+                openFragment(fragment!!)
             }
         }
-        else{
-            super.onBackPressed()
-        }
+        else super.onBackPressed()
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

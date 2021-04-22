@@ -37,16 +37,17 @@ class FragmentPoruka: Fragment() {
             tekst.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, poruka.text.toString().length, 0)
             poruka.text = tekst
         }
+        else {
+            setFragmentResultListener("requestKey") { requestKey, bundle ->
+                result = bundle.getString("tacnost")
+                if (result != null) {
+                    poruka.text = result
+                    var tekst = SpannableString(poruka.text)
+                    tekst.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, poruka.text.toString().length, 0)
+                    poruka.text = tekst
+                }
 
-        setFragmentResultListener("requestKey") { requestKey, bundle ->
-            result  = bundle.getString("tacnost")
-            if(result != null){
-                poruka.text = result
-                var tekst = SpannableString(poruka.text)
-                tekst.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, poruka.text.toString().length, 0)
-                poruka.text = tekst
             }
-
         }
         return view
     }

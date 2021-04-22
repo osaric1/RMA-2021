@@ -52,7 +52,6 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
                 }
                 else{
                     if(uradjenKviz){
-                        Log.d("dada", "dad")
                         fragment.arguments =  bundleOf(Pair("disableList", !uradjenKviz))
                     }
                     transaction?.replace(R.id.framePitanja, fragment)
@@ -68,7 +67,7 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
             val porukaFragment = FragmentPoruka.newInstance()
             val transaction = activity?.supportFragmentManager?.beginTransaction()
             transaction?.replace(R.id.container, porukaFragment)
-            transaction?.addToBackStack(null)
+            transaction?.addToBackStack("poruka")
             transaction?.commit()
 
             return@OnNavigationItemSelectedListener true
@@ -162,23 +161,20 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
 
     override fun onStop() {
         super.onStop()
-        setFragmentResult("requestKey", bundleOf(Pair("tacnost", "Završili ste kviz " + nazivKviza + " sa tačnošću " + (tacnost / pitanja.size).toBigDecimal().setScale(2, RoundingMode.UP).toDouble())))
+        setFragmentResult("requestKey", bundleOf(Pair("tacnost", "Završili ste kviz")))
     }
     override fun onPause() {
         if (!uradjenKviz) {
             MainActivity.passData(bundleOf(
                     Pair("tacnost", (tacnost / pitanja.size).toBigDecimal().setScale(2, RoundingMode.UP).toFloat()),
                     Pair("nazivKviza", nazivKviza), Pair("nazivGrupe", nazivGrupa)))
-            switchVisibility(false)
         }
+        switchVisibility(false)
         super.onPause()
     }
 
     override fun onResume() {
-        if(!uradjenKviz){
-            switchVisibility(true)
-        }
-        else switchVisibility(false)
+        switchVisibility(true)
         super.onResume()
 
     }

@@ -27,7 +27,12 @@ fun allPitanjaKviz(): List<PitanjeKviz>{
                   PitanjeKviz("TP-p1", "TP Kviz 1", "TP", 1.0F),
                     PitanjeKviz("TP-p2", "TP Kviz 1", "TP", 1.0F),
                     PitanjeKviz("TP-p3", "TP Kviz 1", "TP", 1.0F),
-                    PitanjeKviz("TP-p4", "TP Kviz 1", "TP", 1.0F)
+                    PitanjeKviz("TP-p4", "TP Kviz 1", "TP", 1.0F),
+                    PitanjeKviz("TP-p1", "RPR Kviz 2", "RPR", 1.0F),
+                    PitanjeKviz("TP-p2", "RPR Kviz 2", "RPR", 1.0F),
+                    PitanjeKviz("TP-p3", "RPR Kviz 2", "RPR", 1.0F),
+                    PitanjeKviz("TP-p4", "RPR Kviz 2", "RPR", 1.0F)
+
     )
 }
 

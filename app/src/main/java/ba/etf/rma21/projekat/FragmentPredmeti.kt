@@ -17,6 +17,7 @@ import androidx.fragment.app.setFragmentResultListener
 import ba.etf.rma21.projekat.data.models.Grupa
 import ba.etf.rma21.projekat.data.models.Predmet
 import ba.etf.rma21.projekat.viewmodel.GrupaViewModel
+import ba.etf.rma21.projekat.viewmodel.KvizViewModel
 import ba.etf.rma21.projekat.viewmodel.PredmetViewModel
 
 class FragmentPredmeti() : Fragment() {
@@ -27,6 +28,7 @@ class FragmentPredmeti() : Fragment() {
 
     private var predmetViewModel  = PredmetViewModel()
     private var grupaViewModel  = GrupaViewModel()
+    private var kvizViewModel = KvizViewModel()
     private var zavrsenUpis: Boolean = false
 
     companion object{
@@ -55,8 +57,14 @@ class FragmentPredmeti() : Fragment() {
 
                 val fragmentPoruka = FragmentPoruka.newInstance()
                 fragmentPoruka.arguments = bundleOf(Pair("poruka", "Uspješno ste upisani u grupu " + odabirGrupe.selectedItem.toString() + " predmeta " + odabirPredmeta.selectedItem.toString() + "!"))
-                MainActivity.passData(bundle)
-                setFragmentResult("upisi", bundle)
+
+                val godina = odabirGodine.selectedItem.toString()
+                val grupa = odabirGrupe.selectedItem.toString()
+                val predmet = odabirPredmeta.selectedItem.toString()
+
+                kvizViewModel.addGroup(Grupa(grupa, predmet))
+                predmetViewModel.addPredmet(Predmet(predmet, Integer.parseInt(godina)))
+
 
                 val transaction = activity?.supportFragmentManager?.beginTransaction()
                 transaction?.replace(R.id.container, fragmentPoruka)
