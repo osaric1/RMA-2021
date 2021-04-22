@@ -18,19 +18,20 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import java.math.RoundingMode
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
     private lateinit var bottomNavigation: BottomNavigationView
     private lateinit var navigationView: NavigationView
+    private lateinit var meni: Menu
+
     private var indeks: Int = 0
     private var tacnost: Double = 0.0
-    private lateinit var meni: Menu
     private var savedState: Bundle? = Bundle()
     private var listaBoja = Array(pitanja.size) { i -> "bijela"}
-    private var tagovi: String = ""
-    private var switch : Boolean = true
+
+    private var nazivKviza: String = ""
+    private var nazivGrupa: String = ""
     private var uradjenKviz: Boolean = false
 
     private val mOnNavigationItemSelectedListener = NavigationView.OnNavigationItemSelectedListener { item ->
@@ -40,14 +41,14 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
 
                 val fragmentManager = activity?.supportFragmentManager
                 val transaction = fragmentManager?.beginTransaction()
-                var fragment = fragmentManager?.findFragmentByTag(tagovi + indeks.toString())
+                var fragment = fragmentManager?.findFragmentByTag(nazivKviza + indeks.toString())
 
                 if (fragment == null) {
                     val fragmentPitanje = FragmentPitanje.newInstance(pitanja.get(indeks - 1))
                     if(uradjenKviz){
                         fragmentPitanje.arguments =  bundleOf(Pair("disableList",!uradjenKviz))
                     }
-                    transaction?.replace(R.id.framePitanja, fragmentPitanje, tagovi + indeks.toString())
+                    transaction?.replace(R.id.framePitanja, fragmentPitanje, nazivKviza + indeks.toString())
                 } else transaction?.replace(R.id.framePitanja, fragment)
                 transaction?.addToBackStack(null)
                 transaction?.commit()
@@ -105,10 +106,10 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
         meni.getItem(pitanja.size).isVisible = false
 
         if(arguments != null){
-            tagovi = arguments?.getString("argument").toString()
-//            if(arguments?.containsKey("uradjenKviz")!!){
-//                uradjenKviz = arguments?.getBoolean("uradjenKviz")!!
-//            }
+
+            nazivKviza = arguments?.getString("kvizNaziv").toString()
+            nazivGrupa = arguments?.getString("grupaNaziv").toString()
+
             if(arguments?.containsKey("uradjenKviz")!!){
                 uradjenKviz = arguments?.getBoolean("uradjenKviz")!!
                 if(uradjenKviz == true) {
@@ -120,6 +121,7 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
 
         setFragmentResultListener("odgovoreno") { requestKey, bundle ->
             val result:Boolean = bundle.getBoolean("odgovor")
+
             var tekst = SpannableString(meni[indeks-1].title)
 
             if(result){
@@ -152,12 +154,16 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
     }
 
     override fun onStop() {
+        Log.d("onStop", "w")
         super.onStop()
-        setFragmentResult("requestKey", bundleOf(Pair("tacnost", "Završili ste kviz " + tagovi + " sa tačnošću " + (tacnost/pitanja.size).toBigDecimal().setScale(2, RoundingMode.UP).toDouble() )))
+        setFragmentResult("requestKey", bundleOf(Pair("tacnost", "Završili ste kviz " + nazivKviza + " sa tačnošću " + (tacnost/pitanja.size).toBigDecimal().setScale(2, RoundingMode.UP).toDouble() )))
     }
     override fun onPause() {
+        Log.d("onPause", "w")
         if (!uradjenKviz) {
-            MainActivity.passData(bundleOf(Pair("tacnost", (tacnost / pitanja.size).toBigDecimal().setScale(2, RoundingMode.UP).toDouble())))
+            MainActivity.passData(bundleOf(
+                    Pair("tacnost", (tacnost / pitanja.size).toBigDecimal().setScale(2, RoundingMode.UP).toFloat()),
+                    Pair("nazivKviza", nazivKviza), Pair("nazivGrupe", nazivGrupa)))
             switchVisibility(false)
         }
         super.onPause()
@@ -173,10 +179,11 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
     }
 
     override fun onDestroyView() {
+        Log.d("onDestroyView", "w")
         super.onDestroyView()
         savedState?.putStringArray("COLORS", listaBoja)
-        savedState?.putBoolean("switch", switch)
     }
+
 
 
 }

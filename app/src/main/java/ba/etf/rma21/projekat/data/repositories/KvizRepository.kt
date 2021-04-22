@@ -23,7 +23,7 @@ class KvizRepository() {
         }
 
         fun getDone(): List<Kviz> {
-            return getMyKvizes().filter { kviz -> toCalendar(kviz.datumRada).get(Calendar.YEAR) != 1970 && toCalendar(kviz.datumKraj) <= Calendar.getInstance() }.toList()
+            return getMyKvizes().filter { kviz -> toCalendar(kviz.datumRada).get(Calendar.YEAR) != 1970 }.toList()
         }
 
         fun getFuture(): List<Kviz> {

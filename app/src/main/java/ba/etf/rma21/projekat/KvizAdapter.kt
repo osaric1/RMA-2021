@@ -101,13 +101,17 @@ class KvizAdapter(
                 var bundle: Bundle = Bundle()
                 val fragmentPokusaj = FragmentPokusaj.newInstance(lista)
 
-                bundle.putString("argument",kvizovi[position].naziv)
+                bundle.putString("kvizNaziv",kvizovi[position].naziv)
+
                 if(holder.imageView.tag == R.drawable.plava) {
                     bundle.putBoolean("uradjenKviz", true)
                 }
                 else if(holder.imageView.tag == R.drawable.zelena){
                     bundle.putBoolean("uradjenKviz", false)
                 }
+
+                bundle.putString("grupaNaziv", kvizovi[position].nazivGrupe)
+
                 if (fragment == null) {
                     fragmentPokusaj.arguments = bundle
                     transaction?.replace(R.id.container, fragmentPokusaj, "Kviz" + kvizovi[position].naziv)

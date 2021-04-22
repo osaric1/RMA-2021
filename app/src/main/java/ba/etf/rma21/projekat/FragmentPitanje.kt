@@ -31,6 +31,8 @@ class FragmentPitanje(var pitanje: Pitanje): Fragment() {
     private var tacanOdgovor: Boolean = false
     private var savedState: Bundle = Bundle()
 
+    private var savedOdgovor: Int? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
         val view = inflater.inflate(R.layout.pitanje_fragment, container, false)
         var odgovori: ArrayList<String>? = null
@@ -40,27 +42,46 @@ class FragmentPitanje(var pitanje: Pitanje): Fragment() {
 
         if(arguments != null){
             enabled = arguments?.getBoolean("enabled")!!
-
+            savedOdgovor = savedState.getInt("savedOdgovor")
         }
 
         if(savedState.size() > 0){
             enabled = savedState.getBoolean("enabled")
+            savedOdgovor = savedState.getInt("savedOdgovor")
         }
 
 
         odgovori = ArrayList(pitanje.opcije)
         tacno = pitanje.tacan
         tekstPitanja.text = pitanje.tekst
+
         val dataAdapter: ArrayAdapter<String> = ArrayAdapter<String>(view.context, android.R.layout.simple_list_item_1, odgovori)
         listaOdgovora.adapter = dataAdapter
+
+
+        if(savedOdgovor != null) {
+            listaOdgovora.post {
+                val textview = listaOdgovora.getChildAt(savedOdgovor!!) as TextView
+                if(textview != listaOdgovora.getChildAt(tacno) as TextView){
+                    textview.setTextColor(ContextCompat.getColor(view.context, R.color.wrong))
+                    (listaOdgovora.getChildAt(tacno) as TextView).setTextColor(ContextCompat.getColor(view.context, R.color.correct))
+                }
+                else textview.setTextColor(ContextCompat.getColor(view.context, R.color.correct))
+            }
+        }
 
         if(!enabled){
             listaOdgovora.isEnabled = false
         }
 
+
+
+
         if(enabled) {
             listaOdgovora.setOnItemClickListener { parent, view, position, id ->
+                savedOdgovor = position
                 var textview: TextView = listaOdgovora.getChildAt(position) as TextView
+
                 if (textview.text.toString() != odgovori.get(tacno)) {
                     textview.setTextColor(ContextCompat.getColor(view.context, R.color.wrong))
                     (parent.getChildAt(tacno) as TextView).setTextColor(ContextCompat.getColor(view.context, R.color.correct))
@@ -82,7 +103,7 @@ class FragmentPitanje(var pitanje: Pitanje): Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         savedState.putBoolean("enabled", enabled)
-
+        savedState.putInt("savedOdgovor", savedOdgovor!!)
     }
 
 
@@ -90,7 +111,6 @@ class FragmentPitanje(var pitanje: Pitanje): Fragment() {
         super.onAttach(context)
         setFragmentResultListener("disable") { requestKey, bundle ->
             enabled = bundle.getBoolean("disableList")
-            Log.d("enabled", enabled.toString())
         }
     }
 

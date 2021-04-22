@@ -6,7 +6,8 @@ import java.util.*
 data class PitanjeKviz(
         val naziv: String,
         val kviz: String,
-        val predmet: String
+        val predmet: String,
+        val bodovi: Float //bodovi po pitanju
 ) {
     override fun toString(): String {
         return naziv

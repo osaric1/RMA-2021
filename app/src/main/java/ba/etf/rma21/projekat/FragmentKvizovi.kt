@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ba.etf.rma21.projekat.data.models.Grupa
 import ba.etf.rma21.projekat.data.models.Predmet
+import ba.etf.rma21.projekat.data.obracunajBodoveZaKviz
 import ba.etf.rma21.projekat.viewmodel.KvizViewModel
 import ba.etf.rma21.projekat.viewmodel.PitanjeKvizViewModel
 import ba.etf.rma21.projekat.viewmodel.PredmetViewModel
@@ -35,6 +36,7 @@ class FragmentKvizovi: Fragment() {
 
     private var kvizViewModel =  KvizViewModel()
     private var predmetViewModel = PredmetViewModel()
+    private var pitanjeKvizViewModel = PitanjeKvizViewModel()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val view  = inflater.inflate(R.layout.kvizovi_fragment, container, false)
@@ -74,7 +76,11 @@ class FragmentKvizovi: Fragment() {
                 }
             }
             else{
-                kvizViewModel.changeStatus(10.0F, "TP Kviz 2","TP Grupa 1")
+                val kviz = arguments?.getString("nazivKviza")
+                val grupa = arguments?.getString("nazivGrupe")
+                val multiplier = arguments?.getFloat("tacnost")
+
+                kvizViewModel.changeStatus( pitanjeKvizViewModel.dajBodove(kviz!!)* multiplier!!, kviz!!, grupa!!)
 
             }
         }

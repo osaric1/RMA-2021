@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         if(supportFragmentManager.backStackEntryCount > 0){
             supportFragmentManager.popBackStack(supportFragmentManager.getBackStackEntryAt(0).id, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-            if(bundle != null){ //posto skidamo sa stacka fragmente sve dok ne dodjemo do main fragmenta, kako ne bi stvorili dvije instance izbrisemo postojecu i proslijedimo argumente novoj
+            if(bundle != null){//posto skidamo sa stacka fragmente sve dok ne dodjemo do main fragmenta, kako ne bi stvorili dvije instance izbrisemo postojecu i proslijedimo argumente novoj
                 supportFragmentManager.popBackStack()
                 val kvizovi = FragmentKvizovi.newInstance()
                 setFragmentArguments(kvizovi)
