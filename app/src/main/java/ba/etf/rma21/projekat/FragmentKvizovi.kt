@@ -38,7 +38,6 @@ class FragmentKvizovi: Fragment() {
     private var predmetViewModel = PredmetViewModel()
     private var pitanjeKvizViewModel = PitanjeKvizViewModel()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
         val view  = inflater.inflate(R.layout.kvizovi_fragment, container, false)
         spinner = view.findViewById(R.id.filterKvizova)
 
@@ -59,8 +58,8 @@ class FragmentKvizovi: Fragment() {
                 2
         )
 
-
-        kvizAdapter = KvizAdapter(listOf(), activity?.supportFragmentManager)
+        spinner.setSelection(0)
+        kvizAdapter = KvizAdapter(listOf(), activity?.supportFragmentManager, spinner.selectedItem.toString())
 
         if(arguments != null){
             if(arguments?.containsKey("godina")!! && arguments?.containsKey("grupa")!! && arguments?.containsKey("predmet")!!) {
@@ -72,7 +71,6 @@ class FragmentKvizovi: Fragment() {
                     kvizViewModel.addGroup(Grupa(grupa.toString(), predmet.toString()))
                     predmetViewModel.addPredmet(Predmet(predmet.toString(), Integer.parseInt(godina.toString())))
                     kvizAdapter.updateKvizovi(kvizViewModel.getMyKvizes())
-                    spinner.setSelection(0)
                 }
             }
             else{
@@ -84,7 +82,6 @@ class FragmentKvizovi: Fragment() {
 
             }
         }
-        else spinner.setSelection(1)
 
 
         listaKvizova.adapter = kvizAdapter
@@ -110,6 +107,7 @@ class FragmentKvizovi: Fragment() {
                 else if(spinner.selectedItem.toString() == "Prošli kvizovi"){
                     kvizAdapter.updateKvizovi(kvizViewModel.getNotTaken())
                 }
+                kvizAdapter.updateSpinner(spinner.selectedItem.toString())
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}

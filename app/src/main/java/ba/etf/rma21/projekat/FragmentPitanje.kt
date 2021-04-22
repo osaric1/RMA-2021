@@ -31,22 +31,20 @@ class FragmentPitanje(var pitanje: Pitanje): Fragment() {
     private var tacanOdgovor: Boolean = false
     private var savedState: Bundle = Bundle()
 
-    private var savedOdgovor: Int? = null
+    private var savedOdgovor: Int = -1
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
         val view = inflater.inflate(R.layout.pitanje_fragment, container, false)
-        var odgovori: ArrayList<String>? = null
+        val odgovori: ArrayList<String>?
 
         tekstPitanja = view.findViewById(R.id.tekstPitanja)
         listaOdgovora = view.findViewById(R.id.odgovoriLista)
 
         if(arguments != null){
-            enabled = arguments?.getBoolean("enabled")!!
-            savedOdgovor = savedState.getInt("savedOdgovor")
+            enabled = arguments?.getBoolean("disableList")!!
         }
 
         if(savedState.size() > 0){
-            enabled = savedState.getBoolean("enabled")
             savedOdgovor = savedState.getInt("savedOdgovor")
         }
 
@@ -59,7 +57,7 @@ class FragmentPitanje(var pitanje: Pitanje): Fragment() {
         listaOdgovora.adapter = dataAdapter
 
 
-        if(savedOdgovor != null) {
+        if(savedOdgovor >= 0) {
             listaOdgovora.post {
                 val textview = listaOdgovora.getChildAt(savedOdgovor!!) as TextView
                 if(textview != listaOdgovora.getChildAt(tacno) as TextView){
@@ -70,11 +68,11 @@ class FragmentPitanje(var pitanje: Pitanje): Fragment() {
             }
         }
 
+
+
         if(!enabled){
             listaOdgovora.isEnabled = false
         }
-
-
 
 
         if(enabled) {
@@ -102,8 +100,7 @@ class FragmentPitanje(var pitanje: Pitanje): Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        savedState.putBoolean("enabled", enabled)
-        savedState.putInt("savedOdgovor", savedOdgovor!!)
+        savedState.putInt("savedOdgovor", savedOdgovor)
     }
 
 

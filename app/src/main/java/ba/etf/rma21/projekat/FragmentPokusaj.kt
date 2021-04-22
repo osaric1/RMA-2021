@@ -46,10 +46,17 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
                 if (fragment == null) {
                     val fragmentPitanje = FragmentPitanje.newInstance(pitanja.get(indeks - 1))
                     if(uradjenKviz){
-                        fragmentPitanje.arguments =  bundleOf(Pair("disableList",!uradjenKviz))
+                        fragmentPitanje.arguments =  bundleOf(Pair("disableList", !uradjenKviz))
                     }
                     transaction?.replace(R.id.framePitanja, fragmentPitanje, nazivKviza + indeks.toString())
-                } else transaction?.replace(R.id.framePitanja, fragment)
+                }
+                else{
+                    if(uradjenKviz){
+                        Log.d("dada", "dad")
+                        fragment.arguments =  bundleOf(Pair("disableList", !uradjenKviz))
+                    }
+                    transaction?.replace(R.id.framePitanja, fragment)
+                }
                 transaction?.addToBackStack(null)
                 transaction?.commit()
 
@@ -87,9 +94,9 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
 
             var tekst = SpannableString(i.toString())
             tekst.setSpan(RelativeSizeSpan(2f), 0, i.toString().length, 0)
-            if(listaBoja[i-1] == "bijela")
+            if(listaBoja[i - 1] == "bijela")
                 tekst.setSpan(ForegroundColorSpan(Color.WHITE), 0, i.toString().length, 0)
-            else if(listaBoja[i-1] == "crvena"){
+            else if(listaBoja[i - 1] == "crvena"){
                 tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.wrong)), 0, i.toString().length, 0)
             }
             else tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.correct)), 0, i.toString().length, 0)
@@ -122,18 +129,18 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
         setFragmentResultListener("odgovoreno") { requestKey, bundle ->
             val result:Boolean = bundle.getBoolean("odgovor")
 
-            var tekst = SpannableString(meni[indeks-1].title)
+            var tekst = SpannableString(meni[indeks - 1].title)
 
             if(result){
-                tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.correct)), 0, meni[indeks-1].title.length, 0)
+                tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.correct)), 0, meni[indeks - 1].title.length, 0)
                 tacnost+=1
-                listaBoja[indeks-1] = "zelena"
+                listaBoja[indeks - 1] = "zelena"
             }
             else{
-                tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.wrong)), 0, meni[indeks-1].title.length, 0)
-                listaBoja[indeks-1] = "crvena"
+                tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.wrong)), 0, meni[indeks - 1].title.length, 0)
+                listaBoja[indeks - 1] = "crvena"
             }
-            meni[indeks-1].title = tekst
+            meni[indeks - 1].title = tekst
         }
 
         navigationView.setNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
@@ -154,12 +161,10 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
     }
 
     override fun onStop() {
-        Log.d("onStop", "w")
         super.onStop()
-        setFragmentResult("requestKey", bundleOf(Pair("tacnost", "Završili ste kviz " + nazivKviza + " sa tačnošću " + (tacnost/pitanja.size).toBigDecimal().setScale(2, RoundingMode.UP).toDouble() )))
+        setFragmentResult("requestKey", bundleOf(Pair("tacnost", "Završili ste kviz " + nazivKviza + " sa tačnošću " + (tacnost / pitanja.size).toBigDecimal().setScale(2, RoundingMode.UP).toDouble())))
     }
     override fun onPause() {
-        Log.d("onPause", "w")
         if (!uradjenKviz) {
             MainActivity.passData(bundleOf(
                     Pair("tacnost", (tacnost / pitanja.size).toBigDecimal().setScale(2, RoundingMode.UP).toFloat()),
@@ -179,11 +184,9 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
     }
 
     override fun onDestroyView() {
-        Log.d("onDestroyView", "w")
         super.onDestroyView()
         savedState?.putStringArray("COLORS", listaBoja)
     }
-
 
 
 }

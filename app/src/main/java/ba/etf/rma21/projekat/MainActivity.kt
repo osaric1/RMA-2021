@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun openFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.container, fragment)
+         transaction.replace(R.id.container, fragment)
         if(fragment !is FragmentKvizovi || supportFragmentManager.backStackEntryCount > 0)
             transaction.addToBackStack(null)
         transaction.commit()
@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         if(supportFragmentManager.backStackEntryCount > 0){
-            supportFragmentManager.popBackStack(supportFragmentManager.getBackStackEntryAt(0).id, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            supportFragmentManager.popBackStackImmediate(supportFragmentManager.getBackStackEntryAt(0).name, FragmentManager.POP_BACK_STACK_INCLUSIVE)
             if(bundle != null){//posto skidamo sa stacka fragmente sve dok ne dodjemo do main fragmenta, kako ne bi stvorili dvije instance izbrisemo postojecu i proslijedimo argumente novoj
                 supportFragmentManager.popBackStack()
                 val kvizovi = FragmentKvizovi.newInstance()
@@ -93,15 +93,14 @@ class MainActivity : AppCompatActivity() {
 
         fun passData(bundle: Bundle){
             this.bundle = bundle
-            Log.d("Sta se prije desilo", "0")
         }
         fun setFragmentArguments(fragment: Fragment){
-            Log.d("Tip Fragmenta koji krade", bundle.toString())
             if(bundle != null) {
                 fragment.arguments = bundle
                 bundle = null
             }
         }
     }
+
 }
 

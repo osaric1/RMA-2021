@@ -22,8 +22,11 @@ import java.util.*
 class KvizAdapter(
         private var kvizovi: List<Kviz>,
         private var manager: FragmentManager?,
-        private var pitanjeKvizViewModel: PitanjeKvizViewModel = PitanjeKvizViewModel()
+        private var spinnerTekst:String
 ): RecyclerView.Adapter<KvizAdapter.KvizViewHolder>(){
+
+    private var pitanjeKvizViewModel: PitanjeKvizViewModel = PitanjeKvizViewModel()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KvizViewHolder {
         val view = LayoutInflater
                 .from(parent.context)
@@ -92,21 +95,21 @@ class KvizAdapter(
         holder.kvizTitle.text = kvizovi[position].naziv
         holder.predmetName.text = kvizovi[position].nazivPredmeta
 
-        val lista = pitanjeKvizViewModel.getPitanja(holder.kvizTitle.text.toString(), holder.predmetName.text.toString())
 
-        if(lista.isNotEmpty()) {
-            holder.itemView.setOnClickListener {
+        Log.d("spinner", spinnerTekst)
+        val lista = pitanjeKvizViewModel.getPitanja(holder.kvizTitle.text.toString(), holder.predmetName.text.toString())
+        holder.itemView.setOnClickListener {
+            if(spinnerTekst == "Svi moji kvizovi" && holder.imageView.tag != R.drawable.crvena ) {
                 val transaction = manager?.beginTransaction()
                 var fragment = manager?.findFragmentByTag("Kviz" + kvizovi[position].naziv)
                 var bundle: Bundle = Bundle()
                 val fragmentPokusaj = FragmentPokusaj.newInstance(lista)
 
-                bundle.putString("kvizNaziv",kvizovi[position].naziv)
+                bundle.putString("kvizNaziv", kvizovi[position].naziv)
 
-                if(holder.imageView.tag == R.drawable.plava) {
+                if (holder.imageView.tag == R.drawable.plava) {
                     bundle.putBoolean("uradjenKviz", true)
-                }
-                else if(holder.imageView.tag == R.drawable.zelena){
+                } else if (holder.imageView.tag == R.drawable.zelena) {
                     bundle.putBoolean("uradjenKviz", false)
                 }
 
@@ -115,16 +118,17 @@ class KvizAdapter(
                 if (fragment == null) {
                     fragmentPokusaj.arguments = bundle
                     transaction?.replace(R.id.container, fragmentPokusaj, "Kviz" + kvizovi[position].naziv)
-                }
-                else{
+                } else {
                     fragment.arguments = bundle
                     transaction?.replace(R.id.container, fragment)
                 }
                 transaction?.addToBackStack(null)
                 transaction?.commit()
-
             }
+
         }
+
+
 
 
     }
@@ -155,6 +159,10 @@ class KvizAdapter(
         val cal = Calendar.getInstance()
         cal.time = date
         return cal
+    }
+
+    fun updateSpinner(spinnerTekst: String) {
+        this.spinnerTekst = spinnerTekst
     }
 
 
