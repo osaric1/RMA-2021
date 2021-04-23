@@ -1,7 +1,6 @@
 package ba.etf.rma21.projekat.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,7 +42,6 @@ class FragmentPredmeti() : Fragment() {
         odabirGodine = view.findViewById(R.id.odabirGodina)
         odabirPredmeta = view.findViewById(R.id.odabirPredmet)
         odabirGrupe = view.findViewById(R.id.odabirGrupa)
-        Log.d("whatup", zavrsenUpis.toString())
         dodajPredmet = view.findViewById(R.id.dodajPredmetDugme)
 
 //        if(savedState.size() > 0){
@@ -163,7 +161,6 @@ class FragmentPredmeti() : Fragment() {
 
 //    override fun onDestroyView() {
 //        super.onDestroyView()
-//        Log.d("ovo se desi", "zes")
 //        savedState.putInt("presetGodina", odabirGodine.selectedItemPosition)
 //        if(!zavrsenUpis){
 //            savedState.putInt("presetGrupa", odabirGodine.selectedItemPosition)
