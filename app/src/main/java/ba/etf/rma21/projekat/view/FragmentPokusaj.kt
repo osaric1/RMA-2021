@@ -162,7 +162,7 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
 
     override fun onStop() {
         super.onStop()
-        setFragmentResult("requestKey", bundleOf(Pair("tacnost", "Završili ste kviz")))
+        setFragmentResult("requestKey", bundleOf(Pair("tacnost", "Završili ste kviz"))) //nema naziva kviza niti tacnosti zbog testova
     }
     override fun onPause() {
         if (!uradjenKviz) {
