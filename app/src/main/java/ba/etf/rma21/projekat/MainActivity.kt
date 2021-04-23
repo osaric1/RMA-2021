@@ -1,23 +1,17 @@
 package ba.etf.rma21.projekat
 
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
-import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
+import ba.etf.rma21.projekat.view.FragmentKvizovi
+import ba.etf.rma21.projekat.view.FragmentPoruka
+import ba.etf.rma21.projekat.view.FragmentPredmeti
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var bottomNavigation: BottomNavigationView
-
+    private var kvizZavrsen = false
     private val myOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when(item.itemId){
             R.id.kvizovi -> {
@@ -40,6 +34,7 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.predajKviz -> {
                 val porukaFragment = FragmentPoruka.newInstance()
+                kvizZavrsen = true
                 openFragment(porukaFragment)
                 return@OnNavigationItemSelectedListener true
             }
@@ -89,6 +84,10 @@ class MainActivity : AppCompatActivity() {
             }
             else {
                 val fragment = supportFragmentManager.findFragmentByTag("kviz")
+                if(kvizZavrsen){
+                    setFragmentArguments(fragment!!)
+                    kvizZavrsen = false
+                }
                 openFragment(fragment!!)
             }
         }

@@ -1,4 +1,4 @@
-package ba.etf.rma21.projekat
+package ba.etf.rma21.projekat.view
 
 import android.graphics.Color
 import android.os.Bundle
@@ -7,12 +7,13 @@ import android.text.SpannableString
 import android.text.style.AlignmentSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
-import android.util.Log
 import android.view.*
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.get
 import androidx.fragment.app.*
+import ba.etf.rma21.projekat.MainActivity
+import ba.etf.rma21.projekat.R
 import ba.etf.rma21.projekat.data.models.Pitanje
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView

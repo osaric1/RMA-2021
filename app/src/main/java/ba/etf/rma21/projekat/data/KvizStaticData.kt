@@ -3,7 +3,6 @@ package ba.etf.rma21.projekat.data
 import ba.etf.rma21.projekat.data.models.Kviz
 import java.util.*
 
-
 var sviKvizovi: MutableList<Kviz> = mutableListOf(
         Kviz("IM Kviz 1", "IM", GregorianCalendar(2021,3,1).time, GregorianCalendar(2021,3,16).time, GregorianCalendar(1970,0,1).time, 30,"IM Grupa 1", null),
         Kviz("IM Kviz 2", "IM", GregorianCalendar(2021,3,1).time, GregorianCalendar(2021,3,18).time, GregorianCalendar(1970,0,1).time,30 ,"IM Grupa 2", null),
@@ -32,4 +31,6 @@ fun kvizStatus(bodovi: Float, nazivKviza: String, nazivGrupe: String){
     kviz?.osvojeniBodovi = bodovi
     kviz?.datumRada = Date()
 }
+
+
 

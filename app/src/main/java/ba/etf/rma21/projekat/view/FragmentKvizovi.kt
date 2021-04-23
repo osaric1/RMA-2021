@@ -1,33 +1,19 @@
-package ba.etf.rma21.projekat
+package ba.etf.rma21.projekat.view
 
-import android.content.Intent
 import android.os.Bundle
-import android.text.Layout
-import android.text.SpannableString
-import android.text.style.AlignmentSpan
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ba.etf.rma21.projekat.data.models.Grupa
-import ba.etf.rma21.projekat.data.models.Predmet
-import ba.etf.rma21.projekat.data.obracunajBodoveZaKviz
+import ba.etf.rma21.projekat.R
 import ba.etf.rma21.projekat.viewmodel.KvizViewModel
 import ba.etf.rma21.projekat.viewmodel.PitanjeKvizViewModel
 import ba.etf.rma21.projekat.viewmodel.PredmetViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class FragmentKvizovi: Fragment() {
     private lateinit var listaKvizova: RecyclerView

@@ -1,10 +1,7 @@
-package ba.etf.rma21.projekat
+package ba.etf.rma21.projekat.view
 
 import android.content.Context
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,12 +10,10 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
-import androidx.core.view.children
-import androidx.core.view.get
-import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
+import ba.etf.rma21.projekat.R
 import ba.etf.rma21.projekat.data.models.Pitanje
 import java.util.*
 

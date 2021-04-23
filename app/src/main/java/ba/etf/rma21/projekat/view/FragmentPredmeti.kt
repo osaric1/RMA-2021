@@ -1,6 +1,5 @@
-package ba.etf.rma21.projekat
+package ba.etf.rma21.projekat.view
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,8 +11,7 @@ import android.widget.Button
 import android.widget.Spinner
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.setFragmentResultListener
+import ba.etf.rma21.projekat.R
 import ba.etf.rma21.projekat.data.models.Grupa
 import ba.etf.rma21.projekat.data.models.Predmet
 import ba.etf.rma21.projekat.viewmodel.GrupaViewModel
@@ -29,12 +27,14 @@ class FragmentPredmeti() : Fragment() {
     private var predmetViewModel  = PredmetViewModel()
     private var grupaViewModel  = GrupaViewModel()
     private var kvizViewModel = KvizViewModel()
-    private var zavrsenUpis: Boolean = false
 
+//    private var savedState = Bundle()
+    
     companion object{
-        private var presetGodina: Int? = null
-        private var presetGrupa: Int? = null
-        private var presetPredmet: Int? = null
+        private var presetGodina: Int = -1
+        private var presetGrupa: Int = -1
+        private var presetPredmet: Int = -1
+        private var zavrsenUpis: Boolean = false
         fun newInstance(): FragmentPredmeti = FragmentPredmeti()
     }
 
@@ -43,8 +43,14 @@ class FragmentPredmeti() : Fragment() {
         odabirGodine = view.findViewById(R.id.odabirGodina)
         odabirPredmeta = view.findViewById(R.id.odabirPredmet)
         odabirGrupe = view.findViewById(R.id.odabirGrupa)
-
+        Log.d("whatup", zavrsenUpis.toString())
         dodajPredmet = view.findViewById(R.id.dodajPredmetDugme)
+
+//        if(savedState.size() > 0){
+//            presetGodina = savedState.getInt("presetGodina")
+//            presetPredmet = savedState.getInt("presetPredmet")
+//            presetGrupa = savedState.getInt("presetGrupa")
+//        }
 
         dodajPredmet.setOnClickListener {
             zavrsenUpis = true
@@ -83,7 +89,9 @@ class FragmentPredmeti() : Fragment() {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             odabirGodine.adapter = adapter
 
-//            defaultGodina = Integer.parseInt(intent.getStringExtra("godinaDefault"))
+        }
+        if(presetGodina >= 0){
+            odabirGodine.setSelection(presetGodina)
         }
 
         odabirGodine.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -93,17 +101,17 @@ class FragmentPredmeti() : Fragment() {
                     position: Int,
                     id: Long)
             {
-                var predmeti : List<String> = predmetViewModel.getSlobodni(Integer.parseInt(odabirGodine.selectedItem.toString())).map { predmet -> predmet.toString()  }
-
+                var predmeti: List<String> = predmetViewModel.getSlobodni(Integer.parseInt(odabirGodine.selectedItem.toString())).map { predmet -> predmet.toString() }
                 if(predmeti.isEmpty()){
                     predmeti = listOf("-Empty-")
                 }
 
                 val dataAdapter: ArrayAdapter<String> = ArrayAdapter<String>(view.context, android.R.layout.simple_spinner_item, predmeti)
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
                 odabirPredmeta.adapter = dataAdapter
-
+                if(presetPredmet >= 0){
+                    odabirPredmeta.setSelection(presetPredmet)
+                }
 
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -127,43 +135,42 @@ class FragmentPredmeti() : Fragment() {
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
                 odabirGrupe.adapter = dataAdapter
-
+                if(presetGrupa >= 0){
+                    odabirGrupe.setSelection(presetGrupa)
+                }
             }
+
+
+
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
         }
+
+
         return view
     }
 
 
     override fun onPause() {
+        presetGodina = odabirGodine.selectedItemPosition
         if(!zavrsenUpis) {
-            presetGodina = odabirGodine.selectedItemPosition
-            presetGrupa = odabirGrupe.selectedItemPosition
             presetPredmet = odabirPredmeta.selectedItemPosition
+            presetGrupa = odabirGrupe.selectedItemPosition
         }
         super.onPause()
     }
 
-    override fun onResume() {
-        if(!zavrsenUpis) {
-            if (presetGodina != null) {
-                odabirGodine.setSelection(presetGodina!!)
-            }
-            if (presetGrupa != null) {
-                odabirGrupe.setSelection(presetGrupa!!)
-            }
-            if (presetPredmet != null) {
-                odabirPredmeta.setSelection(presetPredmet!!)
-            }
-        }
-        super.onResume()
-    }
+//    override fun onDestroyView() {
+//        super.onDestroyView()
+//        Log.d("ovo se desi", "zes")
+//        savedState.putInt("presetGodina", odabirGodine.selectedItemPosition)
+//        if(!zavrsenUpis){
+//            savedState.putInt("presetGrupa", odabirGodine.selectedItemPosition)
+//            savedState.putInt("presetPredmet", odabirGodine.selectedItemPosition)
+//        }
+//    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
-    }
 
 }

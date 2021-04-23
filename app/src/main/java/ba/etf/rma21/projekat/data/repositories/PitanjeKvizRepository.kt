@@ -10,8 +10,6 @@ class PitanjeKvizRepository {
     companion object {
 
         fun getPitanja(nazivKviza: String, nazivPredmeta: String): List<Pitanje> {
-            Log.d("da", nazivKviza.toString())
-            Log.d("da", nazivPredmeta.toString())
             var nazivi: List<String> = allPitanjaKviz().filter { pitanjeKviz -> pitanjeKviz.kviz == nazivKviza && pitanjeKviz.predmet == nazivPredmeta }.map { pitanjeKviz -> pitanjeKviz.toString() }.toList()
             return allPitanja().filter { pitanje -> nazivi.contains(pitanje.naziv) }.toList()
         }

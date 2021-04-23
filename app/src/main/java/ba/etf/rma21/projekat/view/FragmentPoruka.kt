@@ -1,22 +1,16 @@
-package ba.etf.rma21.projekat
+package ba.etf.rma21.projekat.view
 
-import android.content.Context
 import android.os.Bundle
 import android.text.Layout
 import android.text.SpannableString
 import android.text.style.AlignmentSpan
-import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
+import ba.etf.rma21.projekat.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class FragmentPoruka: Fragment() {

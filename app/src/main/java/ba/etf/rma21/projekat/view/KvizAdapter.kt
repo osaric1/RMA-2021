@@ -1,19 +1,15 @@
-package ba.etf.rma21.projekat
+package ba.etf.rma21.projekat.view
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
+import ba.etf.rma21.projekat.R
 import ba.etf.rma21.projekat.data.models.Kviz
 import ba.etf.rma21.projekat.viewmodel.PitanjeKvizViewModel
 import java.util.*
@@ -96,34 +92,35 @@ class KvizAdapter(
         holder.predmetName.text = kvizovi[position].nazivPredmeta
 
 
-        Log.d("spinner", spinnerTekst)
-        val lista = pitanjeKvizViewModel.getPitanja(holder.kvizTitle.text.toString(), holder.predmetName.text.toString())
         holder.itemView.setOnClickListener {
             if(spinnerTekst != "Svi kvizovi") {
-                val transaction = manager?.beginTransaction()
-                var fragment = manager?.findFragmentByTag("Kviz" + kvizovi[position].naziv)
-                var bundle: Bundle = Bundle()
-                val fragmentPokusaj = FragmentPokusaj.newInstance(lista)
+                val lista = pitanjeKvizViewModel.getPitanja(holder.kvizTitle.text.toString(), holder.predmetName.text.toString())
+                if (lista.isNotEmpty() && holder.imageView.tag != R.drawable.crvena) {
+                    val transaction = manager?.beginTransaction()
+                    var fragment = manager?.findFragmentByTag("Kviz" + kvizovi[position].naziv)
+                    var bundle= Bundle()
+                    val fragmentPokusaj = FragmentPokusaj.newInstance(lista)
 
-                bundle.putString("kvizNaziv", kvizovi[position].naziv)
+                    bundle.putString("kvizNaziv", kvizovi[position].naziv)
 
-                if (holder.imageView.tag == R.drawable.plava) {
-                    bundle.putBoolean("uradjenKviz", true)
-                } else if (holder.imageView.tag == R.drawable.zelena) {
-                    bundle.putBoolean("uradjenKviz", false)
+                    if (holder.imageView.tag == R.drawable.plava) {
+                        bundle.putBoolean("uradjenKviz", true)
+                    } else if (holder.imageView.tag == R.drawable.zelena) {
+                        bundle.putBoolean("uradjenKviz", false)
+                    }
+
+                    bundle.putString("grupaNaziv", kvizovi[position].nazivGrupe)
+
+                    if (fragment == null) {
+                        fragmentPokusaj.arguments = bundle
+                        transaction?.replace(R.id.container, fragmentPokusaj, "Kviz" + kvizovi[position].naziv)
+                    } else {
+                        fragment.arguments = bundle
+                        transaction?.replace(R.id.container, fragment)
+                    }
+                    transaction?.addToBackStack(null)
+                    transaction?.commit()
                 }
-
-                bundle.putString("grupaNaziv", kvizovi[position].nazivGrupe)
-
-                if (fragment == null) {
-                    fragmentPokusaj.arguments = bundle
-                    transaction?.replace(R.id.container, fragmentPokusaj, "Kviz" + kvizovi[position].naziv)
-                } else {
-                    fragment.arguments = bundle
-                    transaction?.replace(R.id.container, fragment)
-                }
-                transaction?.addToBackStack(null)
-                transaction?.commit()
             }
 
         }
