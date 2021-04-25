@@ -107,7 +107,7 @@ class FragmentPredmeti() : Fragment() {
                 val dataAdapter: ArrayAdapter<String> = ArrayAdapter<String>(view.context, android.R.layout.simple_spinner_item, predmeti)
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 odabirPredmeta.adapter = dataAdapter
-                if(presetPredmet >= 0){
+                if(presetPredmet >=  0 && !predmeti.contains("-Empty-")){
                     odabirPredmeta.setSelection(presetPredmet)
                 }
 
@@ -133,7 +133,7 @@ class FragmentPredmeti() : Fragment() {
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
                 odabirGrupe.adapter = dataAdapter
-                if(presetGrupa >= 0){
+                if(presetGrupa >= 0 && !grupe.contains("-Empty-")){
                     odabirGrupe.setSelection(presetGrupa)
                 }
             }

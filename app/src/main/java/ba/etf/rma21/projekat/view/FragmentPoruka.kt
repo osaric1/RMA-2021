@@ -42,6 +42,17 @@ class FragmentPoruka: Fragment() {
                 }
 
             }
+
+            setFragmentResultListener("ispisi") { requestKey, bundle ->
+                result = bundle.getString("rezultat")
+                if (result != null) {
+                    poruka.text = result
+                    var tekst = SpannableString(poruka.text)
+                    tekst.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, poruka.text.toString().length, 0)
+                    poruka.text = tekst
+                }
+
+            }
         }
         return view
     }

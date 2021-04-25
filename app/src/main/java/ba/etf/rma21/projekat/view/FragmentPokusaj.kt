@@ -66,6 +66,7 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
         }
         else{
             val porukaFragment = FragmentPoruka.newInstance()
+            setFragmentResult("ispisi", bundleOf(Pair("rezultat", "Završili ste kviz " + nazivKviza + " sa tačnosti " + (tacnost / pitanja.size).toBigDecimal().setScale(2, RoundingMode.UP).toFloat())) )
             val transaction = activity?.supportFragmentManager?.beginTransaction()
             transaction?.replace(R.id.container, porukaFragment)
             transaction?.addToBackStack("poruka")
