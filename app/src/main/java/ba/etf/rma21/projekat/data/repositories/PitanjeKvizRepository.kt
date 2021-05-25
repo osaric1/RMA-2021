@@ -18,6 +18,10 @@ class PitanjeKvizRepository {
             return obracunajBodoveZaKviz(nazivKviza)
         }
 
+        fun getPitanja(idKviza:Int):List<Pitanje>{
+            return listOf()
+        }
+
     }
 
 
