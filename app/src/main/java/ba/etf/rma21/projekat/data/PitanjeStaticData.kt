@@ -1,5 +1,6 @@
 package ba.etf.rma21.projekat.data
 
+/*
 import ba.etf.rma21.projekat.data.models.Pitanje
 
 fun allPitanja(): List<Pitanje>{
@@ -40,3 +41,5 @@ fun allPitanja(): List<Pitanje>{
             Pitanje("DM-p6", "If A ⊆ B then A X C ⊆ B X C the given statement is true or false.", listOf("True", "False"), 0)
         )
 }
+
+ */

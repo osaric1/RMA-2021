@@ -1,5 +1,5 @@
 package ba.etf.rma21.projekat.data
-
+/*
 import ba.etf.rma21.projekat.data.models.Kviz
 import java.util.*
 
@@ -32,5 +32,7 @@ fun kvizStatus(bodovi: Float, nazivKviza: String, nazivGrupe: String){
     kviz?.datumRada = Date()
 }
 
+
+ */
 
 

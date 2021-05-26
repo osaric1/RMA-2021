@@ -1,5 +1,6 @@
 package ba.etf.rma21.projekat.data
 
+/*
 import ba.etf.rma21.projekat.data.models.Pitanje
 import ba.etf.rma21.projekat.data.models.PitanjeKviz
 
@@ -44,3 +45,5 @@ fun obracunajBodoveZaKviz(nazivKviza: String): Float{
     }
     return total
 }
+
+ */

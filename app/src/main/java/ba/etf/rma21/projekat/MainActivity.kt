@@ -3,6 +3,8 @@ package ba.etf.rma21.projekat
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import ba.etf.rma21.projekat.data.models.Account
+import ba.etf.rma21.projekat.data.repositories.AccountRepository
 import ba.etf.rma21.projekat.view.FragmentKvizovi
 import ba.etf.rma21.projekat.view.FragmentPoruka
 import ba.etf.rma21.projekat.view.FragmentPredmeti
@@ -12,6 +14,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class MainActivity : AppCompatActivity() {
     private lateinit var bottomNavigation: BottomNavigationView
     private var kvizZavrsen = false
+
     private val myOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when(item.itemId){
             R.id.kvizovi -> {
@@ -98,7 +101,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        AccountRepository.acHash = "e6aba651-b4ba-4b26-85b8-c15fe9eededd"
 
         bottomNavigation= findViewById(R.id.bottomNav)
         bottomNavigation.menu.findItem(R.id.predajKviz).setVisible(false)

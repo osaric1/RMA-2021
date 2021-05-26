@@ -4,6 +4,7 @@ import ba.etf.rma21.projekat.data.models.Predmet
 import ba.etf.rma21.projekat.data.repositories.PredmetRepository
 
 class PredmetViewModel {
+    /*
     fun getUpisani(): List<Predmet> {
         return PredmetRepository.getUpisani()
     }
@@ -27,4 +28,6 @@ class PredmetViewModel {
     fun getSlobodniAll(): List<Predmet>{
         return PredmetRepository.getSlobodniAll()
     }
+
+     */
 }

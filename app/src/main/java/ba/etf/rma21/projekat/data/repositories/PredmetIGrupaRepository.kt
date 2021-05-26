@@ -17,6 +17,13 @@ class PredmetIGrupaRepository {
             }!!
         }
 
+        /*
+        fun getPredmetsByGodinama(godina: Int): List<Predmet> {
+            return PredmetRepository.getAll().filter { predmet -> predmet.godina == godina  }.toList()
+        }
+
+         */
+
         suspend fun getGrupe(): List<Grupa> {
             return withContext(Dispatchers.IO) {
                 val response = ApiAdapter.retrofit.getGrupe()

@@ -1,5 +1,5 @@
 package ba.etf.rma21.projekat.data
-
+/*
 import ba.etf.rma21.projekat.data.models.Grupa
 
 fun allGrupe(): List<Grupa> {
@@ -22,3 +22,5 @@ fun allGrupe(): List<Grupa> {
             Grupa("RG Grupa 2", "RG")
     )
 }
+
+ */
