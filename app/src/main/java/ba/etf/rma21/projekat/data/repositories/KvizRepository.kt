@@ -41,6 +41,19 @@ class KvizRepository() {
             }
         }
 
+        suspend fun getUpisani():List<Kviz> { // vraća listu svih kvizova za grupe na kojima je student upisan
+            var upisaneGrupe = listOf<Grupa>()
+            upisaneGrupe = PredmetIGrupaRepository.getUpisaneGrupe()!!
+            return withContext(Dispatchers.IO){
+                var listaKvizova:MutableList<Kviz> = mutableListOf()
+                for(grupa in upisaneGrupe){
+                    val response = ApiAdapter.retrofit.getUpisani(grupa.id)
+                    listaKvizova.addAll(response.body()!!)
+                }
+                return@withContext listaKvizova
+            }
+        }
+
         fun getDone(): List<Kviz> {
             return getMyKvizes().filter { kviz -> toCalendar(kviz.datumRada).get(Calendar.YEAR) != 1970 }.toList()
         }

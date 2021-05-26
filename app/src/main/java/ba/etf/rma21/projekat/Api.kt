@@ -39,4 +39,13 @@ interface Api {
 
     @GET("/predmet/{id}/grupa")
     suspend fun getGrupeZaPredmet(@Path("id") idPredmeta: Int): Response<List<Grupa>>
+
+    @POST("/grupa/{gid}/student/{id}")
+    suspend fun upisiUGrupu(@Path("gid") groupId: Int, @Path("id") studentId: String): Response<String>
+
+    @GET("/student/{id}/grupa")
+    suspend fun getUpisaneGrupe(@Path("id") studentId: String): Response<List<Grupa>>
+
+    @GET("/grupa/{id}/kvizovi")
+    suspend fun getUpisani(@Path("id") grupaId: Int) : Response<List<Kviz>>
 }

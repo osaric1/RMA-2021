@@ -7,35 +7,57 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class PredmetIGrupaRepository {
-    suspend fun getPredmeti():List<Predmet>{
-        return withContext(Dispatchers.IO){
-            val response = ApiAdapter.retrofit.getPredmeti()
-            val responseBody = response.body()
+    companion object {
+        suspend fun getPredmeti(): List<Predmet> {
+            return withContext(Dispatchers.IO) {
+                val response = ApiAdapter.retrofit.getPredmeti()
+                val responseBody = response.body()
 
-            return@withContext responseBody
-        }!!
-    }
+                return@withContext responseBody
+            }!!
+        }
 
-    suspend fun getGrupe():List<Grupa>{
-        return withContext(Dispatchers.IO){
-            val response = ApiAdapter.retrofit.getGrupe()
-            val responseBody = response.body()
+        suspend fun getGrupe(): List<Grupa> {
+            return withContext(Dispatchers.IO) {
+                val response = ApiAdapter.retrofit.getGrupe()
+                val responseBody = response.body()
 
-            return@withContext responseBody
-        }!!
-    }
+                return@withContext responseBody
+            }!!
+        }
 
-    suspend fun getGrupeZaPredmet(idPredmeta:Int):List<Grupa>? {
-        return withContext(Dispatchers.IO){
-            val response = ApiAdapter.retrofit.getGrupeZaPredmet(idPredmeta)
-            val responseBody = response.body()
+        suspend fun getGrupeZaPredmet(idPredmeta: Int): List<Grupa>? {
+            return withContext(Dispatchers.IO) {
+                val response = ApiAdapter.retrofit.getGrupeZaPredmet(idPredmeta)
+                val responseBody = response.body()
 
-            when(responseBody){
-                is List<Grupa> -> return@withContext responseBody
-                else -> return@withContext null
+                when (responseBody) {
+                    is List<Grupa> -> return@withContext responseBody
+                    else -> return@withContext null
+                }
+            }
+        }
+
+        suspend fun upisiUGrupu(idGrupa: Int): Boolean {
+            return withContext(Dispatchers.IO) {
+                val response = ApiAdapter.retrofit.upisiUGrupu(idGrupa, AccountRepository.getHash())
+                val responseBody = response.body()
+
+                return@withContext responseBody.equals("upisan")
+            }
+        }
+
+        suspend fun getUpisaneGrupe(): List<Grupa>? {
+            return withContext(Dispatchers.IO) {
+                val response = ApiAdapter.retrofit.getUpisaneGrupe(AccountRepository.getHash())
+                val responseBody = response.body()
+
+                when (responseBody) {
+                    is List<Grupa> -> return@withContext responseBody
+                    else -> return@withContext null
+                }
             }
         }
     }
-
 
 }
