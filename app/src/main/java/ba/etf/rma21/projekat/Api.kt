@@ -48,4 +48,10 @@ interface Api {
 
     @GET("/grupa/{id}/kvizovi")
     suspend fun getUpisani(@Path("id") grupaId: Int) : Response<List<Kviz>>
+
+    @GET("/kviz/{id}/grupa")
+    suspend fun getGrupeZaKviz(@Path("id") kvizId: Int): Response<List<Grupa>>
+
+    @GET("/predmet/{id}")
+    suspend fun getPredmetById(@Path("id") predmetId: Int): Response<Predmet>
 }

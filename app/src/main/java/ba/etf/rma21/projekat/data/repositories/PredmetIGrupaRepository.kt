@@ -65,6 +65,30 @@ class PredmetIGrupaRepository {
                 }
             }
         }
+
+        suspend fun getGrupeZaKviz(idKviza: Int): List<Grupa>?{
+            return withContext(Dispatchers.IO) {
+                val response = ApiAdapter.retrofit.getGrupeZaKviz(idKviza)
+                val responseBody = response.body()
+
+                when (responseBody) {
+                    is List<Grupa> -> return@withContext responseBody
+                    else -> return@withContext null
+                }
+            }
+        }
+
+        suspend fun getPredmetById(predmetId: Int): Predmet?{
+            return withContext(Dispatchers.IO) {
+                val response = ApiAdapter.retrofit.getPredmetById(predmetId)
+                val responseBody = response.body()
+
+                when (responseBody) {
+                    is Predmet -> return@withContext responseBody
+                    else -> return@withContext null
+                }
+            }
+        }
     }
 
 }

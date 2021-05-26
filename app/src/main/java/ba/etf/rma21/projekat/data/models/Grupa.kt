@@ -4,7 +4,8 @@ import com.google.gson.annotations.SerializedName
 
 data class Grupa(
     @SerializedName("id") val id: Int,
-    @SerializedName("naziv") val naziv: String) {
+    @SerializedName("naziv") val naziv: String,
+    @SerializedName("PredmetId") val predmetId: Int) {
     override fun toString(): String {
         return naziv
     }

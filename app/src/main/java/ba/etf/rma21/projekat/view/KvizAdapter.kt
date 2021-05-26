@@ -10,8 +10,13 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import ba.etf.rma21.projekat.R
+import ba.etf.rma21.projekat.data.models.Grupa
 import ba.etf.rma21.projekat.data.models.Kviz
 import ba.etf.rma21.projekat.viewmodel.PitanjeKvizViewModel
+import ba.etf.rma21.projekat.viewmodel.PredmetIGrupaViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -21,7 +26,7 @@ class KvizAdapter(
         private var spinnerTekst:String
 ): RecyclerView.Adapter<KvizAdapter.KvizViewHolder>(){
 
-    private var pitanjeKvizViewModel: PitanjeKvizViewModel = PitanjeKvizViewModel()
+    private var predmetIGrupaViewModel = PredmetIGrupaViewModel()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KvizViewHolder {
         val view = LayoutInflater
@@ -33,13 +38,16 @@ class KvizAdapter(
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: KvizViewHolder, position: Int) {
         var datumPocetkaCalendar = toCalendar(kvizovi[position].datumPocetka)
-        var datumKrajaCalendar = kvizovi[position].datumKraj?.let { toCalendar(it) }
-        var datumRadaCalendar = toCalendar(kvizovi[position].datumRada)
+        var datumKrajaCalendar: Calendar
 
+        if(kvizovi[position].datumKraj != null) {
+            datumKrajaCalendar = toCalendar(kvizovi[position].datumKraj!!)
+        }
+        else datumKrajaCalendar = GregorianCalendar(2022, datumPocetkaCalendar.get(Calendar.MONTH), datumPocetkaCalendar.get(Calendar.DAY_OF_MONTH))
 
-
-        if(kvizovi[position].osvojeniBodovi == null) qholder.kvizPoints.text = ""
-        else holder.kvizPoints.text = kvizovi[position].osvojeniBodovi.toString()
+        //TODO provjeriti ima li kviztaken id kviza
+        var datumRadaCalendar = GregorianCalendar(1970, 1,1)
+        holder.kvizPoints.text = ""
         holder.kvizDuration.text = kvizovi[position].trajanje.toString() + " min"
 
 
@@ -93,43 +101,48 @@ class KvizAdapter(
         }
 
         holder.kvizTitle.text = kvizovi[position].naziv
-        holder.predmetName.text = kvizovi[position].nazivPredmeta
 
-
-
-
-        holder.itemView.setOnClickListener {
-            if(spinnerTekst != "Svi kvizovi") {
-                val lista = pitanjeKvizViewModel.getPitanja(holder.kvizTitle.text.toString(), holder.predmetName.text.toString())
-                if (lista.isNotEmpty() && holder.imageView.tag != R.drawable.crvena) {
-                    val transaction = manager?.beginTransaction()
-                    var fragment = manager?.findFragmentByTag("Kviz" + kvizovi[position].naziv)
-                    var bundle= Bundle()
-                    val fragmentPokusaj = FragmentPokusaj.newInstance(lista)
-
-                    bundle.putString("kvizNaziv", kvizovi[position].naziv)
-
-                    if (holder.imageView.tag == R.drawable.plava) {
-                        bundle.putBoolean("uradjenKviz", true)
-                    } else if (holder.imageView.tag == R.drawable.zelena) {
-                        bundle.putBoolean("uradjenKviz", false)
-                    }
-
-                    bundle.putString("grupaNaziv", kvizovi[position].nazivGrupe)
-
-                    if (fragment == null) {
-                        fragmentPokusaj.arguments = bundle
-                        transaction?.replace(R.id.container, fragmentPokusaj, "Kviz" + kvizovi[position].naziv)
-                    } else {
-                        fragment.arguments = bundle
-                        transaction?.replace(R.id.container, fragment)
-                    }
-                    transaction?.addToBackStack(null)
-                    transaction?.commit()
-                }
-            }
-
+        GlobalScope.launch(Dispatchers.Main) {
+            val grupe = predmetIGrupaViewModel.getGrupeZaKviz(kvizovi[position].id)
+            val predmet = predmetIGrupaViewModel.getPredmetById(grupe!![0].predmetId)
+            holder.predmetName.text = predmet.toString()
         }
+
+
+
+
+//        holder.itemView.setOnClickListener {
+//            if(spinnerTekst != "Svi kvizovi") {
+//                val lista = pitanjeKvizViewModel.getPitanja(holder.kvizTitle.text.toString(), holder.predmetName.text.toString())
+//                if (lista.isNotEmpty() && holder.imageView.tag != R.drawable.crvena) {
+//                    val transaction = manager?.beginTransaction()
+//                    var fragment = manager?.findFragmentByTag("Kviz" + kvizovi[position].naziv)
+//                    var bundle= Bundle()
+//                    val fragmentPokusaj = FragmentPokusaj.newInstance(lista)
+//
+//                    bundle.putString("kvizNaziv", kvizovi[position].naziv)
+//
+//                    if (holder.imageView.tag == R.drawable.plava) {
+//                        bundle.putBoolean("uradjenKviz", true)
+//                    } else if (holder.imageView.tag == R.drawable.zelena) {
+//                        bundle.putBoolean("uradjenKviz", false)
+//                    }
+//
+//                    bundle.putString("grupaNaziv", kvizovi[position].nazivGrupe)
+//
+//                    if (fragment == null) {
+//                        fragmentPokusaj.arguments = bundle
+//                        transaction?.replace(R.id.container, fragmentPokusaj, "Kviz" + kvizovi[position].naziv)
+//                    } else {
+//                        fragment.arguments = bundle
+//                        transaction?.replace(R.id.container, fragment)
+//                    }
+//                    transaction?.addToBackStack(null)
+//                    transaction?.commit()
+//                }
+//            }
+//
+//        }
 
 
 

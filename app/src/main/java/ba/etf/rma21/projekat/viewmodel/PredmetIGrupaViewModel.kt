@@ -24,4 +24,12 @@ class PredmetIGrupaViewModel {
     suspend fun getUpisaneGrupe(): List<Grupa>? {
         return PredmetIGrupaRepository.getUpisaneGrupe()
     }
+
+    suspend fun getGrupeZaKviz(idKviza: Int): List<Grupa>?{
+        return PredmetIGrupaRepository.getGrupeZaKviz(idKviza)
+    }
+
+    suspend fun getPredmetById(predmetId: Int): Predmet?{
+        return PredmetIGrupaRepository.getPredmetById(predmetId)
+    }
 }

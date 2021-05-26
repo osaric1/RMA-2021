@@ -70,7 +70,7 @@ class FragmentKvizovi: Fragment() {
                     position: Int,
                     id: Long
             ) {
-                GlobalScope.launch(Dispatchers.IO) {
+                    GlobalScope.launch(Dispatchers.Main) {
 
                     if(spinner.selectedItem.toString() == "Svi kvizovi"){
                         kvizAdapter.updateKvizovi(kvizViewModel.getAll())

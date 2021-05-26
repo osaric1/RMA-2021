@@ -7,7 +7,7 @@ import ba.etf.rma21.projekat.data.models.Account
 import ba.etf.rma21.projekat.data.repositories.AccountRepository
 import ba.etf.rma21.projekat.view.FragmentKvizovi
 import ba.etf.rma21.projekat.view.FragmentPoruka
-import ba.etf.rma21.projekat.view.FragmentPredmeti
+//import ba.etf.rma21.projekat.view.FragmentPredmeti
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
@@ -31,8 +31,8 @@ class MainActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.predmeti -> {
-                val predmetiFragment = FragmentPredmeti.newInstance()
-                openFragment(predmetiFragment)
+                //val predmetiFragment = FragmentPredmeti.newInstance()
+                //openFragment(predmetiFragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.predajKviz -> {
