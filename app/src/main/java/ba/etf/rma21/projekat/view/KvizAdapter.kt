@@ -33,12 +33,16 @@ class KvizAdapter(
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: KvizViewHolder, position: Int) {
         var datumPocetkaCalendar = toCalendar(kvizovi[position].datumPocetka)
-        var datumKrajaCalendar = toCalendar(kvizovi[position].datumKraj)
+        var datumKrajaCalendar = kvizovi[position].datumKraj?.let { toCalendar(it) }
         var datumRadaCalendar = toCalendar(kvizovi[position].datumRada)
 
-        if(kvizovi[position].osvojeniBodovi == null) holder.kvizPoints.text = ""
+
+
+        if(kvizovi[position].osvojeniBodovi == null) qholder.kvizPoints.text = ""
         else holder.kvizPoints.text = kvizovi[position].osvojeniBodovi.toString()
         holder.kvizDuration.text = kvizovi[position].trajanje.toString() + " min"
+
+
 
         if(     datumRadaCalendar.get(Calendar.YEAR)  == 1970
                 && datumPocetkaCalendar < Calendar.getInstance()
@@ -90,6 +94,8 @@ class KvizAdapter(
 
         holder.kvizTitle.text = kvizovi[position].naziv
         holder.predmetName.text = kvizovi[position].nazivPredmeta
+
+
 
 
         holder.itemView.setOnClickListener {

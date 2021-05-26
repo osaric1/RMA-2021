@@ -14,6 +14,9 @@ import ba.etf.rma21.projekat.R
 import ba.etf.rma21.projekat.viewmodel.KvizViewModel
 import ba.etf.rma21.projekat.viewmodel.PitanjeKvizViewModel
 import ba.etf.rma21.projekat.viewmodel.PredmetViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class FragmentKvizovi: Fragment() {
     private lateinit var listaKvizova: RecyclerView
@@ -53,7 +56,7 @@ class FragmentKvizovi: Fragment() {
             val grupa = arguments?.getString("nazivGrupe")
             val multiplier = arguments?.getFloat("tacnost")
 
-            kvizViewModel.changeStatus( pitanjeKvizViewModel.dajBodove(kviz!!)* multiplier!!, kviz!!, grupa!!)
+            //kvizViewModel.changeStatus( pitanjeKvizViewModel.dajBodove(kviz!!)* multiplier!!, kviz!!, grupa!!)
 
 
         }
@@ -67,22 +70,16 @@ class FragmentKvizovi: Fragment() {
                     position: Int,
                     id: Long
             ) {
-                if(spinner.selectedItem.toString() == "Svi kvizovi"){
-                    kvizAdapter.updateKvizovi(kvizViewModel.getAll())
+                GlobalScope.launch(Dispatchers.IO) {
+
+                    if(spinner.selectedItem.toString() == "Svi kvizovi"){
+                        kvizAdapter.updateKvizovi(kvizViewModel.getAll())
+                    }
+                    else if(spinner.selectedItem.toString() == "Svi moji kvizovi"){
+                        kvizAdapter.updateKvizovi(kvizViewModel.getUpisani())
+                    }
+                    kvizAdapter.updateSpinner(spinner.selectedItem.toString())
                 }
-                else if(spinner.selectedItem.toString() == "Svi moji kvizovi"){
-                    kvizAdapter.updateKvizovi(kvizViewModel.getMyKvizes())
-                }
-                else if(spinner.selectedItem.toString() == "Urađeni kvizovi"){
-                    kvizAdapter.updateKvizovi(kvizViewModel.getDone())
-                }
-                else if(spinner.selectedItem.toString() == "Budući kvizovi"){
-                    kvizAdapter.updateKvizovi(kvizViewModel.getFuture())
-                }
-                else if(spinner.selectedItem.toString() == "Prošli kvizovi"){
-                    kvizAdapter.updateKvizovi(kvizViewModel.getNotTaken())
-                }
-                kvizAdapter.updateSpinner(spinner.selectedItem.toString())
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
