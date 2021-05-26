@@ -27,4 +27,16 @@ interface Api {
 
     @GET("/kviz")
     suspend fun getAll(): Response<List<Kviz>>
+
+    @GET("/kviz/{id}")
+    suspend fun getById(@Path("id") kvizId: Int): Response<Kviz>
+
+    @GET("/predmet")
+    suspend fun getPredmeti(): Response<List<Predmet>>
+
+    @GET("/grupa")
+    suspend fun getGrupe(): Response<List<Grupa>>
+
+    @GET("/predmet/{id}/grupa")
+    suspend fun getGrupeZaPredmet(@Path("id") idPredmeta: Int): Response<List<Grupa>>
 }

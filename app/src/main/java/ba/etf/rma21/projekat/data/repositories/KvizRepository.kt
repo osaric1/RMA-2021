@@ -30,6 +30,17 @@ class KvizRepository() {
             }
         }
 
+        suspend fun getById(id: Int):Kviz?{
+            return withContext(Dispatchers.IO){
+                var response = ApiAdapter.retrofit.getById(id)
+                val responseBody = response.body()
+                when(responseBody){
+                    is Kviz -> return@withContext responseBody
+                    else -> return@withContext null
+                }
+            }
+        }
+
         fun getDone(): List<Kviz> {
             return getMyKvizes().filter { kviz -> toCalendar(kviz.datumRada).get(Calendar.YEAR) != 1970 }.toList()
         }
