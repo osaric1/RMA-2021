@@ -12,8 +12,10 @@ import androidx.recyclerview.widget.RecyclerView
 import ba.etf.rma21.projekat.R
 import ba.etf.rma21.projekat.data.models.Grupa
 import ba.etf.rma21.projekat.data.models.Kviz
+import ba.etf.rma21.projekat.data.models.KvizTaken
 import ba.etf.rma21.projekat.viewmodel.PitanjeKvizViewModel
 import ba.etf.rma21.projekat.viewmodel.PredmetIGrupaViewModel
+import ba.etf.rma21.projekat.viewmodel.TakeKvizViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -27,6 +29,7 @@ class KvizAdapter(
 ): RecyclerView.Adapter<KvizAdapter.KvizViewHolder>(){
 
     private var predmetIGrupaViewModel = PredmetIGrupaViewModel()
+    private var takeKvizViewModel = TakeKvizViewModel()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KvizViewHolder {
         val view = LayoutInflater
@@ -46,9 +49,22 @@ class KvizAdapter(
         else datumKrajaCalendar = GregorianCalendar(2022, datumPocetkaCalendar.get(Calendar.MONTH), datumPocetkaCalendar.get(Calendar.DAY_OF_MONTH))
 
         //TODO provjeriti ima li kviztaken id kviza
+
+        GlobalScope.launch(Dispatchers.Main) {
+            val pokusaji: List<KvizTaken> = takeKvizViewModel.getPocetiKvizovi()
+            if(!pokusaji.isEmpty()) {
+                val pokusaj = pokusaji.first { pokusaj -> pokusaj.id == kvizovi[position].id }
+
+                holder.kvizPoints.text = pokusaj.osvojeniBodovi.toString()
+            }
+            else{
+                holder.kvizPoints.text = ""
+            }
+            holder.kvizDuration.text = kvizovi[position].trajanje.toString() + " min"
+        }
+
         var datumRadaCalendar = GregorianCalendar(1970, 1,1)
-        holder.kvizPoints.text = ""
-        holder.kvizDuration.text = kvizovi[position].trajanje.toString() + " min"
+
 
 
 

@@ -18,30 +18,11 @@ class KvizViewModel() {
         return KvizRepository.getAll()!!
     }
 
-    suspend fun getById(id: Int):Kviz?{
+    suspend fun getById(id: Int): Kviz? {
         return KvizRepository.getById(id)
     }
 
-    suspend fun getUpisani():List<Kviz> {
+    suspend fun getUpisani(): List<Kviz> {
         return KvizRepository.getUpisani()
     }
-/*
-    fun getDone(): List<Kviz> {
-        return KvizRepository.getDone()
-    }
-
-    fun getFuture(): List<Kviz> {
-        return KvizRepository.getFuture()
-    }
-
-    fun getNotTaken(): List<Kviz> {
-        return KvizRepository.getNotTaken()
-    }
-    fun addGroup(grupa: Grupa){
-        KvizRepository.addGroup(grupa)
-    }
-    fun changeStatus(bodovi: Float, nazivKviza: String, nazivGrupe: String){
-        KvizRepository.changeStatus(bodovi, nazivKviza, nazivGrupe)
-    }
-*/
 }

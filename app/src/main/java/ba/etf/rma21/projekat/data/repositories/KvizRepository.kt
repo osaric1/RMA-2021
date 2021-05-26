@@ -56,14 +56,14 @@ class KvizRepository() {
             }
         }
 
-        /*
-        fun getDone(): List<Kviz> {
-            return getMyKvizes().filter { kviz -> toCalendar(kviz.datumRada).get(Calendar.YEAR) != 1970 }.toList()
+/*
+        suspend fun getDone(): List<Kviz> {
+            return getUpisani().filter { kviz -> toCalendar(kviz.datumRada).get(Calendar.YEAR) != 1970 }.toList()
         }
 
 
-        fun getFuture(): List<Kviz> {
-            return getMyKvizes().filter { kviz -> toCalendar(kviz.datumPocetka) > Calendar.getInstance() }.toList()
+        suspend fun getFuture(): List<Kviz> {
+            return getAll()!!.filter { kviz -> toCalendar(kviz.datumPocetka) > Calendar.getInstance() }.toList()
         }
 
         fun getNotTaken(): List<Kviz> {

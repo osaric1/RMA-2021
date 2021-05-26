@@ -29,7 +29,7 @@ class TakeKvizRepository {
                 val responseBody = response.body()
                 when(responseBody){
                     is List<KvizTaken> ->  {
-                      if(responseBody.isEmpty()) return@withContext null
+                      if(responseBody.isEmpty()) return@withContext responseBody
                       return@withContext responseBody
                     }
                     else -> return@withContext null
