@@ -1,12 +1,13 @@
 package ba.etf.rma21.projekat.data.models
 
+import com.google.gson.annotations.SerializedName
 import java.util.*
 
 class KvizTaken(
-    val id: Int,
-    val student: String,
-    val osvojeniBodovi: Float,
-    val datumRada: Date?
+    @SerializedName("id") val id: Int,
+    @SerializedName("student") val student: String,
+    @SerializedName("osvojeniBodovi") val osvojeniBodovi: Float,
+    @SerializedName("datumRada") val datumRada: Date?
 ) {
 
 }

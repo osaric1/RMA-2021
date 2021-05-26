@@ -1,25 +1,33 @@
 package ba.etf.rma21.projekat.data.repositories
 
 import android.util.Log
+import ba.etf.rma21.projekat.ApiAdapter
 import ba.etf.rma21.projekat.data.*
 import ba.etf.rma21.projekat.data.models.Grupa
 import ba.etf.rma21.projekat.data.models.Kviz
+import ba.etf.rma21.projekat.data.models.Odgovor
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.util.*
 
 class KvizRepository() {
     companion object {
-        private var upisaneGrupe : MutableList<Grupa> = mutableListOf(Grupa("RMA Grupa 2", "RMA"), Grupa("TP Grupa 1", "TP"), Grupa("DM Grupa 1", "DM"),
+        /*private var upisaneGrupe : MutableList<Grupa> = mutableListOf(Grupa("RMA Grupa 2", "RMA"), Grupa("TP Grupa 1", "TP"), Grupa("DM Grupa 1", "DM"),
         Grupa("RPR Grupa 1", "RPR"))
-        init {
-
-        }
-
+         */
         fun getMyKvizes(): List<Kviz> {
             return allKvizes().filter { kviz -> upisaneGrupe.filter { grupa -> grupa.naziv == kviz.nazivGrupe }.any() }.toList()
         }
 
-        fun getAll(): List<Kviz> {
-            return allKvizes()
+        suspend fun getAll(): List<Kviz>? {
+            return withContext(Dispatchers.IO){
+                var response = ApiAdapter.retrofit.getAll()
+                val responseBody = response.body()
+                when(responseBody){
+                    is List<Kviz> -> return@withContext responseBody
+                    else -> return@withContext null
+                }
+            }
         }
 
         fun getDone(): List<Kviz> {

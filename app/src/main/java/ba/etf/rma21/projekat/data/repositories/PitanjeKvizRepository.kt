@@ -1,10 +1,13 @@
 package ba.etf.rma21.projekat.data.repositories
 
 import android.util.Log
+import ba.etf.rma21.projekat.ApiAdapter
 import ba.etf.rma21.projekat.data.allPitanja
 import ba.etf.rma21.projekat.data.allPitanjaKviz
 import ba.etf.rma21.projekat.data.models.Pitanje
 import ba.etf.rma21.projekat.data.obracunajBodoveZaKviz
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class PitanjeKvizRepository {
     companion object {
@@ -18,8 +21,16 @@ class PitanjeKvizRepository {
             return obracunajBodoveZaKviz(nazivKviza)
         }
 
-        fun getPitanja(idKviza:Int):List<Pitanje>{
-            return listOf()
+        suspend fun getPitanja(idKviza:Int):List<Pitanje>{
+            return withContext(Dispatchers.IO){
+                val response = ApiAdapter.retrofit.getPitanja(idKviza)
+                val responseBody = response.body()
+
+                when(responseBody){
+                    is List<Pitanje> -> return@withContext responseBody
+                    else -> return@withContext listOf<Pitanje>()
+                }
+            }!!
         }
 
     }
