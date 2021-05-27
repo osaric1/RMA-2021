@@ -13,12 +13,11 @@ import ba.etf.rma21.projekat.R
 import ba.etf.rma21.projekat.data.models.Grupa
 import ba.etf.rma21.projekat.data.models.Kviz
 import ba.etf.rma21.projekat.data.models.KvizTaken
+import ba.etf.rma21.projekat.data.models.Predmet
 import ba.etf.rma21.projekat.viewmodel.PitanjeKvizViewModel
 import ba.etf.rma21.projekat.viewmodel.PredmetIGrupaViewModel
 import ba.etf.rma21.projekat.viewmodel.TakeKvizViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.util.*
 
 
@@ -30,6 +29,13 @@ class KvizAdapter(
 
     private var predmetIGrupaViewModel = PredmetIGrupaViewModel()
     private var takeKvizViewModel = TakeKvizViewModel()
+    private var pitanjeKvizViewModel = PitanjeKvizViewModel()
+    private var job: Job = Job()
+    private var scope = CoroutineScope(Dispatchers.Main + job)
+
+    private var pokusaji: List<KvizTaken> = listOf()
+    private var grupe: List<Grupa> = listOf()
+    private var predmet = Predmet(1,"",-1)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KvizViewHolder {
         val view = LayoutInflater
@@ -40,128 +46,140 @@ class KvizAdapter(
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: KvizViewHolder, position: Int) {
+        holder.predmetName.text = ""
+
         var datumPocetkaCalendar = toCalendar(kvizovi[position].datumPocetka)
         var datumKrajaCalendar: Calendar
 
-        if(kvizovi[position].datumKraj != null) {
+        if (kvizovi[position].datumKraj != null) {
             datumKrajaCalendar = toCalendar(kvizovi[position].datumKraj!!)
-        }
-        else datumKrajaCalendar = GregorianCalendar(2022, datumPocetkaCalendar.get(Calendar.MONTH), datumPocetkaCalendar.get(Calendar.DAY_OF_MONTH))
+        } else datumKrajaCalendar = GregorianCalendar(
+            2022,
+            datumPocetkaCalendar.get(Calendar.MONTH),
+            datumPocetkaCalendar.get(Calendar.DAY_OF_MONTH)
+        )
 
         //TODO provjeriti ima li kviztaken id kviza
 
-        GlobalScope.launch(Dispatchers.Main) {
-            val pokusaji: List<KvizTaken> = takeKvizViewModel.getPocetiKvizovi()
-            if(!pokusaji.isEmpty()) {
+        scope.launch {
+
+            val result = async {
+                pokusaji = takeKvizViewModel.getPocetiKvizovi()
+                grupe = predmetIGrupaViewModel.getGrupeZaKviz(kvizovi[position].id)!!
+                predmet = predmetIGrupaViewModel.getPredmetById(grupe!![0].predmetId)!!
+            }
+
+            holder.kvizDuration.text = kvizovi[position].trajanje.toString() + " min"
+
+            var datumRadaCalendar = GregorianCalendar(1970, 1, 1)
+
+            if (datumRadaCalendar.get(Calendar.YEAR) == 1970
+                && datumPocetkaCalendar < Calendar.getInstance()
+                && (datumKrajaCalendar > Calendar.getInstance()
+                        || datumKrajaCalendar.compareTo(Calendar.getInstance()) == 0)
+            ) {
+
+                holder.kvizDate.text =
+                    (if (datumKrajaCalendar.get(Calendar.DAY_OF_MONTH) < 10) "0" else "") +
+                            datumKrajaCalendar.get(Calendar.DAY_OF_MONTH).toString() + "." +
+                            (if (datumKrajaCalendar.get(Calendar.MONTH) + 1 < 10) "0" else "") +
+                            (datumKrajaCalendar.get(Calendar.MONTH) + 1).toString() +
+                            "." + datumKrajaCalendar.get(Calendar.YEAR).toString() + "."
+
+                holder.imageView.setImageResource(R.drawable.zelena)
+                holder.imageView.tag = R.drawable.zelena
+            } else if (datumRadaCalendar.get(Calendar.YEAR) == 1970 && datumKrajaCalendar < Calendar.getInstance()) {
+                holder.kvizDate.text =
+                    (if (datumKrajaCalendar.get(Calendar.DAY_OF_MONTH) < 10) "0" else "") +
+                            datumKrajaCalendar.get(Calendar.DAY_OF_MONTH).toString() + "." +
+                            (if (datumKrajaCalendar.get(Calendar.MONTH) + 1 < 10) "0" else "") +
+                            (datumKrajaCalendar.get(Calendar.MONTH) + 1).toString() +
+                            "." + datumKrajaCalendar.get(Calendar.YEAR).toString() + "."
+
+                holder.imageView.setImageResource(R.drawable.crvena)
+                holder.imageView.tag = R.drawable.crvena
+            } else if (datumRadaCalendar.get(Calendar.YEAR) == 1970 && datumPocetkaCalendar > Calendar.getInstance()) {
+                holder.kvizDate.text =
+                    if (datumPocetkaCalendar.get(Calendar.DAY_OF_MONTH) < 10) "0" else "" +
+                            datumPocetkaCalendar.get(Calendar.DAY_OF_MONTH).toString() + "." +
+                            (if (datumPocetkaCalendar.get(Calendar.MONTH) + 1 < 10) "0" else "") +
+                            (datumPocetkaCalendar.get(Calendar.MONTH) + 1).toString() +
+                            "." + datumPocetkaCalendar.get(Calendar.YEAR).toString() + "."
+
+                holder.imageView.setImageResource(R.drawable.zuta)
+                holder.imageView.tag = R.drawable.zuta
+            } else {
+                holder.kvizDate.text =
+                    (if (datumRadaCalendar.get(Calendar.DAY_OF_MONTH) < 10) "0" else "") +
+                            datumRadaCalendar.get(Calendar.DAY_OF_MONTH).toString() + "." +
+                            (if (datumRadaCalendar.get(Calendar.MONTH) + 1 < 10) "0" else "") +
+                            (datumRadaCalendar.get(Calendar.MONTH) + 1).toString() + "." +
+                            datumRadaCalendar.get(Calendar.YEAR).toString() + "."
+
+                holder.imageView.setImageResource(R.drawable.plava)
+                holder.imageView.tag = R.drawable.plava
+            }
+
+            holder.kvizTitle.text = kvizovi[position].naziv
+
+            if (!pokusaji.isEmpty()) {
                 val pokusaj = pokusaji.first { pokusaj -> pokusaj.id == kvizovi[position].id }
 
                 holder.kvizPoints.text = pokusaj.osvojeniBodovi.toString()
-            }
-            else{
+            } else {
                 holder.kvizPoints.text = ""
             }
-            holder.kvizDuration.text = kvizovi[position].trajanje.toString() + " min"
-        }
 
-        var datumRadaCalendar = GregorianCalendar(1970, 1,1)
-
-
-
-
-        if(     datumRadaCalendar.get(Calendar.YEAR)  == 1970
-                && datumPocetkaCalendar < Calendar.getInstance()
-                && (datumKrajaCalendar > Calendar.getInstance()
-                || datumKrajaCalendar.compareTo(Calendar.getInstance()) == 0)) {
-
-            holder.kvizDate.text =  (if(datumKrajaCalendar.get(Calendar.DAY_OF_MONTH) < 10) "0"  else "") +
-                                    datumKrajaCalendar.get(Calendar.DAY_OF_MONTH).toString() + "." +
-                                    (if(datumKrajaCalendar.get(Calendar.MONTH) + 1 < 10) "0"  else "") +
-                                    (datumKrajaCalendar.get(Calendar.MONTH)+1).toString() +
-                                    "." + datumKrajaCalendar.get(Calendar.YEAR).toString() + "."
-
-            holder.imageView.setImageResource(R.drawable.zelena)
-            holder.imageView.tag = R.drawable.zelena
-        }
-
-        else if(datumRadaCalendar.get(Calendar.YEAR) == 1970 && datumKrajaCalendar < Calendar.getInstance()){
-            holder.kvizDate.text =  (if(datumKrajaCalendar.get(Calendar.DAY_OF_MONTH) < 10) "0"  else "") +
-                                    datumKrajaCalendar.get(Calendar.DAY_OF_MONTH).toString() + "." +
-                                    (if(datumKrajaCalendar.get(Calendar.MONTH) + 1 < 10) "0"  else "") +
-                                    (datumKrajaCalendar.get(Calendar.MONTH)+1).toString() +
-                                    "." + datumKrajaCalendar.get(Calendar.YEAR).toString() + "."
-
-            holder.imageView.setImageResource(R.drawable.crvena)
-            holder.imageView.tag = R.drawable.crvena
-        }
-
-        else if(datumRadaCalendar.get(Calendar.YEAR) == 1970 && datumPocetkaCalendar > Calendar.getInstance()){
-            holder.kvizDate.text =  if(datumPocetkaCalendar.get(Calendar.DAY_OF_MONTH) < 10) "0" else "" +
-                                    datumPocetkaCalendar.get(Calendar.DAY_OF_MONTH).toString() + "." +
-                                    (if(datumPocetkaCalendar.get(Calendar.MONTH) + 1 < 10) "0"  else "") +
-                                    (datumPocetkaCalendar.get(Calendar.MONTH)+1).toString()  +
-                                    "." + datumPocetkaCalendar.get(Calendar.YEAR).toString() + "."
-
-            holder.imageView.setImageResource(R.drawable.zuta)
-            holder.imageView.tag = R.drawable.zuta
-        }
-
-        else{
-            holder.kvizDate.text =  (if(datumRadaCalendar.get(Calendar.DAY_OF_MONTH) < 10) "0" else "") +
-                                    datumRadaCalendar.get(Calendar.DAY_OF_MONTH).toString() + "." +
-                                    (if(datumRadaCalendar.get(Calendar.MONTH) + 1 < 10) "0"  else "") +
-                                    (datumRadaCalendar.get(Calendar.MONTH)+1).toString() + "." +
-                                    datumRadaCalendar.get(Calendar.YEAR).toString() + "."
-
-            holder.imageView.setImageResource(R.drawable.plava)
-            holder.imageView.tag = R.drawable.plava
-        }
-
-        holder.kvizTitle.text = kvizovi[position].naziv
-
-        GlobalScope.launch(Dispatchers.Main) {
-            val grupe = predmetIGrupaViewModel.getGrupeZaKviz(kvizovi[position].id)
-            val predmet = predmetIGrupaViewModel.getPredmetById(grupe!![0].predmetId)
+            result.await()
             holder.predmetName.text = predmet.toString()
+
+            holder.itemView.setOnClickListener {
+                if (spinnerTekst != "Svi kvizovi") {
+                    scope.launch {
+                        val lista = pitanjeKvizViewModel.getPitanja(kvizovi[position].id)
+
+                        if (lista.isNotEmpty() && holder.imageView.tag != R.drawable.crvena) {
+                            val transaction = manager?.beginTransaction()
+                            var fragment =
+                                manager?.findFragmentByTag("Kviz" + kvizovi[position].naziv)
+                            var bundle = Bundle()
+                            val fragmentPokusaj = FragmentPokusaj.newInstance(lista)
+
+                            bundle.putString("kvizNaziv", kvizovi[position].naziv)
+
+                            if (holder.imageView.tag == R.drawable.plava) {
+                                bundle.putBoolean("uradjenKviz", true)
+                            } else if (holder.imageView.tag == R.drawable.zelena) {
+                                bundle.putBoolean("uradjenKviz", false)
+                            }
+                            
+                            val grupe = predmetIGrupaViewModel.getGrupeZaKviz(kvizovi[position].id)
+                            val predmet = predmetIGrupaViewModel.getPredmetById(grupe!![0].predmetId)
+                            val upisanaGrupa = predmetIGrupaViewModel.getUpisaneGrupe()!!
+                                .find { grupa -> grupa.predmetId == predmet!!.id }
+
+                            bundle.putString("grupaNaziv", upisanaGrupa!!.naziv)
+
+                            if (fragment == null) {
+                                fragmentPokusaj.arguments = bundle
+                                transaction?.replace(
+                                    R.id.container,
+                                    fragmentPokusaj,
+                                    "Kviz" + kvizovi[position].naziv
+                                )
+                            } else {
+                                fragment.arguments = bundle
+                                transaction?.replace(R.id.container, fragment)
+                            }
+                            transaction?.addToBackStack(null)
+                            transaction?.commit()
+                        }
+                    }
+                }
+
+            }
+
         }
-
-
-
-
-//        holder.itemView.setOnClickListener {
-//            if(spinnerTekst != "Svi kvizovi") {
-//                val lista = pitanjeKvizViewModel.getPitanja(holder.kvizTitle.text.toString(), holder.predmetName.text.toString())
-//                if (lista.isNotEmpty() && holder.imageView.tag != R.drawable.crvena) {
-//                    val transaction = manager?.beginTransaction()
-//                    var fragment = manager?.findFragmentByTag("Kviz" + kvizovi[position].naziv)
-//                    var bundle= Bundle()
-//                    val fragmentPokusaj = FragmentPokusaj.newInstance(lista)
-//
-//                    bundle.putString("kvizNaziv", kvizovi[position].naziv)
-//
-//                    if (holder.imageView.tag == R.drawable.plava) {
-//                        bundle.putBoolean("uradjenKviz", true)
-//                    } else if (holder.imageView.tag == R.drawable.zelena) {
-//                        bundle.putBoolean("uradjenKviz", false)
-//                    }
-//
-//                    bundle.putString("grupaNaziv", kvizovi[position].nazivGrupe)
-//
-//                    if (fragment == null) {
-//                        fragmentPokusaj.arguments = bundle
-//                        transaction?.replace(R.id.container, fragmentPokusaj, "Kviz" + kvizovi[position].naziv)
-//                    } else {
-//                        fragment.arguments = bundle
-//                        transaction?.replace(R.id.container, fragment)
-//                    }
-//                    transaction?.addToBackStack(null)
-//                    transaction?.commit()
-//                }
-//            }
-//
-//        }
-
-
-
 
     }
 

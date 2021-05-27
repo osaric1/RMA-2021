@@ -19,9 +19,7 @@ import ba.etf.rma21.projekat.viewmodel.GrupaViewModel
 import ba.etf.rma21.projekat.viewmodel.KvizViewModel
 import ba.etf.rma21.projekat.viewmodel.PredmetIGrupaViewModel
 import ba.etf.rma21.projekat.viewmodel.PredmetViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class FragmentPredmeti() : Fragment() {
     private lateinit var  odabirGodine: Spinner
@@ -32,6 +30,8 @@ class FragmentPredmeti() : Fragment() {
     private var predmetIGrupaViewModel  = PredmetIGrupaViewModel()
     private var grupaViewModel  = GrupaViewModel()
     private var kvizViewModel = KvizViewModel()
+
+    val scope = CoroutineScope(Job() + Dispatchers.Main)
 
 //    private var savedState = Bundle()
 
@@ -70,7 +70,7 @@ class FragmentPredmeti() : Fragment() {
                 val grupa = odabirGrupe.selectedItem.toString()
                 val predmet = odabirPredmeta.selectedItem.toString()
 
-                GlobalScope.launch(Dispatchers.Main) {
+                scope.launch{
                     val grupe = predmetIGrupaViewModel.getGrupe()
                     val pronadjenaGrupa = grupe.find { grupa1 -> grupa1.naziv == grupa }
                     Log.d("ID", pronadjenaGrupa!!.id.toString())
@@ -111,7 +111,7 @@ class FragmentPredmeti() : Fragment() {
                 id: Long)
             {
                 //treba izvuci slobodne
-                GlobalScope.launch(Dispatchers.Main) {
+                scope.launch{
                     val zauzetiPredmetiId = predmetIGrupaViewModel.getUpisaneGrupe()!!.map { grupa ->  grupa.predmetId }.toList()
                     var slobodniPredmeti: MutableList<Predmet> = predmetIGrupaViewModel.getPredmeti().filter { predmet -> predmet.godina == Integer.parseInt(odabirGodine.selectedItem.toString())  } as MutableList<Predmet>
 
@@ -142,7 +142,7 @@ class FragmentPredmeti() : Fragment() {
                 position: Int,
                 id: Long) {
 
-                GlobalScope.launch(Dispatchers.Main) {
+                scope.launch {
                     var grupe: List<String>
                     val predmet = predmetIGrupaViewModel.getPredmeti().find { predmet1 ->  predmet1.naziv == odabirPredmeta.selectedItem.toString() }
                     if(predmet == null) grupe = listOf("-Empty-")

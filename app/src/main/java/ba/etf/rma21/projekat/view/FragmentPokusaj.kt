@@ -14,9 +14,14 @@ import androidx.core.view.get
 import androidx.fragment.app.*
 import ba.etf.rma21.projekat.MainActivity
 import ba.etf.rma21.projekat.R
+import ba.etf.rma21.projekat.data.models.KvizTaken
 import ba.etf.rma21.projekat.data.models.Pitanje
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.math.RoundingMode
 import java.util.*
 
@@ -34,6 +39,10 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
     private var nazivKviza: String = ""
     private var nazivGrupa: String = ""
     private var uradjenKviz: Boolean = false
+
+    private var pokusajKviza: KvizTaken? = null
+    private var job: Job = Job()
+    private var scope = CoroutineScope(Dispatchers.Main + job)
 
     private val mOnNavigationItemSelectedListener = NavigationView.OnNavigationItemSelectedListener { item ->
         if(item.title.toString() != "Rezultat") {
@@ -79,6 +88,10 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.pokusaj_fragment, container, false)
+
+        scope.launch{
+
+        }
         navigationView = view.findViewById(R.id.navigacijaPitanja)
         bottomNavigation = activity?.findViewById(R.id.bottomNav)!!
 

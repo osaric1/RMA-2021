@@ -14,9 +14,7 @@ import ba.etf.rma21.projekat.R
 import ba.etf.rma21.projekat.viewmodel.KvizViewModel
 import ba.etf.rma21.projekat.viewmodel.PitanjeKvizViewModel
 import ba.etf.rma21.projekat.viewmodel.PredmetViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class FragmentKvizovi: Fragment() {
     private lateinit var listaKvizova: RecyclerView
@@ -26,6 +24,9 @@ class FragmentKvizovi: Fragment() {
     private var kvizViewModel =  KvizViewModel()
     private var predmetViewModel = PredmetViewModel()
     private var pitanjeKvizViewModel = PitanjeKvizViewModel()
+    private var job: Job = Job()
+    private var scope = CoroutineScope(Dispatchers.Main + job)
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view  = inflater.inflate(R.layout.kvizovi_fragment, container, false)
         spinner = view.findViewById(R.id.filterKvizova)
@@ -70,7 +71,7 @@ class FragmentKvizovi: Fragment() {
                     position: Int,
                     id: Long
             ) {
-                    GlobalScope.launch(Dispatchers.Main) {
+                    scope.launch{
 
                     if(spinner.selectedItem.toString() == "Svi kvizovi"){
                         kvizAdapter.updateKvizovi(kvizViewModel.getAll())
