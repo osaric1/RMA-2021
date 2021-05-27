@@ -96,9 +96,6 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.pokusaj_fragment, container, false)
 
-        scope.launch {
-            pokusajKviza = takeKvizViewModel.zapocniKviz(idKviza)
-        }
 
         navigationView = view.findViewById(R.id.navigacijaPitanja)
         bottomNavigation = activity?.findViewById(R.id.bottomNav)!!
@@ -144,6 +141,11 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
                 uradjenKviz = arguments?.getBoolean("uradjenKviz")!!
                 if(uradjenKviz == true) {
                     meni.getItem(pitanja.size).isVisible = true
+                }
+            }
+            if(!uradjenKviz){
+                scope.launch {
+                    pokusajKviza = takeKvizViewModel.zapocniKviz(idKviza)
                 }
             }
         }
@@ -193,21 +195,19 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
         super.onStop()
 
         var odgovori: List<Odgovor> = listOf()
-        scope.launch {
-            odgovori = odgovorViewModel.getOdgovoriKviz(idKviza)
+        if(!uradjenKviz) {
+            scope.launch {
+                odgovori = odgovorViewModel.getOdgovoriKviz(idKviza)
 
-            if(odgovori.size != pitanja.size){
-                for(pitanje in pitanja) {
-                    if(!pitanje.odgovoreno) {
-                        odgovorViewModel.postaviOdgovorKviz(pokusajKviza!!.id, pitanje.id, 10)
-                        pitanje.odgovoreno = true
+                if (odgovori.size != pitanja.size) {
+                    for (pitanje in pitanja) {
+                        if (!pitanje.odgovoreno) {
+                            odgovorViewModel.postaviOdgovorKviz(pokusajKviza!!.id, pitanje.id, 10)
+                            pitanje.odgovoreno = true
+                        }
                     }
                 }
             }
-        }
-
-        for(i in indeks-1..pitanja.size){
-
         }
         setFragmentResult("requestKey", bundleOf(Pair("tacnost", "Završili ste kviz"))) //nema naziva kviza niti tacnosti zbog testova
     }

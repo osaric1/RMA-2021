@@ -81,7 +81,23 @@ class KvizAdapter(
 
             holder.kvizDuration.text = kvizovi[position].trajanje.toString() + " min"
 
+            holder.kvizTitle.text = kvizovi[position].naziv
+
+            result.await()
+
             var datumRadaCalendar = GregorianCalendar(1970, 1, 1)
+
+
+            if (!pokusaji.isEmpty()) {
+                val pokusaj = pokusaji.find { pokusaj -> pokusaj.KvizId == kvizovi[position].id }
+
+                if(pokusaj != null) {
+                    holder.kvizPoints.text = pokusaj.osvojeniBodovi.toString()
+                    datumRadaCalendar = toCalendar(pokusaj.datumRada!!) as GregorianCalendar
+                }
+            } else {
+                holder.kvizPoints.text = ""
+            }
 
             if (datumRadaCalendar.get(Calendar.YEAR) == 1970
                 && datumPocetkaCalendar < Calendar.getInstance()
@@ -129,18 +145,7 @@ class KvizAdapter(
                 holder.imageView.setImageResource(R.drawable.plava)
                 holder.imageView.tag = R.drawable.plava
             }
-            holder.kvizTitle.text = kvizovi[position].naziv
 
-            if (!pokusaji.isEmpty()) {
-                val pokusaj = pokusaji.find { pokusaj -> pokusaj.KvizId == kvizovi[position].id }
-
-                if(pokusaj != null)
-                holder.kvizPoints.text = pokusaj.osvojeniBodovi.toString()
-            } else {
-                holder.kvizPoints.text = ""
-            }
-
-            result.await()
             holder.predmetName.text = predmetiStringovi.dropLast(1)
 
             holder.itemView.setOnClickListener {
