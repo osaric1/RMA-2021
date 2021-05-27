@@ -6,11 +6,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 object ApiConfig {
-    var url: String = "https://rma21-etf.herokuapp.com/"
+    var baseURL: String = "https://rma21-etf.herokuapp.com/"
 
     suspend fun postaviBaseURL(baseUrl:String):Unit {
         return withContext(Dispatchers.IO){
-            url = baseUrl
+            baseURL = baseUrl
         }
     }
 }

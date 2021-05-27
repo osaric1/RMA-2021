@@ -102,7 +102,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        AccountRepository.acHash = "e6aba651-b4ba-4b26-85b8-c15fe9eededd"
 
         bottomNavigation= findViewById(R.id.bottomNav)
         bottomNavigation.menu.findItem(R.id.predajKviz).setVisible(false)

@@ -15,9 +15,6 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import ba.etf.rma21.projekat.R
 import ba.etf.rma21.projekat.data.models.Pitanje
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import java.util.*
 
 
@@ -49,7 +46,7 @@ class FragmentPitanje(var pitanje: Pitanje): Fragment() {
 
         odgovori = ArrayList(pitanje.opcije)
         tacno = pitanje.tacan
-        tekstPitanja.text = pitanje.tekst
+        tekstPitanja.text = pitanje.tekstPitanja
 
         val dataAdapter: ArrayAdapter<String> = ArrayAdapter<String>(view.context, android.R.layout.simple_list_item_1, odgovori)
         listaOdgovora.adapter = dataAdapter

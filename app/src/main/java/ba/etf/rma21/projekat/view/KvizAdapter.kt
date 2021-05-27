@@ -2,6 +2,7 @@ package ba.etf.rma21.projekat.view
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -62,11 +63,19 @@ class KvizAdapter(
         //TODO provjeriti ima li kviztaken id kviza
 
         scope.launch {
-
+            var predmetiStringovi: String =""
             val result = async {
                 pokusaji = takeKvizViewModel.getPocetiKvizovi()
                 grupe = predmetIGrupaViewModel.getGrupeZaKviz(kvizovi[position].id)!!
-                predmet = predmetIGrupaViewModel.getPredmetById(grupe!![0].predmetId)!!
+
+                for(grupa in grupe){
+
+                    val tekst = predmetIGrupaViewModel.getPredmetById(grupa.predmetId).toString()
+
+                    if(!predmetiStringovi.contains(tekst)) {
+                        predmetiStringovi += tekst +","
+                    }
+                }
             }
 
             holder.kvizDuration.text = kvizovi[position].trajanje.toString() + " min"
@@ -131,7 +140,7 @@ class KvizAdapter(
             }
 
             result.await()
-            holder.predmetName.text = predmet.toString()
+            holder.predmetName.text = predmetiStringovi.dropLast(1)
 
             holder.itemView.setOnClickListener {
                 if (spinnerTekst != "Svi kvizovi") {
@@ -152,7 +161,7 @@ class KvizAdapter(
                             } else if (holder.imageView.tag == R.drawable.zelena) {
                                 bundle.putBoolean("uradjenKviz", false)
                             }
-                            
+
                             val grupe = predmetIGrupaViewModel.getGrupeZaKviz(kvizovi[position].id)
                             val predmet = predmetIGrupaViewModel.getPredmetById(grupe!![0].predmetId)
                             val upisanaGrupa = predmetIGrupaViewModel.getUpisaneGrupe()!!
