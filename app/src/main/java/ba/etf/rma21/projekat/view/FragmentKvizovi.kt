@@ -79,18 +79,19 @@ class FragmentKvizovi: Fragment() {
                     else if(spinner.selectedItem.toString() == "Svi moji kvizovi") {
                         kvizAdapter.updateKvizovi(kvizViewModel.getUpisani())
                     }
-                    /*
+
                     else if(spinner.selectedItem.toString() == "Urađeni kvizovi") {
                         kvizAdapter.updateKvizovi(kvizViewModel.getDone())
                     }
+
                     else if(spinner.selectedItem.toString() == "Prošli kvizovi") {
                         kvizAdapter.updateKvizovi(kvizViewModel.getNotTaken())
                     }
+
                     else if(spinner.selectedItem.toString() == "Budući kvizovi") {
                         kvizAdapter.updateKvizovi(kvizViewModel.getFuture())
                     }
 
-                     */
                     kvizAdapter.updateSpinner(spinner.selectedItem.toString())
                 }
             }

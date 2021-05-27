@@ -56,22 +56,31 @@ class KvizRepository() {
             }
         }
 
-/*
+
         suspend fun getDone(): List<Kviz> {
-            return getUpisani().filter { kviz -> toCalendar(kviz.datumRada).get(Calendar.YEAR) != 1970 }.toList()
+            return withContext(Dispatchers.IO){
+                var response = ApiAdapter.retrofit.getPocetiKvizovi(AccountRepository.acHash)
+                val responseBody = response.body()
+
+                if(responseBody != null){
+                    val ids = responseBody.map { kvizTaken -> kvizTaken.KvizId  }
+                    return@withContext getUpisani().filter { kviz -> ids.contains(kviz.id) }.toList()
+                }
+                return@withContext listOf<Kviz>()
+            }
         }
 
 
         suspend fun getFuture(): List<Kviz> {
             return getAll()!!.filter { kviz -> toCalendar(kviz.datumPocetka) > Calendar.getInstance() }.toList()
         }
-
+/*
         fun getNotTaken(): List<Kviz> {
             return getMyKvizes().filter { kviz -> toCalendar(kviz.datumKraj) < Calendar.getInstance() &&  toCalendar(kviz.datumRada).get(Calendar.YEAR) == 1970 }.toList()
         }
 
-         */
 
+*/
         /*fun addGroup(grupa: Grupa){
             upisaneGrupe.add(grupa)
         }
@@ -82,6 +91,19 @@ class KvizRepository() {
             val cal = Calendar.getInstance()
             cal.time = date
             return cal
+        }
+
+        suspend fun getNotTaken(): List<Kviz> {
+            return withContext(Dispatchers.IO){
+                var response = ApiAdapter.retrofit.getPocetiKvizovi(AccountRepository.acHash)
+                val responseBody = response.body()
+
+                if(responseBody != null){
+                    val ids = responseBody.map { kvizTaken -> kvizTaken.KvizId  }
+                    return@withContext getUpisani().filter { kviz -> kviz.datumKraj != null && !ids.contains(kviz.id) && toCalendar(kviz.datumKraj) < Calendar.getInstance() }.toList()
+                }
+                return@withContext listOf<Kviz>()
+            }
         }
 
         /*

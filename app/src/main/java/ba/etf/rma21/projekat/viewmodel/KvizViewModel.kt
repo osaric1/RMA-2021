@@ -25,4 +25,15 @@ class KvizViewModel() {
     suspend fun getUpisani(): List<Kviz> {
         return KvizRepository.getUpisani()
     }
+    suspend fun getDone(): List<Kviz> {
+        return KvizRepository.getDone()
+    }
+
+    suspend fun getNotTaken(): List<Kviz> {
+        return KvizRepository.getNotTaken()
+    }
+
+    suspend fun getFuture(): List<Kviz> {
+        return KvizRepository.getFuture()
+    }
 }
