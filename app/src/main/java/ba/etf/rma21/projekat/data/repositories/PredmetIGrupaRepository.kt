@@ -47,10 +47,9 @@ class PredmetIGrupaRepository {
 
         suspend fun upisiUGrupu(idGrupa: Int): Boolean {
             return withContext(Dispatchers.IO) {
-                val response = ApiAdapter.retrofit.upisiUGrupu(idGrupa, AccountRepository.getHash())
-                val responseBody = response.body()
+                ApiAdapter.retrofit.upisiUGrupu(idGrupa, AccountRepository.getHash())
 
-                return@withContext responseBody.equals("upisan")
+                return@withContext true
             }
         }
 
