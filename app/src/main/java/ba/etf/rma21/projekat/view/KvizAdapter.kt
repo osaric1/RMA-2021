@@ -63,6 +63,7 @@ class KvizAdapter(
         //TODO provjeriti ima li kviztaken id kviza
 
         scope.launch {
+
             var predmetiStringovi: String =""
             val result = async {
                 pokusaji = takeKvizViewModel.getPocetiKvizovi()
@@ -128,12 +129,12 @@ class KvizAdapter(
                 holder.imageView.setImageResource(R.drawable.plava)
                 holder.imageView.tag = R.drawable.plava
             }
-
             holder.kvizTitle.text = kvizovi[position].naziv
 
             if (!pokusaji.isEmpty()) {
-                val pokusaj = pokusaji.first { pokusaj -> pokusaj.id == kvizovi[position].id }
+                val pokusaj = pokusaji.find { pokusaj -> pokusaj.KvizId == kvizovi[position].id }
 
+                if(pokusaj != null)
                 holder.kvizPoints.text = pokusaj.osvojeniBodovi.toString()
             } else {
                 holder.kvizPoints.text = ""
@@ -168,6 +169,7 @@ class KvizAdapter(
                                 .find { grupa -> grupa.predmetId == predmet!!.id }
 
                             bundle.putString("grupaNaziv", upisanaGrupa!!.naziv)
+                            bundle.putInt("idKviza", kvizovi[position].id)
 
                             if (fragment == null) {
                                 fragmentPokusaj.arguments = bundle

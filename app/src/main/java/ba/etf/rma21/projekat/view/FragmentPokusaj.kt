@@ -7,6 +7,7 @@ import android.text.SpannableString
 import android.text.style.AlignmentSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
+import android.util.Log
 import android.view.*
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -15,7 +16,10 @@ import androidx.fragment.app.*
 import ba.etf.rma21.projekat.MainActivity
 import ba.etf.rma21.projekat.R
 import ba.etf.rma21.projekat.data.models.KvizTaken
+import ba.etf.rma21.projekat.data.models.Odgovor
 import ba.etf.rma21.projekat.data.models.Pitanje
+import ba.etf.rma21.projekat.viewmodel.OdgovorViewModel
+import ba.etf.rma21.projekat.viewmodel.TakeKvizViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineScope
@@ -36,6 +40,7 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
     private var savedState: Bundle? = Bundle()
     private var listaBoja = Array(pitanja.size) { i -> "bijela"}
 
+    private var idKviza: Int = -1
     private var nazivKviza: String = ""
     private var nazivGrupa: String = ""
     private var uradjenKviz: Boolean = false
@@ -43,6 +48,8 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
     private var pokusajKviza: KvizTaken? = null
     private var job: Job = Job()
     private var scope = CoroutineScope(Dispatchers.Main + job)
+    private var takeKvizViewModel = TakeKvizViewModel()
+    private var odgovorViewModel = OdgovorViewModel()
 
     private val mOnNavigationItemSelectedListener = NavigationView.OnNavigationItemSelectedListener { item ->
         if(item.title.toString() != "Rezultat") {
@@ -89,9 +96,10 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.pokusaj_fragment, container, false)
 
-        scope.launch{
-
+        scope.launch {
+            pokusajKviza = takeKvizViewModel.zapocniKviz(idKviza)
         }
+
         navigationView = view.findViewById(R.id.navigacijaPitanja)
         bottomNavigation = activity?.findViewById(R.id.bottomNav)!!
 
@@ -130,6 +138,7 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
 
             nazivKviza = arguments?.getString("kvizNaziv").toString()
             nazivGrupa = arguments?.getString("grupaNaziv").toString()
+            idKviza = arguments?.getInt("idKviza")!!
 
             if(arguments?.containsKey("uradjenKviz")!!){
                 uradjenKviz = arguments?.getBoolean("uradjenKviz")!!
@@ -142,6 +151,12 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
 
         setFragmentResultListener("odgovoreno") { requestKey, bundle ->
             val result:Boolean = bundle.getBoolean("odgovor")
+
+            scope.launch {
+                odgovorViewModel.postaviOdgovorKviz(pokusajKviza!!.id, pitanja[indeks-1].id, bundle.getInt("position"))
+            }
+
+            pitanja[indeks-1].odgovoreno = true
 
             var tekst = SpannableString(meni[indeks - 1].title)
 
@@ -176,6 +191,24 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
 
     override fun onStop() {
         super.onStop()
+
+        var odgovori: List<Odgovor> = listOf()
+        scope.launch {
+            odgovori = odgovorViewModel.getOdgovoriKviz(idKviza)
+
+            if(odgovori.size != pitanja.size){
+                for(pitanje in pitanja) {
+                    if(!pitanje.odgovoreno) {
+                        odgovorViewModel.postaviOdgovorKviz(pokusajKviza!!.id, pitanje.id, 10)
+                        pitanje.odgovoreno = true
+                    }
+                }
+            }
+        }
+
+        for(i in indeks-1..pitanja.size){
+
+        }
         setFragmentResult("requestKey", bundleOf(Pair("tacnost", "Završili ste kviz"))) //nema naziva kviza niti tacnosti zbog testova
     }
     override fun onPause() {

@@ -86,7 +86,7 @@ class FragmentPitanje(var pitanje: Pitanje): Fragment() {
                 listaOdgovora.isEnabled = false
                 listaOdgovora.onItemClickListener = null
                 enabled = false
-                setFragmentResult("odgovoreno", bundleOf(Pair("odgovor",tacanOdgovor)))
+                setFragmentResult("odgovoreno", bundleOf(Pair("odgovor",tacanOdgovor), Pair("position", position)))
             }
         }
 
