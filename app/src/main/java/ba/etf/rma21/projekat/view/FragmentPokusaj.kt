@@ -108,7 +108,7 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
 
         meni = navigationView.menu
 
-
+/*
         for (i in 1..pitanja.size) {
 
             var tekst = SpannableString(i.toString())
@@ -131,6 +131,51 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
         meni.add(0, pitanja.size, pitanja.size, tekst)
         meni.getItem(pitanja.size).isVisible = false
 
+
+ */
+        scope.launch{
+
+            val kvizTaken = takeKvizViewModel.getPocetiKvizovi().find { kvizTaken -> kvizTaken.KvizId == idKviza  }
+
+            if(kvizTaken != null) {
+                val listaOdgovora = odgovorViewModel.getOdgovoriKviz(kvizTaken.id)
+
+                if (listaOdgovora.isNotEmpty()) {
+                    var i = 1
+                    for (odgovor in listaOdgovora) {
+                        val pitanje = pitanja.find { pitanje -> pitanje.id == odgovor.PitanjeId }
+
+                        if (pitanje != null) {
+                            val tekst = SpannableString(i.toString())
+                            tekst.setSpan(RelativeSizeSpan(2f), 0, i.toString().length, 0)
+
+                            if (pitanje.tacan == odgovor.odgovoreno)
+                                tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.correct)), 0, i.toString().length, 0)
+
+                            else if(odgovor.odgovoreno > pitanje.opcije.size)
+                                tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.white)), 0, i.toString().length, 0)
+
+                            else if(pitanje.tacan != odgovor.odgovoreno)
+                                tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.wrong)), 0, i.toString().length, 0)
+
+
+                            tekst.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, i.toString().length, 0)
+                            meni.add(0, i - 1, i - 1, tekst)
+                            i++
+                        }
+
+                    }
+                }
+            }
+            val tekst = SpannableString("Rezultat")
+            tekst.setSpan(RelativeSizeSpan(2f), 0, 8, 0)
+            tekst.setSpan(ForegroundColorSpan(Color.WHITE), 0, 8, 0)
+            tekst.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, 8, 0)
+            meni.add(0, pitanja.size, pitanja.size, tekst)
+            meni.getItem(pitanja.size).isVisible = false
+        }
+
+
         if(arguments != null){
 
             nazivKviza = arguments?.getString("kvizNaziv").toString()
@@ -139,9 +184,12 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
 
             if(arguments?.containsKey("uradjenKviz")!!){
                 uradjenKviz = arguments?.getBoolean("uradjenKviz")!!
+                /*
                 if(uradjenKviz == true) {
                     meni.getItem(pitanja.size).isVisible = true
                 }
+
+                 */
             }
             if(!uradjenKviz){
                 scope.launch {
