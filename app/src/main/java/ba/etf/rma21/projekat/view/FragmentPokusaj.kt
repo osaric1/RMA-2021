@@ -18,7 +18,6 @@ import ba.etf.rma21.projekat.R
 import ba.etf.rma21.projekat.data.models.KvizTaken
 import ba.etf.rma21.projekat.data.models.Odgovor
 import ba.etf.rma21.projekat.data.models.Pitanje
-import ba.etf.rma21.projekat.viewmodel.KvizViewModel
 import ba.etf.rma21.projekat.viewmodel.OdgovorViewModel
 import ba.etf.rma21.projekat.viewmodel.TakeKvizViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -58,19 +57,22 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
 
                 val fragmentManager = activity?.supportFragmentManager
                 val transaction = fragmentManager?.beginTransaction()
-                var fragment = fragmentManager?.findFragmentByTag(nazivKviza + indeks.toString())
+                val fragment = fragmentManager?.findFragmentByTag(nazivKviza + indeks.toString())
+
+                val bundle: Bundle = Bundle()
+                bundle.putInt("idKviza", idKviza)
+
+                if(uradjenKviz){
+                    bundle.putBoolean("disableList", !uradjenKviz)
+                }
 
                 if (fragment == null) {
                     val fragmentPitanje = FragmentPitanje.newInstance(pitanja.get(indeks - 1))
-                    if(uradjenKviz){
-                        fragmentPitanje.arguments =  bundleOf(Pair("disableList", !uradjenKviz))
-                    }
+                    fragmentPitanje.arguments = bundle
                     transaction?.replace(R.id.framePitanja, fragmentPitanje, nazivKviza + indeks.toString())
                 }
                 else{
-                    if(uradjenKviz){
-                        fragment.arguments =  bundleOf(Pair("disableList", !uradjenKviz))
-                    }
+                    fragment.arguments = bundle
                     transaction?.replace(R.id.framePitanja, fragment)
                 }
                 transaction?.addToBackStack(null)
@@ -121,10 +123,10 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
         scope.launch{
 
             val kvizTaken = takeKvizViewModel.getPocetiKvizovi().find { kvizTaken -> kvizTaken.KvizId == idKviza  }
-            var listaOdgovora: List<Odgovor> = mutableListOf()
-
+            val listaOdgovora: List<Odgovor>
             if(kvizTaken != null) {
                 listaOdgovora = odgovorViewModel.getOdgovoriKviz(kvizTaken.id)
+                Log.d("dada", kvizTaken.id.toString())
 
                 if (listaOdgovora.isNotEmpty()) {
                     var i = 1
@@ -150,6 +152,7 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
                         }
                     }
                 }
+
             }
         }
 
@@ -177,7 +180,7 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
 
         setFragmentResultListener("odgovoreno") { _, bundle ->
             val result:Boolean = bundle.getBoolean("odgovor")
-
+             Log.d("dadadadadad", "ma de vise")
             scope.launch {
                 odgovorViewModel.postaviOdgovorKviz(pokusajKviza!!.id, pitanja[indeks-1].id, bundle.getInt("position"))
             }
