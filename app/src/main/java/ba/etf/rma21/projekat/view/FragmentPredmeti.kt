@@ -54,7 +54,7 @@ class FragmentPredmeti() : Fragment() {
 
         dodajPredmet.setOnClickListener {
 
-            if(odabirPredmeta.selectedItem.toString() != "-Empty-" && odabirPredmeta.selectedItem.toString() != "" &&
+            if(odabirPredmeta.selectedItem != null && odabirGrupe.selectedItem != null && odabirPredmeta.selectedItem.toString() != "-Empty-" && odabirPredmeta.selectedItem.toString() != "" &&
                 odabirGrupe.selectedItem.toString() != "-Empty-" && odabirGrupe.selectedItem.toString() != "") {
 
                 zavrsenUpis = true

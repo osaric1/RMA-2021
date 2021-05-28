@@ -8,7 +8,8 @@ data class Kviz(
         @SerializedName("naziv") val naziv: String,
         @SerializedName("datumPocetak") val datumPocetka: Date,
         @SerializedName("datumKraj") val datumKraj: Date?,
-        @SerializedName("trajanje") val trajanje: Int
+        @SerializedName("trajanje") val trajanje: Int,
+        var predan: Boolean = false
 ) {
 
 

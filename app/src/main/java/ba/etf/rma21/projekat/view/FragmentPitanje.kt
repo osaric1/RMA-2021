@@ -2,6 +2,7 @@ package ba.etf.rma21.projekat.view
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,6 +53,7 @@ class FragmentPitanje(var pitanje: Pitanje): Fragment() {
         listaOdgovora.adapter = dataAdapter
 
 
+        scope
         if(savedOdgovor >= 0) {
             listaOdgovora.post {
                 val textview = listaOdgovora.getChildAt(savedOdgovor!!) as TextView

@@ -15,6 +15,7 @@ import ba.etf.rma21.projekat.data.models.Grupa
 import ba.etf.rma21.projekat.data.models.Kviz
 import ba.etf.rma21.projekat.data.models.KvizTaken
 import ba.etf.rma21.projekat.data.models.Predmet
+import ba.etf.rma21.projekat.viewmodel.OdgovorViewModel
 import ba.etf.rma21.projekat.viewmodel.PitanjeKvizViewModel
 import ba.etf.rma21.projekat.viewmodel.PredmetIGrupaViewModel
 import ba.etf.rma21.projekat.viewmodel.TakeKvizViewModel
@@ -31,6 +32,8 @@ class KvizAdapter(
     private var predmetIGrupaViewModel = PredmetIGrupaViewModel()
     private var takeKvizViewModel = TakeKvizViewModel()
     private var pitanjeKvizViewModel = PitanjeKvizViewModel()
+    private var odgovorViewModel = OdgovorViewModel()
+
     private var job: Job = Job()
     private var scope = CoroutineScope(Dispatchers.Main + job)
 
@@ -88,12 +91,17 @@ class KvizAdapter(
             var datumRadaCalendar = GregorianCalendar(1970, 1, 1)
 
 
-            if (!pokusaji.isEmpty()) {
+            if (!pokusaji.isEmpty()) { //nalazimo da li smo vec odgovarali na neki kviz
                 val pokusaj = pokusaji.find { pokusaj -> pokusaj.KvizId == kvizovi[position].id }
 
                 if(pokusaj != null) {
-                    holder.kvizPoints.text = pokusaj.osvojeniBodovi.toString()
-                    datumRadaCalendar = toCalendar(pokusaj.datumRada!!) as GregorianCalendar
+                    val odgovori = odgovorViewModel.getOdgovoriKviz(pokusaj.id)
+
+                    if(odgovori.size == pitanjeKvizViewModel.getPitanja(kvizovi[position].id).size && kvizovi[position].predan){ //ako su odgovorena sva pitanja i ako je predan kviz
+                        holder.kvizPoints.text = pokusaj.osvojeniBodovi.toString()
+                        datumRadaCalendar = toCalendar(pokusaj.datumRada!!) as GregorianCalendar
+                    }
+                    else holder.kvizPoints.text = ""
                 }
             } else {
                 holder.kvizPoints.text = ""
