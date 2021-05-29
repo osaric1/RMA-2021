@@ -53,11 +53,9 @@ class FragmentPitanje(var pitanje: Pitanje): Fragment() {
         listaOdgovora = view.findViewById(R.id.odgovoriLista)
 
         if(arguments != null){
-            //enabled = arguments?.getBoolean("disableList")!!
             idKviza = arguments?.getInt("idKviza")!!
         }
 
-        println(idKviza)
         odgovori = ArrayList(pitanje.opcije)
         tacno = pitanje.tacan
         tekstPitanja.text = pitanje.tekstPitanja
@@ -75,29 +73,29 @@ class FragmentPitanje(var pitanje: Pitanje): Fragment() {
                         .find { odgovor1 -> odgovor1.PitanjeId == pitanje.id }
 
                     if (odgovor != null) {
-
-                        if (odgovor!!.odgovoreno >= 0 && odgovor!!.odgovoreno <= pitanje.opcije.size - 1) {
-                            enabled = false
-                        }
+                        enabled = false
 
                         listaOdgovora.post {
-                            val textview = listaOdgovora.getChildAt(odgovor!!.odgovoreno) as TextView
-                            if (textview != listaOdgovora.getChildAt(tacno) as TextView) {
-                                textview.setTextColor(
+                            if(odgovor!!.odgovoreno < pitanje.opcije.size) {
+                                val textview =
+                                    listaOdgovora.getChildAt(odgovor!!.odgovoreno) as TextView
+                                if (textview != listaOdgovora.getChildAt(tacno) as TextView) {
+                                    textview.setTextColor(
+                                        ContextCompat.getColor(
+                                            view.context,
+                                            R.color.wrong
+                                        )
+                                    )
+                                    (listaOdgovora.getChildAt(tacno) as TextView).setTextColor(
+                                        ContextCompat.getColor(view.context, R.color.correct)
+                                    )
+                                } else textview.setTextColor(
                                     ContextCompat.getColor(
                                         view.context,
-                                        R.color.wrong
+                                        R.color.correct
                                     )
                                 )
-                                (listaOdgovora.getChildAt(tacno) as TextView).setTextColor(
-                                    ContextCompat.getColor(view.context, R.color.correct)
-                                )
-                            } else textview.setTextColor(
-                                ContextCompat.getColor(
-                                    view.context,
-                                    R.color.correct
-                                )
-                            )
+                            }
                         }
                     }
                 }

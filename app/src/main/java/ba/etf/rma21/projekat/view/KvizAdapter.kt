@@ -63,7 +63,6 @@ class KvizAdapter(
             datumPocetkaCalendar.get(Calendar.DAY_OF_MONTH)
         )
 
-        //TODO provjeriti ima li kviztaken id kviza
 
         scope.launch {
 
@@ -96,8 +95,8 @@ class KvizAdapter(
 
                 if(pokusaj != null) {
                     val odgovori = odgovorViewModel.getOdgovoriKviz(pokusaj.id)
-
-                    if(odgovori.size == pitanjeKvizViewModel.getPitanja(kvizovi[position].id).size && kvizovi[position].predan){ //ako su odgovorena sva pitanja i ako je predan kviz
+                    Log.d("predan",kvizovi[position].predan.toString() )
+                    if(odgovori.size == pitanjeKvizViewModel.getPitanja(kvizovi[position].id).size){ //ako su odgovorena sva pitanja i ako je predan kviz
                         holder.kvizPoints.text = pokusaj.osvojeniBodovi.toString()
                         datumRadaCalendar = toCalendar(pokusaj.datumRada!!) as GregorianCalendar
                     }

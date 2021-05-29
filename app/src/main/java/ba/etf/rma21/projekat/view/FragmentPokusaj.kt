@@ -95,11 +95,15 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
         false
     }
 
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.pokusaj_fragment, container, false)
 
         navigationView = view.findViewById(R.id.navigacijaPitanja)
         bottomNavigation = activity?.findViewById(R.id.bottomNav)!!
+
+        tacnost = 0.0
 
         switchVisibility(true)
 
@@ -122,38 +126,47 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
 
         scope.launch{
 
-            val kvizTaken = takeKvizViewModel.getPocetiKvizovi().find { kvizTaken -> kvizTaken.KvizId == idKviza  }
+            pokusajKviza = takeKvizViewModel.getPocetiKvizovi().find { kvizTaken -> kvizTaken.KvizId == idKviza  }
             val listaOdgovora: List<Odgovor>
-            if(kvizTaken != null) {
-                listaOdgovora = odgovorViewModel.getOdgovoriKviz(kvizTaken.id)
-                Log.d("dada", kvizTaken.id.toString())
+            if(pokusajKviza != null) {
+                listaOdgovora = odgovorViewModel.getOdgovoriKviz(pokusajKviza!!.id)
 
                 if (listaOdgovora.isNotEmpty()) {
-                    var i = 1
                     for (odgovor in listaOdgovora) {
                         val pitanje = pitanja.find { pitanje -> pitanje.id == odgovor.PitanjeId }
 
                         if (pitanje != null) {
-                            val tekst = SpannableString(i.toString())
-                            tekst.setSpan(RelativeSizeSpan(2f), 0, i.toString().length, 0)
+                            val tekst = SpannableString((pitanja.indexOf(pitanje) + 1).toString())
+                            tekst.setSpan(RelativeSizeSpan(2f), 0, (pitanja.indexOf(pitanje) + 1).toString().length, 0)
 
                             if (pitanje.tacan == odgovor.odgovoreno){
-                                tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.correct)), 0, i.toString().length, 0)
+                                tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.correct)), 0, (pitanja.indexOf(pitanje) + 1).toString().length, 0)
+                                tacnost++
                             }
+
+                            else if(odgovor.odgovoreno >= pitanje.opcije.size){
+                                tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.white)), 0, (pitanja.indexOf(pitanje) + 1).toString().length, 0)
+                            }
+
 
                             else if(pitanje.tacan != odgovor.odgovoreno){
-                                tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.wrong)), 0, i.toString().length, 0)
+                                tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.wrong)), 0, (pitanja.indexOf(pitanje) + 1).toString().length, 0)
                             }
 
-                            tekst.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, i.toString().length, 0)
-                            meni.getItem(i-1).title = tekst
+                            tekst.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, (pitanja.indexOf(pitanje) + 1).toString().length, 0)
+                            meni.getItem((pitanja.indexOf(pitanje))).title = tekst
 
-                            i++
                         }
                     }
                 }
 
             }
+            else{
+                pokusajKviza = takeKvizViewModel.zapocniKviz(idKviza)
+            }
+
+            //odmah cemo ovdje poslati u main bundle za idKviza
+            MainActivity.passData(bundleOf(Pair("idKviza", idKviza), Pair("pokusajKviza", pokusajKviza!!.id)))
         }
 
         if(arguments != null){
@@ -170,36 +183,27 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
                 }
 
             }
-            if(!uradjenKviz){
-                scope.launch {
-                    pokusajKviza = takeKvizViewModel.zapocniKviz(idKviza)
-                }
-            }
+
         }
 
 
         setFragmentResultListener("odgovoreno") { _, bundle ->
             val result:Boolean = bundle.getBoolean("odgovor")
-             Log.d("dadadadadad", "ma de vise")
             scope.launch {
                 odgovorViewModel.postaviOdgovorKviz(pokusajKviza!!.id, pitanja[indeks-1].id, bundle.getInt("position"))
             }
-
-            pitanja[indeks-1].odgovoreno = true
 
             var tekst = SpannableString(meni[indeks - 1].title)
 
             if(result){
                 tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.correct)), 0, meni[indeks - 1].title.length, 0)
-                tacnost+=1
+                tacnost++
             }
             else{
                 tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.wrong)), 0, meni[indeks - 1].title.length, 0)
             }
             meni[indeks - 1].title = tekst
         }
-
-
 
         navigationView.setNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         switchVisibility(true)
@@ -219,28 +223,15 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
     }
 
     override fun onStop() {
-        var odgovori: List<Odgovor>
-
-        if(uradjenKviz) {
-            scope.launch {
-                odgovori = odgovorViewModel.getOdgovoriKviz(idKviza)
-
-                if (odgovori.size != pitanja.size) {
-                    for (pitanje in pitanja) {
-                        if (!pitanje.odgovoreno) {
-                            odgovorViewModel.postaviOdgovorKviz(pokusajKviza!!.id, pitanje.id, 10)
-                            pitanje.odgovoreno = true
-                        }
-                    }
-                }
-            }
-        }
         setFragmentResult("requestKey", bundleOf(Pair("tacnost", "Završili ste kviz"))) //nema naziva kviza niti tacnosti zbog testova
         super.onStop()
 
     }
-    override fun onPause() {
+
+    override fun onPause()
+    {
         if (!uradjenKviz) {
+            Log.d("dadadad", "ovdje")
             MainActivity.passData(bundleOf(
                     Pair("tacnost", (tacnost / pitanja.size).toBigDecimal().setScale(2, RoundingMode.UP).toFloat()),
                     Pair("nazivKviza", nazivKviza), Pair("nazivGrupe", nazivGrupa)))
@@ -259,6 +250,7 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
     }
+
 
 
 }
