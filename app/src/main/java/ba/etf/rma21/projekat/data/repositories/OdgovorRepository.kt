@@ -2,6 +2,7 @@ package ba.etf.rma21.projekat.data.repositories
 
 import android.util.Log
 import ba.etf.rma21.projekat.ApiAdapter
+import ba.etf.rma21.projekat.data.models.KvizTaken
 import ba.etf.rma21.projekat.data.models.Odgovor
 import ba.etf.rma21.projekat.data.models.OdgovorKviz
 import ba.etf.rma21.projekat.viewmodel.OdgovorViewModel
@@ -29,10 +30,11 @@ class OdgovorRepository {
                 val pokusajKviza = TakeKvizRepository.getPocetiKvizovi().find{ kvizTaken -> kvizTaken.id == idKvizTaken  }
                 var bodovi: Float = pokusajKviza!!.osvojeniBodovi
 
-                val pitanje = PitanjeKvizRepository.getPitanja(pokusajKviza!!.KvizId).find { pitanje -> pitanje.id == idPitanje  }
+                val pitanje = PitanjeKvizRepository.getPitanja(pokusajKviza.KvizId).find { pitanje -> pitanje.id == idPitanje  }
+
 
                 if(pitanje!!.tacan == odgovor)
-                    bodovi += 1.0F
+                    bodovi += 50.0f
 
                 val response = ApiAdapter.retrofit.postaviOdgovorKviz(
                     AccountRepository.getHash(),
@@ -41,7 +43,7 @@ class OdgovorRepository {
                 )
                 val responseBody = response.body()
                 when (responseBody) {
-                    is OdgovorKviz -> return@withContext responseBody.osvojeniBodovi
+                    is Odgovor -> return@withContext bodovi.toInt()
                     else -> return@withContext -1
                 }
             }

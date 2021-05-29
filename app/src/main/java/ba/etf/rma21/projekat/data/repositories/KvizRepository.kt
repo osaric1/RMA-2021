@@ -21,15 +21,15 @@ class KvizRepository() {
 
          */
 
-        suspend fun getAll(): List<Kviz>? {
+        suspend fun getAll(): List<Kviz> {
             return withContext(Dispatchers.IO){
-                var response = ApiAdapter.retrofit.getAll()
+                val response = ApiAdapter.retrofit.getAll()
                 val responseBody = response.body()
                 when(responseBody){
                     is List<Kviz> -> return@withContext responseBody
-                    else -> return@withContext null
+                    else -> return@withContext listOf<Kviz>()
                 }
-            }
+            }!!
         }
 
         suspend fun getById(id: Int):Kviz?{
@@ -74,19 +74,8 @@ class KvizRepository() {
         suspend fun getFuture(): List<Kviz> {
             return getAll()!!.filter { kviz -> toCalendar(kviz.datumPocetka) > Calendar.getInstance() }.toList()
         }
-/*
-        fun getNotTaken(): List<Kviz> {
-            return getMyKvizes().filter { kviz -> toCalendar(kviz.datumKraj) < Calendar.getInstance() &&  toCalendar(kviz.datumRada).get(Calendar.YEAR) == 1970 }.toList()
-        }
 
 
-*/
-        /*fun addGroup(grupa: Grupa){
-            upisaneGrupe.add(grupa)
-        }
-
-
-         */
         fun toCalendar(date: Date): Calendar{
             val cal = Calendar.getInstance()
             cal.time = date
@@ -106,12 +95,6 @@ class KvizRepository() {
             }
         }
 
-        /*
-        fun changeStatus(bodovi: Float, nazivKviza: String, nazivGrupe: String){
-            kvizStatus(bodovi, nazivKviza, nazivGrupe)
-        }
-
-         */
 
     }
 }

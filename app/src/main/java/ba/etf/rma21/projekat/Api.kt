@@ -23,7 +23,7 @@ interface Api {
     suspend fun getOdgovoriKviz(@Path("id") studentId: String, @Path("ktid") kvizPokusajId: Int): Response<List<Odgovor>>
 
     @POST("/student/{id}/kviztaken/{ktid}/odgovor")
-    suspend fun postaviOdgovorKviz(@Path("id") studentId: String, @Path("ktid")kvizPokusajId: Int, @Body requestBody: OdgovorKviz): Response<OdgovorKviz>
+    suspend fun postaviOdgovorKviz(@Path("id") studentId: String, @Path("ktid")kvizPokusajId: Int, @Body requestBody: OdgovorKviz): Response<Odgovor>
 
     @GET("/kviz")
     suspend fun getAll(): Response<List<Kviz>>
@@ -41,7 +41,7 @@ interface Api {
     suspend fun getGrupeZaPredmet(@Path("id") idPredmeta: Int): Response<List<Grupa>>
 
     @POST("/grupa/{gid}/student/{id}")
-    suspend fun upisiUGrupu(@Path("gid") groupId: Int, @Path("id") studentId: String)
+    suspend fun upisiUGrupu(@Path("gid") groupId: Int, @Path("id") studentId: String): Response<Message>
 
     @GET("/student/{id}/grupa")
     suspend fun getUpisaneGrupe(@Path("id") studentId: String): Response<List<Grupa>>

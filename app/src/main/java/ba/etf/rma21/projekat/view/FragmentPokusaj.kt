@@ -26,6 +26,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.lang.NullPointerException
 import java.math.RoundingMode
 import java.util.*
 
@@ -162,7 +163,12 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
 
             }
             else{
-                pokusajKviza = takeKvizViewModel.zapocniKviz(idKviza)
+                try {
+                    pokusajKviza = takeKvizViewModel.zapocniKviz(idKviza)
+                }
+                catch(e: NullPointerException){
+                    println("Greska kod metode zapocniKviz\n")
+                }
             }
 
             //odmah cemo ovdje poslati u main bundle za idKviza
@@ -178,7 +184,7 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
             if(arguments?.containsKey("uradjenKviz")!!){
                 uradjenKviz = arguments?.getBoolean("uradjenKviz")!!
 
-                if(uradjenKviz == true) {
+                if(uradjenKviz) {
                     meni.getItem(pitanja.size).isVisible = true
                 }
 
@@ -190,8 +196,6 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
         setFragmentResultListener("odgovoreno") { _, bundle ->
             val result:Boolean = bundle.getBoolean("odgovor")
             scope.launch {
-                if(result)
-                    pokusajKviza!!.osvojeniBodovi += 1.0F
 
                 odgovorViewModel.postaviOdgovorKviz(pokusajKviza!!.id, pitanja[indeks-1].id, bundle.getInt("position"))
             }
