@@ -5,5 +5,5 @@ import com.google.gson.annotations.SerializedName
 class OdgovorKviz(
     @SerializedName("odgovor") val odgovor: Int,
     @SerializedName("pitanje") val pitanjeId: Int,
-    @SerializedName("bodovi") val osvojeniBodovi: Float
+    @SerializedName("bodovi") val osvojeniBodovi: Int
 ){}

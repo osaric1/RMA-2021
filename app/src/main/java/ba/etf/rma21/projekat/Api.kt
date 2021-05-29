@@ -23,7 +23,7 @@ interface Api {
     suspend fun getOdgovoriKviz(@Path("id") studentId: String, @Path("ktid") kvizPokusajId: Int): Response<List<Odgovor>>
 
     @POST("/student/{id}/kviztaken/{ktid}/odgovor")
-    suspend fun postaviOdgovorKviz(@Path("id") studentId: String, @Path("ktid")kvizPokusajId: Int, @Body requestBody: OdgovorKviz): Response<Odgovor>
+    suspend fun postaviOdgovorKviz(@Path("id") studentId: String, @Path("ktid")kvizPokusajId: Int, @Body requestBody: OdgovorKviz): Response<OdgovorKviz>
 
     @GET("/kviz")
     suspend fun getAll(): Response<List<Kviz>>

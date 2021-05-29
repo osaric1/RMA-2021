@@ -190,10 +190,13 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
         setFragmentResultListener("odgovoreno") { _, bundle ->
             val result:Boolean = bundle.getBoolean("odgovor")
             scope.launch {
+                if(result)
+                    pokusajKviza!!.osvojeniBodovi += 1.0F
+
                 odgovorViewModel.postaviOdgovorKviz(pokusajKviza!!.id, pitanja[indeks-1].id, bundle.getInt("position"))
             }
 
-            var tekst = SpannableString(meni[indeks - 1].title)
+            val tekst = SpannableString(meni[indeks - 1].title)
 
             if(result){
                 tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.correct)), 0, meni[indeks - 1].title.length, 0)
