@@ -13,21 +13,29 @@ class OdgovorRepository {
     companion object {
         suspend fun getOdgovoriKviz(idKviza: Int): List<Odgovor> {
             return withContext(Dispatchers.IO) {
-                var response =
-                    ApiAdapter.retrofit.getOdgovoriKviz(AccountRepository.getHash(), idKviza)
-                val responseBody = response.body()
-                when (responseBody) {
-                    is List<Odgovor> -> {
-                        return@withContext responseBody
+                val pokusajKviza = TakeKvizRepository.getPocetiKvizovi()!!.find{ kvizTaken -> kvizTaken.KvizId == idKviza  }
+
+                if(pokusajKviza != null) {
+                    var response =
+                        ApiAdapter.retrofit.getOdgovoriKviz(
+                            AccountRepository.getHash(),
+                            pokusajKviza.id
+                        )
+                    val responseBody = response.body()
+                    when (responseBody) {
+                        is List<Odgovor> -> {
+                            return@withContext responseBody
+                        }
+                        else -> return@withContext listOf<Odgovor>()
                     }
-                    else -> return@withContext listOf<Odgovor>()
                 }
+                else return@withContext listOf<Odgovor>()
             }!!
         }
 
         suspend fun postaviOdgovorKviz(idKvizTaken: Int, idPitanje: Int, odgovor: Int): Int {
             return withContext(Dispatchers.IO) {
-                val pokusajKviza = TakeKvizRepository.getPocetiKvizovi().find{ kvizTaken -> kvizTaken.id == idKvizTaken  }
+                val pokusajKviza = TakeKvizRepository.getPocetiKvizovi()!!.find{ kvizTaken -> kvizTaken.id == idKvizTaken  }
                 var bodovi: Float = pokusajKviza!!.osvojeniBodovi
 
                 val pitanje = PitanjeKvizRepository.getPitanja(pokusajKviza.KvizId).find { pitanje -> pitanje.id == idPitanje  }

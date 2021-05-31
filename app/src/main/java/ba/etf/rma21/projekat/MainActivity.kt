@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
                     val kviz = kvizViewModel.getById(idKviza)
 
                     pokusajKviza = takeKvizViewModel.getPocetiKvizovi()
-                        .find { kvizTaken -> kvizTaken.id == pokusajKvizaId }
+                        ?.find { kvizTaken -> kvizTaken.id == pokusajKvizaId }
 
                     if (odgovori.size != pitanja.size) {
                         for (pitanje in pitanja) {

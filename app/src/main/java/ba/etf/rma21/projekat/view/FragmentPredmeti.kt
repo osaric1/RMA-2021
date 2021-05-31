@@ -73,8 +73,6 @@ class FragmentPredmeti() : Fragment() {
                 scope.launch{
                     val grupe = predmetIGrupaViewModel.getGrupe()
                     val pronadjenaGrupa = grupe.find { grupa1 -> grupa1.naziv == grupa }
-                    Log.d("ID", pronadjenaGrupa!!.id.toString())
-                    Log.d("studentId", AccountRepository.getHash())
                     predmetIGrupaViewModel.upisiUGrupu(pronadjenaGrupa!!.id)
                 }
                 //upisivanje

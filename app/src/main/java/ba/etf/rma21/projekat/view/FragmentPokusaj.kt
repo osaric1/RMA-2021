@@ -127,11 +127,10 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
 
         scope.launch{
 
-            pokusajKviza = takeKvizViewModel.getPocetiKvizovi().find { kvizTaken -> kvizTaken.KvizId == idKviza  }
+            pokusajKviza = takeKvizViewModel.getPocetiKvizovi()?.find { kvizTaken -> kvizTaken.KvizId == idKviza  }
             val listaOdgovora: List<Odgovor>
             if(pokusajKviza != null) {
-                listaOdgovora = odgovorViewModel.getOdgovoriKviz(pokusajKviza!!.id)
-
+                listaOdgovora = odgovorViewModel.getOdgovoriKviz(idKviza)
                 if (listaOdgovora.isNotEmpty()) {
                     for (odgovor in listaOdgovora) {
                         val pitanje = pitanja.find { pitanje -> pitanje.id == odgovor.PitanjeId }

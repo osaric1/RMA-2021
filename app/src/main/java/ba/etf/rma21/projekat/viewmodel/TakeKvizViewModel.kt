@@ -8,7 +8,7 @@ class TakeKvizViewModel {
         return TakeKvizRepository.zapocniKviz(idKviza)
     }
 
-    suspend fun getPocetiKvizovi():List<KvizTaken> {
+    suspend fun getPocetiKvizovi(): List<KvizTaken>? {
         return TakeKvizRepository.getPocetiKvizovi()
     }
 }

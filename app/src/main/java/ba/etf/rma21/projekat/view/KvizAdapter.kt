@@ -37,7 +37,7 @@ class KvizAdapter(
     private var job: Job = Job()
     private var scope = CoroutineScope(Dispatchers.Main + job)
 
-    private var pokusaji: List<KvizTaken> = listOf()
+    private var pokusaji: List<KvizTaken>? = listOf()
     private var grupe: List<Grupa> = listOf()
     private var predmet = Predmet(1,"",-1)
 
@@ -90,12 +90,11 @@ class KvizAdapter(
             var datumRadaCalendar = GregorianCalendar(1970, 1, 1)
 
 
-            if (!pokusaji.isEmpty()) { //nalazimo da li smo vec odgovarali na neki kviz
-                val pokusaj = pokusaji.find { pokusaj -> pokusaj.KvizId == kvizovi[position].id }
+            if (pokusaji != null && !pokusaji!!.isEmpty()) { //nalazimo da li smo vec odgovarali na neki kviz
+                val pokusaj = pokusaji!!.find { pokusaj -> pokusaj.KvizId == kvizovi[position].id }
 
                 if(pokusaj != null) {
-                    val odgovori = odgovorViewModel.getOdgovoriKviz(pokusaj.id)
-                    Log.d("predan",kvizovi[position].predan.toString() )
+                    val odgovori = odgovorViewModel.getOdgovoriKviz(kvizovi[position].id)
                     if(odgovori.size == pitanjeKvizViewModel.getPitanja(kvizovi[position].id).size){ //ako su odgovorena sva pitanja i ako je predan kviz
                         holder.kvizPoints.text = pokusaj.osvojeniBodovi.toString()
                         datumRadaCalendar = toCalendar(pokusaj.datumRada!!) as GregorianCalendar

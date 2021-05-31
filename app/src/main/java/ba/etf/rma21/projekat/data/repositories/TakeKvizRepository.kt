@@ -1,5 +1,6 @@
 package ba.etf.rma21.projekat.data.repositories
 
+import android.util.Log
 import ba.etf.rma21.projekat.ApiAdapter
 import ba.etf.rma21.projekat.data.models.KvizTaken
 import kotlinx.coroutines.Dispatchers
@@ -23,18 +24,20 @@ class TakeKvizRepository {
             }
         }
 
-        suspend fun getPocetiKvizovi():List<KvizTaken> {
+        suspend fun getPocetiKvizovi(): List<KvizTaken>? {
             return withContext(Dispatchers.IO){
                 var response = ApiAdapter.retrofit.getPocetiKvizovi(AccountRepository.getHash())
                 val responseBody = response.body()
                 when(responseBody){
                     is List<KvizTaken> ->  {
-                      if(responseBody.isEmpty()) return@withContext responseBody
-                      return@withContext responseBody
+                      if(responseBody.isEmpty()){
+                          return@withContext null
+                      }
+                      else return@withContext responseBody
                     }
                     else -> return@withContext null
                 }
-            }!!
+            }
         }
 
     }

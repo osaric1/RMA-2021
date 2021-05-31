@@ -65,11 +65,11 @@ class FragmentPitanje(var pitanje: Pitanje): Fragment() {
 
         lateinit var result: Deferred<Unit>
         scope.launch {
-            val kvizTaken = takeKvizViewModel.getPocetiKvizovi().find { kvizTaken -> kvizTaken.KvizId == idKviza  }
+            val kvizTaken = takeKvizViewModel.getPocetiKvizovi()?.find { kvizTaken -> kvizTaken.KvizId == idKviza  }
             var odgovor: Odgovor?
             if(kvizTaken != null) {
                 result = async {
-                    odgovor = odgovorViewModel.getOdgovoriKviz(kvizTaken.id)
+                    odgovor = odgovorViewModel.getOdgovoriKviz(idKviza)
                         .find { odgovor1 -> odgovor1.PitanjeId == pitanje.id }
 
                     if (odgovor != null) {
