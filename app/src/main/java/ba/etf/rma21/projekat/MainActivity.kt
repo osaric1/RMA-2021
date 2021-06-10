@@ -1,31 +1,20 @@
 package ba.etf.rma21.projekat
 
+//import ba.etf.rma21.projekat.view.FragmentPredmeti
+import android.net.Uri
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.core.view.get
 import androidx.fragment.app.*
-import androidx.fragment.app.setFragmentResultListener
-import ba.etf.rma21.projekat.data.models.Account
 import ba.etf.rma21.projekat.data.models.KvizTaken
-import ba.etf.rma21.projekat.data.repositories.AccountRepository
 import ba.etf.rma21.projekat.view.FragmentKvizovi
 import ba.etf.rma21.projekat.view.FragmentPoruka
 import ba.etf.rma21.projekat.view.FragmentPredmeti
-import ba.etf.rma21.projekat.viewmodel.KvizViewModel
-import ba.etf.rma21.projekat.viewmodel.OdgovorViewModel
-import ba.etf.rma21.projekat.viewmodel.PitanjeKvizViewModel
-import ba.etf.rma21.projekat.viewmodel.TakeKvizViewModel
-//import ba.etf.rma21.projekat.view.FragmentPredmeti
+import ba.etf.rma21.projekat.viewmodel.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-
 
 
 class MainActivity : AppCompatActivity() {
@@ -38,17 +27,17 @@ class MainActivity : AppCompatActivity() {
     private var pitanjeKvizViewModel = PitanjeKvizViewModel()
     private var takeKvizViewModel = TakeKvizViewModel()
     private var kvizViewModel = KvizViewModel()
+    private var accountViewModel = AccountViewModel()
 
     private val myOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when(item.itemId){
             R.id.kvizovi -> {
                 val fragment = supportFragmentManager.findFragmentByTag("kviz")
-                if(fragment == null){
+                if (fragment == null) {
                     val kvizoviFragment = FragmentKvizovi.newInstance()
                     setFragmentArguments(kvizoviFragment)
                     openFragment(kvizoviFragment)
-                }
-                else{
+                } else {
                     setFragmentArguments(fragment)
                     openFragment(fragment)
                 }
@@ -67,7 +56,7 @@ class MainActivity : AppCompatActivity() {
                 var pokusajKviza: KvizTaken?
                 var pokusajKvizaId: Int? = null
 
-                if(bundle != null){
+                if (bundle != null) {
                     idKviza = bundle!!.getInt("idKviza")
                     pokusajKvizaId = bundle!!.getInt("pokusajKviza")
                 }
@@ -82,7 +71,8 @@ class MainActivity : AppCompatActivity() {
 
                     if (odgovori.size != pitanja.size) {
                         for (pitanje in pitanja) {
-                            val odgovor = odgovorViewModel.getOdgovoriKviz(idKviza).find{odgovor ->  odgovor.PitanjeId == pitanje.id }
+                            val odgovor = odgovorViewModel.getOdgovoriKviz(idKviza)
+                                .find { odgovor -> odgovor.PitanjeId == pitanje.id }
 
                             if (odgovor == null) {
                                 odgovorViewModel.postaviOdgovorKviz(
@@ -158,6 +148,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
+        val intent = intent
+        val payload = intent?.getStringExtra("payload")
+
+        if(payload != null) {
+            scope.launch {
+                accountViewModel.postaviHash(payload)
+            }
+        }
 
         bottomNavigation= findViewById(R.id.bottomNav)
         bottomNavigation.menu.findItem(R.id.predajKviz).setVisible(false)
