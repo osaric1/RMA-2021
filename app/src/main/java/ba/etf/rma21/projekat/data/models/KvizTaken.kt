@@ -1,14 +1,18 @@
 package ba.etf.rma21.projekat.data.models
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import java.util.*
 
+@Entity
 class KvizTaken(
-    @SerializedName("id") val id: Int,
-    @SerializedName("student") val student: String,
-    @SerializedName("osvojeniBodovi") var osvojeniBodovi: Float,
-    @SerializedName("datumRada") val datumRada: Date?,
-    @SerializedName("KvizId") val KvizId: Int
+    @PrimaryKey @SerializedName("id") val id: Int,
+    @ColumnInfo(name = "student") @SerializedName("student") val student: String,
+    @ColumnInfo(name = "osvojeniBodovi") @SerializedName("osvojeniBodovi") var osvojeniBodovi: Float,
+    @ColumnInfo(name = "datumRada") @SerializedName("datumRada") val datumRada: Date?,
+    @ColumnInfo(name = "KvizId") @SerializedName("KvizId") val KvizId: Int
 ) {
 
 }

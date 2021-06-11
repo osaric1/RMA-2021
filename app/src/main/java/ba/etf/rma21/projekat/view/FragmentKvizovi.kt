@@ -77,7 +77,7 @@ class FragmentKvizovi: Fragment() {
                         kvizAdapter.updateKvizovi(kvizViewModel.getAll())
                     }
                     else if(spinner.selectedItem.toString() == "Svi moji kvizovi") {
-                        kvizAdapter.updateKvizovi(kvizViewModel.getUpisani())
+                        kvizAdapter.updateKvizovi(kvizViewModel.getUpisaneIzBaze())
                     }
 
                     else if(spinner.selectedItem.toString() == "Urađeni kvizovi") {

@@ -1,6 +1,5 @@
 package ba.etf.rma21.projekat.data.repositories
 
-import android.accounts.Account
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -10,9 +9,6 @@ import ba.etf.rma21.projekat.data.models.Change
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.Exception
-import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 class DBRepository {
     companion object {
@@ -29,7 +25,7 @@ class DBRepository {
                 try {
 
                     val db = AppDatabase.getInstance(context)
-                    val datum = db.dao().getLastUpdate(AccountRepository.getHash())
+                    val datum = db.accountDao().getLastUpdate(AccountRepository.getHash())
 
                     if(datum == null) return@withContext true
 

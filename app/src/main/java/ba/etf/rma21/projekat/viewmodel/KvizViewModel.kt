@@ -14,6 +14,10 @@ class KvizViewModel() {
 
      */
 
+    suspend fun getUpisaneIzBaze() : List<Kviz>{
+        return KvizRepository.getUpisaneIzBaze()
+    }
+
     suspend fun getAll(): List<Kviz> {
         return KvizRepository.getAll()!!
     }
