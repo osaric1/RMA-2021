@@ -4,12 +4,12 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import ba.etf.rma21.projekat.data.dao.Dao
+import ba.etf.rma21.projekat.data.dao.AccountDao
 import ba.etf.rma21.projekat.data.models.Account
 
 @Database(entities = arrayOf(Account::class), version = 1)
 abstract class AppDatabase: RoomDatabase() {
-    abstract fun dao(): Dao
+    abstract fun dao(): AccountDao
     companion object{
         private var INSTANCE: AppDatabase? = null
 

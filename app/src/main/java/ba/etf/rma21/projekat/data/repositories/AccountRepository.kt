@@ -21,13 +21,6 @@ class AccountRepository {
                     val prethodni = AccountRepository.acHash
                     AccountRepository.acHash = acHash
                     var db = AppDatabase.getInstance(context)
-
-                    //dobavi hesh prije ubacivanja novog accounta
-                    val id = db.dao().getAccountId(acHash)
-                    db.dao().insertAcHash(acHash)
-
-                    //nakon sto ubaci novi hash, izbrisi sve ostale accounte
-                    db.dao().deleteAccounts(id)
                     return@withContext true
                 }
                 catch(error:Exception){

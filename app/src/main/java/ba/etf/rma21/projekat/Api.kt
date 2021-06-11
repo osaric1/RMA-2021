@@ -8,6 +8,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import java.time.LocalDateTime
 
 interface Api {
     @POST("/student/{id}/kviz/{kid}")
@@ -54,4 +55,7 @@ interface Api {
 
     @GET("/predmet/{id}")
     suspend fun getPredmetById(@Path("id") predmetId: Int): Response<Predmet>
+
+    @GET("/account/{id}")
+    suspend fun updateNow(@Path("id") hashStudenta: String, @Path("lastUpdate") lastUpdate: LocalDateTime) : Response<Change>
 }
