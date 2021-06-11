@@ -1,5 +1,6 @@
 package ba.etf.rma21.projekat.view
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -65,6 +67,7 @@ class FragmentKvizovi: Fragment() {
 
         listaKvizova.adapter = kvizAdapter
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onItemSelected(
                     parent: AdapterView<*>,
                     view: View?,

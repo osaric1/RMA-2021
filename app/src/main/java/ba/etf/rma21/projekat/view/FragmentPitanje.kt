@@ -56,7 +56,9 @@ class FragmentPitanje(var pitanje: Pitanje): Fragment() {
             idKviza = arguments?.getInt("idKviza")!!
         }
 
-        odgovori = ArrayList(pitanje.opcije)
+
+        val opcijeParsed = pitanje.opcije.split(",").map { it.trim() }
+        odgovori = ArrayList(opcijeParsed)
         tacno = pitanje.tacan
         tekstPitanja.text = pitanje.tekstPitanja
 
@@ -76,7 +78,7 @@ class FragmentPitanje(var pitanje: Pitanje): Fragment() {
                         enabled = false
 
                         listaOdgovora.post {
-                            if(odgovor!!.odgovoreno < pitanje.opcije.size) {
+                            if(odgovor!!.odgovoreno < opcijeParsed.size) {
                                 val textview =
                                     listaOdgovora.getChildAt(odgovor!!.odgovoreno) as TextView
                                 if (textview != listaOdgovora.getChildAt(tacno) as TextView) {

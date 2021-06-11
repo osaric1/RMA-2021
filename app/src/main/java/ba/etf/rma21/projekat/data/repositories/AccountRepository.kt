@@ -2,6 +2,8 @@ package ba.etf.rma21.projekat.data.repositories
 
 import android.content.Context
 import ba.etf.rma21.projekat.data.AppDatabase
+import ba.etf.rma21.projekat.data.models.Kviz
+import ba.etf.rma21.projekat.data.models.Pitanje
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.Exception
@@ -21,6 +23,8 @@ class AccountRepository {
                     val prethodni = AccountRepository.acHash
                     AccountRepository.acHash = acHash
                     var db = AppDatabase.getInstance(context)
+
+                    updateData()
                     return@withContext true
                 }
                 catch(error:Exception){
@@ -31,6 +35,50 @@ class AccountRepository {
 
         fun getHash():String{
             return acHash
+        }
+
+        suspend fun updateData(){
+            return withContext(Dispatchers.IO){
+                try {
+                    val db = AppDatabase.getInstance(context)
+                    izbrisiIzBaze()
+                    val noviKvizovi = KvizRepository.getUpisani()
+                    val noveGrupe = PredmetIGrupaRepository.getUpisaneGrupe()
+                    val noviPredmeti = PredmetIGrupaRepository.getPredmeti().filter{predmet ->  noveGrupe!!.map { grupa -> grupa.predmetId  }.contains(predmet.id) } //dobavi sve upisane predmete za korisnika
+                    val noviPokusaji = TakeKvizRepository.getPocetiKvizovi()
+
+                    var novaPitanja: MutableList<Pitanje> = mutableListOf()
+                    for(kviz in noviKvizovi){
+                        val pitanja = PitanjeKvizRepository.getPitanja(kviz.id)
+                        novaPitanja.addAll(pitanja)
+                    }
+
+                    db.kvizDao().insertAll(noviKvizovi)
+                    db.kvizTakenDao().insertAll(noviPokusaji!!)
+                    db.predmetDao().insertAll(noviPredmeti)
+                    db.grupaDao().insertAll(noveGrupe!!)
+                    db.pitanjeDao().insertAll(novaPitanja)
+
+                }
+                catch(error: Exception){
+                    println("Desila se greska tokom azuriranja")
+                }
+            }
+        }
+
+        suspend fun izbrisiIzBaze(){
+            return withContext(Dispatchers.IO) {
+                try {
+                    val db = AppDatabase.getInstance(context)
+                    db.kvizDao().deleteAll()
+                    db.kvizTakenDao().deleteAll()
+                    db.predmetDao().deleteAll()
+                    db.pitanjeDao().deleteAll()
+                    db.grupaDao().deleteAll()
+                } catch (error: Exception) {
+                    println("Desila se greska tokom brisanja")
+                }
+            }
         }
     }
 }

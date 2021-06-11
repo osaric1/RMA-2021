@@ -1,13 +1,16 @@
 package ba.etf.rma21.projekat.data.repositories
 
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import ba.etf.rma21.projekat.ApiAdapter
 import ba.etf.rma21.projekat.data.*
 import ba.etf.rma21.projekat.data.models.Grupa
 import ba.etf.rma21.projekat.data.models.Kviz
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.lang.Exception
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class KvizRepository() {
@@ -16,6 +19,9 @@ class KvizRepository() {
         fun setContext(_context: Context) {
             context = _context
         }
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
 
         //dobavi sve sa web servisa
         suspend fun getAll(): List<Kviz> {
@@ -68,6 +74,7 @@ class KvizRepository() {
         }
 
 
+        @RequiresApi(Build.VERSION_CODES.O)
         suspend fun getDone(): List<Kviz> {
 
             val zapocetiKvizovi = TakeKvizRepository.getPocetiKvizoviIzBaze()
@@ -75,7 +82,7 @@ class KvizRepository() {
             val rezultat: MutableList<Kviz> = mutableListOf()
 
             if (zapocetiKvizovi != null) {
-                zapocetiKvizovi.filter { it.datumRada != null && it.datumRada <= GregorianCalendar.getInstance().time }
+                zapocetiKvizovi.filter { it.datumRada != null && LocalDateTime.parse(it.datumRada, formatter) <= LocalDateTime.now()}
                 for (kviz in zapocetiKvizovi) {
                     for (mojKviz in myKvizovi) {
                         if (kviz.KvizId == mojKviz.id) rezultat.add(mojKviz)
@@ -86,8 +93,9 @@ class KvizRepository() {
         }
 
 
+        @RequiresApi(Build.VERSION_CODES.O)
         suspend fun getFuture(): List<Kviz> {
-            return getUpisaneIzBaze().filter { kviz -> toCalendar(kviz.datumPocetka) > Calendar.getInstance() }
+            return getUpisaneIzBaze().filter { kviz -> LocalDateTime.parse(kviz.datumPocetka, formatter) > LocalDateTime.now() }
                 .toList()
         }
 
@@ -98,6 +106,7 @@ class KvizRepository() {
             return cal
         }
 
+        @RequiresApi(Build.VERSION_CODES.O)
         suspend fun getNotTaken(): List<Kviz> {
             return withContext(Dispatchers.IO) {
                 var response = ApiAdapter.retrofit.getPocetiKvizovi(AccountRepository.acHash)
@@ -108,7 +117,7 @@ class KvizRepository() {
                     return@withContext getUpisani().filter { kviz ->
                         kviz.datumKraj != null && !ids.contains(
                             kviz.id
-                        ) && toCalendar(kviz.datumKraj) < Calendar.getInstance()
+                        ) && LocalDateTime.parse(kviz.datumKraj, formatter) < LocalDateTime.now()
                     }.toList()
                 }
                 return@withContext listOf<Kviz>()

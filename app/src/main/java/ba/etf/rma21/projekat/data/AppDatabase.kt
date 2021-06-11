@@ -4,18 +4,17 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import ba.etf.rma21.projekat.data.dao.AccountDao
-import ba.etf.rma21.projekat.data.dao.KvizDao
-import ba.etf.rma21.projekat.data.dao.KvizTakenDao
-import ba.etf.rma21.projekat.data.models.Account
-import ba.etf.rma21.projekat.data.models.Kviz
-import ba.etf.rma21.projekat.data.models.KvizTaken
+import ba.etf.rma21.projekat.data.dao.*
+import ba.etf.rma21.projekat.data.models.*
 
-@Database(entities = arrayOf(Account::class, Kviz::class), version = 1)
+@Database(entities = arrayOf(Account::class, Kviz::class, Predmet::class,KvizTaken::class, Grupa::class,Pitanje::class), version = 1)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun accountDao(): AccountDao
     abstract fun kvizDao(): KvizDao
     abstract fun kvizTakenDao(): KvizTakenDao
+    abstract fun pitanjeDao(): PitanjeDao
+    abstract fun predmetDao(): PredmetDao
+    abstract fun grupaDao(): GrupaDao
 
     companion object{
         private var INSTANCE: AppDatabase? = null

@@ -136,6 +136,8 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
                         val pitanje = pitanja.find { pitanje -> pitanje.id == odgovor.PitanjeId }
 
                         if (pitanje != null) {
+                            val opcijeParsed = pitanje.opcije.split(",").map { it.trim() }
+
                             val tekst = SpannableString((pitanja.indexOf(pitanje) + 1).toString())
                             tekst.setSpan(RelativeSizeSpan(2f), 0, (pitanja.indexOf(pitanje) + 1).toString().length, 0)
 
@@ -144,7 +146,7 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
                                 tacnost++
                             }
 
-                            else if(odgovor.odgovoreno >= pitanje.opcije.size){
+                            else if(odgovor.odgovoreno >= opcijeParsed.size){
                                 tekst.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.white)), 0, (pitanja.indexOf(pitanje) + 1).toString().length, 0)
                             }
 

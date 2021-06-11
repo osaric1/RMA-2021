@@ -29,7 +29,7 @@ class DBRepository {
 
                     if(datum == null) return@withContext true
 
-                    val response = ApiAdapter.retrofit.updateNow(AccountRepository.getHash(), datum.withNano(0)) //mozda bude problema
+                    val response = ApiAdapter.retrofit.updateNow(AccountRepository.getHash(), datum) //mozda bude problema
                     val responseBody = response.body()
                     when(responseBody){
                         is Change -> {

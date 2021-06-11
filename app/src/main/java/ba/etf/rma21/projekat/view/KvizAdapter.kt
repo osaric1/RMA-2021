@@ -1,13 +1,14 @@
 package ba.etf.rma21.projekat.view
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import ba.etf.rma21.projekat.R
@@ -20,13 +21,18 @@ import ba.etf.rma21.projekat.viewmodel.PitanjeKvizViewModel
 import ba.etf.rma21.projekat.viewmodel.PredmetIGrupaViewModel
 import ba.etf.rma21.projekat.viewmodel.TakeKvizViewModel
 import kotlinx.coroutines.*
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
 class KvizAdapter(
-        private var kvizovi: List<Kviz>,
-        private var manager: FragmentManager?,
-        private var spinnerTekst:String
+    private var kvizovi: List<Kviz>,
+    private var manager: FragmentManager?,
+    private var spinnerTekst: String
 ): RecyclerView.Adapter<KvizAdapter.KvizViewHolder>(){
 
     private var predmetIGrupaViewModel = PredmetIGrupaViewModel()
@@ -39,7 +45,7 @@ class KvizAdapter(
 
     private var pokusaji: List<KvizTaken>? = listOf()
     private var grupe: List<Grupa> = listOf()
-    private var predmet = Predmet(1,"",-1)
+    private var predmet = Predmet(1, "", -1)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KvizViewHolder {
         val view = LayoutInflater
@@ -48,15 +54,28 @@ class KvizAdapter(
         return KvizViewHolder(view)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: KvizViewHolder, position: Int) {
         holder.predmetName.text = ""
-
-        var datumPocetkaCalendar = toCalendar(kvizovi[position].datumPocetka)
+        var ldt =  LocalDate.parse(kvizovi[position].datumPocetka).atStartOfDay()
+        var datumPocetkaCalendar = GregorianCalendar.from(
+            ZonedDateTime.of(
+                ldt,
+                ZoneId.systemDefault()
+            )
+        )
+        println(datumPocetkaCalendar)
         var datumKrajaCalendar: Calendar
 
         if (kvizovi[position].datumKraj != null) {
-            datumKrajaCalendar = toCalendar(kvizovi[position].datumKraj!!)
+            ldt = LocalDate.parse(kvizovi[position].datumPocetka).atStartOfDay()
+            datumKrajaCalendar = GregorianCalendar.from(
+                ZonedDateTime.of(
+                    ldt,
+                    ZoneId.systemDefault()
+                )
+            )
         } else datumKrajaCalendar = GregorianCalendar(
             2022,
             datumPocetkaCalendar.get(Calendar.MONTH),
@@ -97,7 +116,13 @@ class KvizAdapter(
                     val odgovori = odgovorViewModel.getOdgovoriKviz(kvizovi[position].id)
                     if(odgovori.size == pitanjeKvizViewModel.getPitanja(kvizovi[position].id).size){ //ako su odgovorena sva pitanja i ako je predan kviz
                         holder.kvizPoints.text = pokusaj.osvojeniBodovi.toString()
-                        datumRadaCalendar = toCalendar(pokusaj.datumRada!!) as GregorianCalendar
+                        val ldt = LocalDate.parse(pokusaj.datumRada!!).atStartOfDay()
+                        datumRadaCalendar = GregorianCalendar.from(
+                            ZonedDateTime.of(
+                                ldt,
+                                ZoneId.systemDefault()
+                            )
+                        )
                     }
                     else holder.kvizPoints.text = ""
                 }
@@ -205,11 +230,39 @@ class KvizAdapter(
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun updateKvizovi(kvizovi: List<Kviz>) {
         this.kvizovi = kvizovi
         Collections.sort(this.kvizovi, Comparator { kviz1, kviz2 ->
-            if(toCalendar(kviz1.datumPocetka).timeInMillis  > toCalendar(kviz2.datumPocetka).timeInMillis) -1
-            else if(toCalendar(kviz1.datumPocetka).timeInMillis  < toCalendar(kviz2.datumPocetka).timeInMillis ) 1
+            println(kviz1.datumPocetka)
+            val df: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
+            val datumPocetkaFirst = LocalDate.parse(kviz1.datumPocetka, df).atStartOfDay()
+            val datumPocetkaSecond = LocalDate.parse(kviz2.datumPocetka, df).atStartOfDay()
+            if (GregorianCalendar.from(
+                    ZonedDateTime.of(
+                        datumPocetkaFirst,
+                        ZoneId.systemDefault()
+                    )
+                ).timeInMillis > GregorianCalendar.from(
+                    ZonedDateTime.of(
+                        datumPocetkaSecond,
+                        ZoneId.systemDefault()
+                    )
+                ).timeInMillis
+            ) -1
+            else if (GregorianCalendar.from(
+                    ZonedDateTime.of(
+                        datumPocetkaFirst,
+                        ZoneId.systemDefault()
+                    )
+                ).timeInMillis < GregorianCalendar.from(
+                    ZonedDateTime.of(
+                        datumPocetkaSecond,
+                        ZoneId.systemDefault()
+                    )
+                ).timeInMillis
+            ) 1
             else 0
         })
 

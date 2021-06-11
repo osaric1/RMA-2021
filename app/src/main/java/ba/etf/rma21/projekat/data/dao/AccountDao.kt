@@ -18,6 +18,6 @@ interface AccountDao {
     suspend fun getAccountId(acHash: String): Int
 
     @Query("SELECT lastUpdate FROM account WHERE acHash==:acHash")
-    suspend fun getLastUpdate(acHash: String): LocalDateTime?
+    suspend fun getLastUpdate(acHash: String): String?
 
 }
