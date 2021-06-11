@@ -59,13 +59,7 @@ class KvizAdapter(
     override fun onBindViewHolder(holder: KvizViewHolder, position: Int) {
         holder.predmetName.text = ""
         var ldt =  LocalDate.parse(kvizovi[position].datumPocetka).atStartOfDay()
-        var datumPocetkaCalendar = GregorianCalendar.from(
-            ZonedDateTime.of(
-                ldt,
-                ZoneId.systemDefault()
-            )
-        )
-        println(datumPocetkaCalendar)
+        var datumPocetkaCalendar = GregorianCalendar.from(ZonedDateTime.of(ldt, ZoneId.systemDefault()))
         var datumKrajaCalendar: Calendar
 
         if (kvizovi[position].datumKraj != null) {

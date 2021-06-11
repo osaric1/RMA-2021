@@ -9,7 +9,10 @@ import ba.etf.rma21.projekat.data.models.Grupa
 import ba.etf.rma21.projekat.data.models.Kviz
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -95,8 +98,10 @@ class KvizRepository() {
 
         @RequiresApi(Build.VERSION_CODES.O)
         suspend fun getFuture(): List<Kviz> {
-            return getUpisaneIzBaze().filter { kviz -> LocalDateTime.parse(kviz.datumPocetka, formatter) > LocalDateTime.now() }
-                .toList()
+            return getUpisaneIzBaze().filter { kviz ->
+                val ldt =  LocalDate.parse(kviz.datumPocetka).atStartOfDay()
+                GregorianCalendar.from(ZonedDateTime.of(ldt, ZoneId.systemDefault())) > Calendar.getInstance()
+            }.toList()
         }
 
 
@@ -109,15 +114,14 @@ class KvizRepository() {
         @RequiresApi(Build.VERSION_CODES.O)
         suspend fun getNotTaken(): List<Kviz> {
             return withContext(Dispatchers.IO) {
-                var response = ApiAdapter.retrofit.getPocetiKvizovi(AccountRepository.acHash)
-                val responseBody = response.body()
+                var zapocetiKvizovi = TakeKvizRepository.getPocetiKvizoviIzBaze()
 
-                if (responseBody != null) {
-                    val ids = responseBody.map { kvizTaken -> kvizTaken.KvizId }
+                if (zapocetiKvizovi != null) {
+                    val ids = zapocetiKvizovi.map { kvizTaken -> kvizTaken.KvizId }
                     return@withContext getUpisani().filter { kviz ->
                         kviz.datumKraj != null && !ids.contains(
                             kviz.id
-                        ) && LocalDateTime.parse(kviz.datumKraj, formatter) < LocalDateTime.now()
+                        ) && GregorianCalendar.from(ZonedDateTime.of(LocalDate.parse(kviz.datumKraj).atStartOfDay(), ZoneId.systemDefault())) < Calendar.getInstance()
                     }.toList()
                 }
                 return@withContext listOf<Kviz>()

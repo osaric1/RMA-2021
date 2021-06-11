@@ -1,6 +1,8 @@
 package ba.etf.rma21.projekat.viewmodel
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import ba.etf.rma21.projekat.data.models.Grupa
 import ba.etf.rma21.projekat.data.models.Kviz
 import ba.etf.rma21.projekat.data.repositories.KvizRepository
@@ -29,15 +31,18 @@ class KvizViewModel() {
     suspend fun getUpisani(): List<Kviz> {
         return KvizRepository.getUpisani()
     }
-//    suspend fun getDone(): List<Kviz> {
-//        return KvizRepository.getDone()
-//    }
-//
-//    suspend fun getNotTaken(): List<Kviz> {
-//        return KvizRepository.getNotTaken()
-//    }
-//
-//    suspend fun getFuture(): List<Kviz> {
-//        return KvizRepository.getFuture()
-//    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun getDone(): List<Kviz> {
+        return KvizRepository.getDone()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun getNotTaken(): List<Kviz> {
+        return KvizRepository.getNotTaken()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun getFuture(): List<Kviz> {
+        return KvizRepository.getFuture()
+    }
 }

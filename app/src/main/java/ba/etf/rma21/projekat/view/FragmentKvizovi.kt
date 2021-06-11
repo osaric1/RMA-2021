@@ -87,17 +87,17 @@ class FragmentKvizovi: Fragment() {
                         kvizAdapter.updateKvizovi(kvizViewModel.getUpisaneIzBaze())
                     }
 
-//                    else if(spinner.selectedItem.toString() == "Urađeni kvizovi") {
-//                        kvizAdapter.updateKvizovi(kvizViewModel.getDone())
-//                    }
-//
-//                    else if(spinner.selectedItem.toString() == "Prošli kvizovi") {
-//                        kvizAdapter.updateKvizovi(kvizViewModel.getNotTaken())
-//                    }
-//
-//                    else if(spinner.selectedItem.toString() == "Budući kvizovi") {
-//                        kvizAdapter.updateKvizovi(kvizViewModel.getFuture())
-//                    }
+                    else if(spinner.selectedItem.toString() == "Urađeni kvizovi") {
+                        kvizAdapter.updateKvizovi(kvizViewModel.getDone())
+                    }
+
+                    else if(spinner.selectedItem.toString() == "Prošli kvizovi") {
+                        kvizAdapter.updateKvizovi(kvizViewModel.getNotTaken())
+                    }
+
+                    else if(spinner.selectedItem.toString() == "Budući kvizovi") {
+                        kvizAdapter.updateKvizovi(kvizViewModel.getFuture())
+                    }
 
                     kvizAdapter.updateSpinner(spinner.selectedItem.toString())
                 }

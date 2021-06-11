@@ -151,10 +151,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-//        scope.launch {
-//            AccountRepository.setContext(applicationContext)
-//            AccountRepository.izbrisiIzBaze()
-//        }
+
         val intent = intent
         val payload = intent?.getStringExtra("payload")
 

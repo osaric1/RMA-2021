@@ -70,40 +70,44 @@ class FragmentPredmeti() : Fragment() {
                 val godina = odabirGodine.selectedItem.toString()
                 val grupa = odabirGrupe.selectedItem.toString()
                 val predmet = odabirPredmeta.selectedItem.toString()
+                var result: Deferred<Unit>
+                scope.launch {
 
-                scope.launch{
-                    val grupe = predmetIGrupaViewModel.getGrupe()
-                    val pronadjenaGrupa = grupe.find { grupa1 -> grupa1.naziv == grupa }
-                    predmetIGrupaViewModel.upisiUGrupu(pronadjenaGrupa!!.id)
+                    result = async {
+                        val grupe = predmetIGrupaViewModel.getGrupe()
+                        val pronadjenaGrupa = grupe.find { grupa1 -> grupa1.naziv == grupa }
+                        predmetIGrupaViewModel.upisiUGrupu(pronadjenaGrupa!!.id)
 
 
-                    val upisaniKvizovi = kvizViewModel.getUpisani()
-                    println(upisaniKvizovi)
-                    val pronadjenPredmet = predmetIGrupaViewModel.getPredmetById(pronadjenaGrupa.predmetId)
-                    val db = AppDatabase.getInstance(requireContext())
+                        val upisaniKvizovi = kvizViewModel.getUpisani()
+                        println(upisaniKvizovi)
+                        val pronadjenPredmet =
+                            predmetIGrupaViewModel.getPredmetById(pronadjenaGrupa.predmetId)
+                        val db = AppDatabase.getInstance(requireContext())
 
-                    if(db.grupaDao().checkDuplicate(pronadjenaGrupa.id) == null)
-                        db.grupaDao().insert(pronadjenaGrupa)
+                        if (db.grupaDao().checkDuplicate(pronadjenaGrupa.id) == null)
+                            db.grupaDao().insert(pronadjenaGrupa)
 
-                    var br = 0
-                    for(upisaniKviz in upisaniKvizovi){
-                        if(db.kvizDao().checkDuplicate(upisaniKviz.id) == null)
-                            db.kvizDao().insert(upisaniKviz)
+                        for (upisaniKviz in upisaniKvizovi) {
+                            if (db.kvizDao().checkDuplicate(upisaniKviz.id) == null)
+                                db.kvizDao().insert(upisaniKviz)
+                        }
+
+
+                        if (db.predmetDao().checkDuplicate(pronadjenPredmet!!.id) == null)
+                            db.predmetDao().insert(pronadjenPredmet)
+
                     }
 
-
-                    if(db.predmetDao().checkDuplicate(pronadjenPredmet!!.id) == null)
-                     db.predmetDao().insert(pronadjenPredmet)
-                }
-                //upisivanje
+                    //upisivanje
 //                kvizViewModel.addGroup(Grupa(grupa, predmet))
 //                predmetViewModel.addPredmet(Predmet(predmet, Integer.parseInt(godina)))
-
-
-                val transaction = activity?.supportFragmentManager?.beginTransaction()
-                transaction?.replace(R.id.container, fragmentPoruka)
-                transaction?.addToBackStack(null)
-                transaction?.commit()
+                    result.await()
+                    val transaction = activity?.supportFragmentManager?.beginTransaction()
+                    transaction?.replace(R.id.container, fragmentPoruka)
+                    transaction?.addToBackStack(null)
+                    transaction?.commit()
+                }
             }
 
         }
