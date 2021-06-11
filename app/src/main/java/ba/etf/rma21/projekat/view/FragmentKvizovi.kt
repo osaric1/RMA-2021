@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ba.etf.rma21.projekat.R
+import ba.etf.rma21.projekat.data.repositories.KvizRepository
 import ba.etf.rma21.projekat.viewmodel.KvizViewModel
 import ba.etf.rma21.projekat.viewmodel.PitanjeKvizViewModel
 import ba.etf.rma21.projekat.viewmodel.PredmetViewModel
@@ -32,6 +33,8 @@ class FragmentKvizovi: Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view  = inflater.inflate(R.layout.kvizovi_fragment, container, false)
         spinner = view.findViewById(R.id.filterKvizova)
+
+        KvizRepository.setContext(requireActivity().applicationContext)
 
         ArrayAdapter.createFromResource(
                 view.context,
@@ -80,20 +83,21 @@ class FragmentKvizovi: Fragment() {
                         kvizAdapter.updateKvizovi(kvizViewModel.getAll())
                     }
                     else if(spinner.selectedItem.toString() == "Svi moji kvizovi") {
+                        println("you think this is funny")
                         kvizAdapter.updateKvizovi(kvizViewModel.getUpisaneIzBaze())
                     }
 
-                    else if(spinner.selectedItem.toString() == "Urađeni kvizovi") {
-                        kvizAdapter.updateKvizovi(kvizViewModel.getDone())
-                    }
-
-                    else if(spinner.selectedItem.toString() == "Prošli kvizovi") {
-                        kvizAdapter.updateKvizovi(kvizViewModel.getNotTaken())
-                    }
-
-                    else if(spinner.selectedItem.toString() == "Budući kvizovi") {
-                        kvizAdapter.updateKvizovi(kvizViewModel.getFuture())
-                    }
+//                    else if(spinner.selectedItem.toString() == "Urađeni kvizovi") {
+//                        kvizAdapter.updateKvizovi(kvizViewModel.getDone())
+//                    }
+//
+//                    else if(spinner.selectedItem.toString() == "Prošli kvizovi") {
+//                        kvizAdapter.updateKvizovi(kvizViewModel.getNotTaken())
+//                    }
+//
+//                    else if(spinner.selectedItem.toString() == "Budući kvizovi") {
+//                        kvizAdapter.updateKvizovi(kvizViewModel.getFuture())
+//                    }
 
                     kvizAdapter.updateSpinner(spinner.selectedItem.toString())
                 }

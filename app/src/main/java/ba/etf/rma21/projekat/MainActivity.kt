@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.*
 import ba.etf.rma21.projekat.data.models.KvizTaken
+import ba.etf.rma21.projekat.data.repositories.AccountRepository
 import ba.etf.rma21.projekat.view.FragmentKvizovi
 import ba.etf.rma21.projekat.view.FragmentPoruka
 import ba.etf.rma21.projekat.view.FragmentPredmeti
@@ -150,6 +151,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
+//        scope.launch {
+//            AccountRepository.setContext(applicationContext)
+//            AccountRepository.izbrisiIzBaze()
+//        }
         val intent = intent
         val payload = intent?.getStringExtra("payload")
 

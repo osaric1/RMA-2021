@@ -17,4 +17,11 @@ interface KvizDao {
 
     @Insert
     suspend fun insertAll(kviz: List<Kviz>)
+
+    @Query("SELECT id FROM kviz WHERE id==:id")
+    suspend fun checkDuplicate(id: Int): Int?
+
+    @Insert
+    suspend fun insert(kviz: Kviz)
+
 }

@@ -12,6 +12,7 @@ import android.widget.Spinner
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import ba.etf.rma21.projekat.R
+import ba.etf.rma21.projekat.data.AppDatabase
 import ba.etf.rma21.projekat.data.models.Grupa
 import ba.etf.rma21.projekat.data.models.Predmet
 import ba.etf.rma21.projekat.data.repositories.AccountRepository
@@ -74,6 +75,25 @@ class FragmentPredmeti() : Fragment() {
                     val grupe = predmetIGrupaViewModel.getGrupe()
                     val pronadjenaGrupa = grupe.find { grupa1 -> grupa1.naziv == grupa }
                     predmetIGrupaViewModel.upisiUGrupu(pronadjenaGrupa!!.id)
+
+
+                    val upisaniKvizovi = kvizViewModel.getUpisani()
+                    println(upisaniKvizovi)
+                    val pronadjenPredmet = predmetIGrupaViewModel.getPredmetById(pronadjenaGrupa.predmetId)
+                    val db = AppDatabase.getInstance(requireContext())
+
+                    if(db.grupaDao().checkDuplicate(pronadjenaGrupa.id) == null)
+                        db.grupaDao().insert(pronadjenaGrupa)
+
+                    var br = 0
+                    for(upisaniKviz in upisaniKvizovi){
+                        if(db.kvizDao().checkDuplicate(upisaniKviz.id) == null)
+                            db.kvizDao().insert(upisaniKviz)
+                    }
+
+
+                    if(db.predmetDao().checkDuplicate(pronadjenPredmet!!.id) == null)
+                     db.predmetDao().insert(pronadjenPredmet)
                 }
                 //upisivanje
 //                kvizViewModel.addGroup(Grupa(grupa, predmet))

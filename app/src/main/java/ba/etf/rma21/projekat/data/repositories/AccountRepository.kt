@@ -55,8 +55,15 @@ class AccountRepository {
 
                     db.kvizDao().insertAll(noviKvizovi)
                     db.kvizTakenDao().insertAll(noviPokusaji!!)
-                    db.predmetDao().insertAll(noviPredmeti)
-                    db.grupaDao().insertAll(noveGrupe!!)
+
+                    for(noviPredmet in noviPredmeti){
+                        db.predmetDao().insert(noviPredmet)
+                    }
+
+                    for(novaGrupa in noveGrupe!!){
+                        db.grupaDao().insert(novaGrupa)
+                    }
+
                     db.pitanjeDao().insertAll(novaPitanja)
 
                 }
