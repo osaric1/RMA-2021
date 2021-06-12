@@ -81,11 +81,15 @@ class KvizAdapter(
 
             var predmetiStringovi: String =""
             val result = async {
+
+                //TODO DOBAVLJANJE POKUSAJA IZ BAZE
                 pokusaji = takeKvizViewModel.getPocetiKvizovi()
                 grupe = predmetIGrupaViewModel.getGrupeZaKviz(kvizovi[position].id)!!
 
                 for(grupa in grupe){
 
+
+                    //TODO BAZA
                     val tekst = predmetIGrupaViewModel.getPredmetById(grupa.predmetId).toString()
 
                     if(!predmetiStringovi.contains(tekst)) {
@@ -107,6 +111,8 @@ class KvizAdapter(
                 val pokusaj = pokusaji!!.find { pokusaj -> pokusaj.KvizId == kvizovi[position].id }
 
                 if(pokusaj != null) {
+
+                    //TODO BAZA
                     val odgovori = odgovorViewModel.getOdgovoriKviz(kvizovi[position].id)
                     if(odgovori.size == pitanjeKvizViewModel.getPitanja(kvizovi[position].id).size){ //ako su odgovorena sva pitanja i ako je predan kviz
                         holder.kvizPoints.text = pokusaj.osvojeniBodovi.toString()
@@ -176,6 +182,7 @@ class KvizAdapter(
             holder.itemView.setOnClickListener {
                 if (spinnerTekst != "Svi kvizovi") {
                     scope.launch {
+                        //TODO DOBAVLJANJE PITANJA IZ BAZE
                         val lista = pitanjeKvizViewModel.getPitanja(kvizovi[position].id)
 
                         if (lista.isNotEmpty() && holder.imageView.tag != R.drawable.crvena) {
@@ -193,6 +200,8 @@ class KvizAdapter(
                                 bundle.putBoolean("uradjenKviz", false)
                             }
 
+
+                            //TODO DOBAVLJANJE GRUPA I PREDMETA I UPISANIH BLA BLA IZ BAZE
                             val grupe = predmetIGrupaViewModel.getGrupeZaKviz(kvizovi[position].id)
                             val predmet = predmetIGrupaViewModel.getPredmetById(grupe!![0].predmetId)
                             val upisanaGrupa = predmetIGrupaViewModel.getUpisaneGrupe()!!

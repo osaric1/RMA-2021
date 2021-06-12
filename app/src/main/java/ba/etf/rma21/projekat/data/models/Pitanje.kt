@@ -13,7 +13,8 @@ data class Pitanje(
         @ColumnInfo(name="naziv") @SerializedName("naziv") val naziv: String,
         @ColumnInfo(name="tekstPitanja") @SerializedName("tekstPitanja") val tekstPitanja: String,
         @ColumnInfo(name="opcije") @SerializedName("opcije") val opcije: String,
-        @ColumnInfo(name="tacan") @SerializedName("tacan") val tacan: Int
+        @ColumnInfo(name="tacan") @SerializedName("tacan") val tacan: Int,
+        @SerializedName("KvizId") val KvizId: Int
 ) {
 
 

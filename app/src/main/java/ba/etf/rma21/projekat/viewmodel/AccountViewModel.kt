@@ -10,4 +10,12 @@ class AccountViewModel {
     fun getHash():String{
         return AccountRepository.getHash()
     }
+
+    suspend fun updateData(){
+        return AccountRepository.updateData()
+    }
+
+    suspend fun izbrisiIzBaze(){
+        return AccountRepository.izbrisiIzBaze()
+    }
 }

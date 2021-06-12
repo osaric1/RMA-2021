@@ -9,6 +9,7 @@ import ba.etf.rma21.projekat.data.models.Change
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.Exception
+import java.time.format.DateTimeFormatter
 
 class DBRepository {
     companion object {
@@ -33,6 +34,9 @@ class DBRepository {
                     val responseBody = response.body()
                     when(responseBody){
                         is Change -> {
+                            if(responseBody.changed){
+                                db.accountDao().setLastUpdate(AccountRepository.getHash(), datum.format(DateTimeFormatter.ISO_DATE_TIME))
+                            }
                             return@withContext responseBody.changed
                         }
                         else -> return@withContext false

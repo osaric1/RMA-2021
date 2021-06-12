@@ -34,8 +34,6 @@ class FragmentPredmeti() : Fragment() {
 
     val scope = CoroutineScope(Job() + Dispatchers.Main)
 
-//    private var savedState = Bundle()
-
     companion object{
         private var presetGodina: Int = -1
         private var presetGrupa: Int = -1
@@ -98,10 +96,6 @@ class FragmentPredmeti() : Fragment() {
                             db.predmetDao().insert(pronadjenPredmet)
 
                     }
-
-                    //upisivanje
-//                kvizViewModel.addGroup(Grupa(grupa, predmet))
-//                predmetViewModel.addPredmet(Predmet(predmet, Integer.parseInt(godina)))
                     result.await()
                     val transaction = activity?.supportFragmentManager?.beginTransaction()
                     transaction?.replace(R.id.container, fragmentPoruka)

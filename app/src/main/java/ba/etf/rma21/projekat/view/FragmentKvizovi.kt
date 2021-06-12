@@ -14,9 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ba.etf.rma21.projekat.R
 import ba.etf.rma21.projekat.data.repositories.KvizRepository
-import ba.etf.rma21.projekat.viewmodel.KvizViewModel
-import ba.etf.rma21.projekat.viewmodel.PitanjeKvizViewModel
-import ba.etf.rma21.projekat.viewmodel.PredmetViewModel
+import ba.etf.rma21.projekat.viewmodel.*
 import kotlinx.coroutines.*
 
 class FragmentKvizovi: Fragment() {
@@ -27,6 +25,9 @@ class FragmentKvizovi: Fragment() {
     private var kvizViewModel =  KvizViewModel()
     private var predmetViewModel = PredmetViewModel()
     private var pitanjeKvizViewModel = PitanjeKvizViewModel()
+    private var accountViewModel = AccountViewModel()
+    private var DBViewModel = DBViewModel()
+
     private var job: Job = Job()
     private var scope = CoroutineScope(Dispatchers.Main + job)
 
@@ -77,29 +78,32 @@ class FragmentKvizovi: Fragment() {
                     position: Int,
                     id: Long
             ) {
+                
                     scope.launch{
 
-                    if(spinner.selectedItem.toString() == "Svi kvizovi"){
-                        kvizAdapter.updateKvizovi(kvizViewModel.getAll())
-                    }
-                    else if(spinner.selectedItem.toString() == "Svi moji kvizovi") {
-                        println("you think this is funny")
-                        kvizAdapter.updateKvizovi(kvizViewModel.getUpisaneIzBaze())
-                    }
+                        if(DBViewModel.updateNow())
+                            accountViewModel.updateData()
 
-                    else if(spinner.selectedItem.toString() == "Urađeni kvizovi") {
-                        kvizAdapter.updateKvizovi(kvizViewModel.getDone())
-                    }
+                        if(spinner.selectedItem.toString() == "Svi kvizovi"){
+                            kvizAdapter.updateKvizovi(kvizViewModel.getAll())
+                        }
+                        else if(spinner.selectedItem.toString() == "Svi moji kvizovi") {
+                            kvizAdapter.updateKvizovi(kvizViewModel.getUpisaneIzBaze())
+                        }
 
-                    else if(spinner.selectedItem.toString() == "Prošli kvizovi") {
-                        kvizAdapter.updateKvizovi(kvizViewModel.getNotTaken())
-                    }
+                        else if(spinner.selectedItem.toString() == "Urađeni kvizovi") {
+                            kvizAdapter.updateKvizovi(kvizViewModel.getDone())
+                        }
 
-                    else if(spinner.selectedItem.toString() == "Budući kvizovi") {
-                        kvizAdapter.updateKvizovi(kvizViewModel.getFuture())
-                    }
+                        else if(spinner.selectedItem.toString() == "Prošli kvizovi") {
+                            kvizAdapter.updateKvizovi(kvizViewModel.getNotTaken())
+                        }
 
-                    kvizAdapter.updateSpinner(spinner.selectedItem.toString())
+                        else if(spinner.selectedItem.toString() == "Budući kvizovi") {
+                            kvizAdapter.updateKvizovi(kvizViewModel.getFuture())
+                        }
+
+                        kvizAdapter.updateSpinner(spinner.selectedItem.toString())
                 }
             }
 

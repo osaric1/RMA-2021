@@ -55,4 +55,7 @@ interface Api {
 
     @GET("/account/{id}")
     suspend fun updateNow(@Path("id") hashStudenta: String, @Query("lastUpdate") lastUpdate: String) : Response<Change>
+
+    @GET("/student/{id}")
+    suspend fun getAccount(@Path("id") hashStudenta: String): Response<Account>
 }

@@ -1,8 +1,9 @@
 package ba.etf.rma21.projekat.data.repositories
 
 import android.content.Context
+import ba.etf.rma21.projekat.ApiAdapter
 import ba.etf.rma21.projekat.data.AppDatabase
-import ba.etf.rma21.projekat.data.models.Kviz
+import ba.etf.rma21.projekat.data.models.Account
 import ba.etf.rma21.projekat.data.models.Pitanje
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -24,8 +25,14 @@ class AccountRepository {
                     AccountRepository.acHash = acHash
                     var db = AppDatabase.getInstance(context)
 
-                    updateData()
-                    return@withContext true
+                    val response = ApiAdapter.retrofit.getAccount(acHash)
+
+                    if(response.body() is Account) {
+                        db.accountDao().changeUser(response.body()!!.id, response.body()!!.student, response.body()!!.acHash, prethodni)
+                        updateData()
+                        return@withContext true
+                    }
+                    return@withContext false
                 }
                 catch(error:Exception){
                     return@withContext false

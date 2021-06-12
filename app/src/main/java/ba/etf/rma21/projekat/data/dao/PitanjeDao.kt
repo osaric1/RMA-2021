@@ -12,4 +12,5 @@ interface PitanjeDao {
 
     @Insert
     suspend fun insertAll(pitanja: List<Pitanje>)
+
 }
