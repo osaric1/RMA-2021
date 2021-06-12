@@ -127,7 +127,8 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
 
         scope.launch{
 
-            pokusajKviza = takeKvizViewModel.getPocetiKvizovi()?.find { kvizTaken -> kvizTaken.KvizId == idKviza  }
+            takeKvizViewModel.setContext(requireActivity().applicationContext)
+            pokusajKviza = takeKvizViewModel.getPocetiKvizoviIzBaze()?.find { kvizTaken -> kvizTaken.KvizId == idKviza  }
             val listaOdgovora: List<Odgovor>
             if(pokusajKviza != null) {
                 listaOdgovora = odgovorViewModel.getOdgovoriKviz(idKviza)

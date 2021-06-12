@@ -164,11 +164,8 @@ class MainActivity : AppCompatActivity() {
             }
             result.await()
 
-
-            if(DBViewnodel.updateNow())
-                accountViewModel.updateData()
-
         }
+
 
         val intent = intent
         val payload = intent?.getStringExtra("payload")

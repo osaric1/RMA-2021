@@ -15,4 +15,5 @@ interface KvizTakenDao {
 
     @Insert
     suspend fun insertAll(kvizTaken: List<KvizTaken>)
+
 }

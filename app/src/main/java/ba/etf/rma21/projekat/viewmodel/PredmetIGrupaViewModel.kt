@@ -18,6 +18,10 @@ class PredmetIGrupaViewModel {
         return PredmetIGrupaRepository.getGrupe()
     }
 
+    suspend fun getGrupa(grupaId: Int): Grupa?{
+        return PredmetIGrupaRepository.getGrupa(grupaId)
+    }
+
     fun setContext(context: Context){
         PredmetIGrupaRepository.setContext(context)
     }

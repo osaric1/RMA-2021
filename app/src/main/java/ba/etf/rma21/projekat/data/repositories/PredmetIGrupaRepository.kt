@@ -26,6 +26,18 @@ class PredmetIGrupaRepository {
             }!!
         }
 
+        suspend fun getGrupa(grupaId: Int): Grupa?{
+            return withContext(Dispatchers.IO) {
+                try {
+                    val db = AppDatabase.getInstance(context)
+                    val grupa = db.grupaDao().getGrupa(grupaId)
+                    return@withContext grupa
+                } catch (error: Exception) {
+                    return@withContext null
+                }
+            }
+        }
+
         suspend fun getGrupe(): List<Grupa> {
             return withContext(Dispatchers.IO) {
                 val response = ApiAdapter.retrofit.getGrupe()

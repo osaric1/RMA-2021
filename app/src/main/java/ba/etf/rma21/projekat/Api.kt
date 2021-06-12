@@ -1,6 +1,7 @@
 package ba.etf.rma21.projekat
 
 import ba.etf.rma21.projekat.data.models.*
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -50,8 +51,8 @@ interface Api {
     @GET("/predmet/{id}")
     suspend fun getPredmetById(@Path("id") predmetId: Int): Response<Predmet>
 
-    @GET("/account/{id}")
-    suspend fun updateNow(@Path("id") hashStudenta: String, @Query("lastUpdate") lastUpdate: String?) : Response<Change>
+    @GET("/account/{id}/lastUpdate")
+    suspend fun updateNow(@Path("id") hashStudenta: String, @Query("date") lastUpdate: String?) : Response<Change>
 
     @GET("/student/{id}")
     suspend fun getAccount(@Path("id") hashStudenta: String): Response<Account>

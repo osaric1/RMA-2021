@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import ba.etf.rma21.projekat.R
 import ba.etf.rma21.projekat.data.AppDatabase
 import ba.etf.rma21.projekat.data.models.Grupa
+import ba.etf.rma21.projekat.data.models.GrupaKviz
 import ba.etf.rma21.projekat.data.models.Predmet
 import ba.etf.rma21.projekat.data.repositories.AccountRepository
 import ba.etf.rma21.projekat.viewmodel.*
@@ -78,9 +79,6 @@ class FragmentPredmeti() : Fragment() {
                         val upisaniKvizovi = kvizViewModel.getUpisani()
                         val pronadjenPredmet = predmetIGrupaViewModel.getPredmetById(pronadjenaGrupa.predmetId)
                         val db = AppDatabase.getInstance(requireContext())
-
-                        println(pronadjenaGrupa)
-                        println(pronadjenPredmet)
                         if (db.grupaDao().checkDuplicate(pronadjenaGrupa.id) == null)
                             db.grupaDao().insert(pronadjenaGrupa)
 

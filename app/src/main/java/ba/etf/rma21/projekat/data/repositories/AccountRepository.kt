@@ -5,6 +5,7 @@ import androidx.room.ColumnInfo
 import ba.etf.rma21.projekat.ApiAdapter
 import ba.etf.rma21.projekat.data.AppDatabase
 import ba.etf.rma21.projekat.data.models.Account
+import ba.etf.rma21.projekat.data.models.GrupaKviz
 import ba.etf.rma21.projekat.data.models.Pitanje
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -81,17 +82,25 @@ class AccountRepository {
 
                     var novaPitanja: MutableList<Pitanje> = mutableListOf()
                     for(kviz in noviKvizovi){
+                        val grupeIDs = PredmetIGrupaRepository.getGrupeZaKviz(kviz.id)
+
+                        if(grupeIDs != null){
+                            for(grp in grupeIDs)
+                                db.grupaKvizDao().insert(GrupaKviz((if(db.grupaKvizDao().najveciId() == null) 0 else db.grupaKvizDao().najveciId()!!) + 1,grp.id, kviz.id))
+                        }
+
                         val pitanja = PitanjeKvizRepository.getPitanja(kviz.id)
                         pitanja.forEach { pitanje -> pitanje.KvizId = kviz.id }
+
                         for(novoPitanje in pitanja){
                             if(db.pitanjeDao().checkDuplicate(novoPitanje.id) == null)
                                 db.pitanjeDao().insert(novoPitanje)
                             else{
                                 novoPitanje.id = db.pitanjeDao().najveciId() + 1
-                                println(novoPitanje.id)
                                 db.pitanjeDao().insert(novoPitanje)
                             }
                         }
+
                         novaPitanja.addAll(pitanja)
                     }
 
@@ -107,8 +116,6 @@ class AccountRepository {
                     for(novaGrupa in noveGrupe!!){
                         db.grupaDao().insert(novaGrupa)
                     }
-
-                    db.pitanjeDao().insertAll(novaPitanja)
 
                 }
                 catch(error: Exception){
@@ -126,6 +133,7 @@ class AccountRepository {
                     db.predmetDao().deleteAll()
                     db.pitanjeDao().deleteAll()
                     db.grupaDao().deleteAll()
+                    db.grupaKvizDao().deleteAll()
                 } catch (error: Exception) {
                     println("Desila se greska tokom brisanja")
                 }

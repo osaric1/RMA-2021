@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ba.etf.rma21.projekat.R
+import ba.etf.rma21.projekat.data.repositories.AccountRepository
 import ba.etf.rma21.projekat.data.repositories.KvizRepository
 import ba.etf.rma21.projekat.viewmodel.*
 import kotlinx.coroutines.*
@@ -83,9 +84,10 @@ class FragmentKvizovi: Fragment() {
                         DBViewModel.setContext(requireActivity().applicationContext)
                         accountViewModel.setContext(requireActivity().applicationContext)
 
-                        if(DBViewModel.updateNow())
+                        if(DBViewModel.updateNow()) {
+                            println("what 2")
                             accountViewModel.updateData()
-
+                        }
                         if(spinner.selectedItem.toString() == "Svi kvizovi"){
                             kvizAdapter.updateKvizovi(kvizViewModel.getAll())
                         }

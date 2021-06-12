@@ -18,4 +18,7 @@ interface GrupaDao {
 
     @Query("SELECT * FROM grupa")
     suspend fun getGrupeIzBaze(): List<Grupa>
+
+    @Query("SELECT * FROM grupa WHERE id==:id")
+    suspend fun getGrupa(id: Int) : Grupa
 }

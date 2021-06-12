@@ -2,6 +2,7 @@ package ba.etf.rma21.projekat.data.repositories
 
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import ba.etf.rma21.projekat.ApiAdapter
 import ba.etf.rma21.projekat.data.AppDatabase
@@ -29,7 +30,7 @@ class DBRepository {
                     val db = AppDatabase.getInstance(context)
                     val datum = db.accountDao().getLastUpdate(AccountRepository.getHash())
 
-                    val response = ApiAdapter.retrofit.updateNow(AccountRepository.getHash(), datum) //mozda bude problema
+                    val response = ApiAdapter.retrofit.updateNow(AccountRepository.getHash(), datum.toString()) //mozda bude problema
                     val responseBody = response.body()
                     when(responseBody){
                         is Change -> {

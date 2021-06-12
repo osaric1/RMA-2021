@@ -15,14 +15,8 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import ba.etf.rma21.projekat.R
-import ba.etf.rma21.projekat.data.models.Grupa
-import ba.etf.rma21.projekat.data.models.Kviz
-import ba.etf.rma21.projekat.data.models.KvizTaken
-import ba.etf.rma21.projekat.data.models.Predmet
-import ba.etf.rma21.projekat.viewmodel.OdgovorViewModel
-import ba.etf.rma21.projekat.viewmodel.PitanjeKvizViewModel
-import ba.etf.rma21.projekat.viewmodel.PredmetIGrupaViewModel
-import ba.etf.rma21.projekat.viewmodel.TakeKvizViewModel
+import ba.etf.rma21.projekat.data.models.*
+import ba.etf.rma21.projekat.viewmodel.*
 import kotlinx.coroutines.*
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -43,12 +37,13 @@ class KvizAdapter(
     private var takeKvizViewModel = TakeKvizViewModel()
     private var pitanjeKvizViewModel = PitanjeKvizViewModel()
     private var odgovorViewModel = OdgovorViewModel()
+    private var grupaKvizViewModel = GrupaKvizViewModel()
 
     private var job: Job = Job()
     private var scope = CoroutineScope(Dispatchers.Main + job)
 
     private var pokusaji: List<KvizTaken>? = listOf()
-    private var grupe: List<Grupa> = listOf()
+    private var grupe: MutableList<Grupa> = mutableListOf()
     private var predmet = Predmet(1, "", -1)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KvizViewHolder {
@@ -80,22 +75,39 @@ class KvizAdapter(
             datumPocetkaCalendar.get(Calendar.DAY_OF_MONTH)
         )
 
+
         scope.launch {
 
             var predmetiStringovi: String =""
             val result = async {
                 predmetIGrupaViewModel.setContext(context)
                 takeKvizViewModel.setContext(context)
-
+                
+                
+                if(spinnerTekst != "Svi kvizovi"){
+                    pokusaji = takeKvizViewModel.getPocetiKvizoviIzBaze()
+                    val idevi = grupaKvizViewModel.getGrupeZaKvizBaza(kvizovi[position].id).map { grupaKviz -> grupaKviz.grupaId  }
+                    println(idevi)
+                    for(id in idevi){
+                        grupe.add(predmetIGrupaViewModel.getGrupa(id)!!)
+                        println("hii")
+                    }
+                }
                 //TODO DOBAVLJANJE POKUSAJA IZ BAZE
-                pokusaji = takeKvizViewModel.getPocetiKvizoviIzBaze()
-                grupe = predmetIGrupaViewModel.getGrupeZaKviz(kvizovi[position].id)!!
+                else{
+                    pokusaji = takeKvizViewModel.getPocetiKvizovi()
+                    grupe = (predmetIGrupaViewModel.getGrupeZaKviz(kvizovi[position].id) as MutableList<Grupa>?)!!
+                }
 
+                var tekst: String
                 for(grupa in grupe){
-
-
                     //TODO BAZA
-                    val tekst = predmetIGrupaViewModel.getPredmetByIdIzBaze(grupa.predmetId).toString()
+                    println(spinnerTekst)
+                    if(spinnerTekst != "Svi kvizovi") {
+                        tekst = predmetIGrupaViewModel.getPredmetByIdIzBaze(grupa.predmetId).toString()
+                    }
+                    else
+                        tekst = predmetIGrupaViewModel.getPredmetById(grupa.predmetId).toString()
 
                     if(!predmetiStringovi.contains(tekst)) {
                         predmetiStringovi += tekst +","
@@ -118,8 +130,19 @@ class KvizAdapter(
                 if(pokusaj != null) {
 
                     //TODO BAZA
-                    val odgovori = odgovorViewModel.getOdgovoriKviz(kvizovi[position].id)
-                    if(odgovori.size == pitanjeKvizViewModel.getPitanjaIzBaze(kvizovi[position].id).size){ //ako su odgovorena sva pitanja i ako je predan kviz
+                    var odgovori: List<Odgovor> = listOf()
+                    var pitanja : List<Pitanje>? = null
+                    if(spinnerTekst != "Svi kvizovi"){
+                        odgovori = odgovorViewModel.getOdgovoriKviz(kvizovi[position].id)
+                        pitanja = pitanjeKvizViewModel.getPitanjaIzBaze(kvizovi[position].id)
+                    }
+                    else{
+                        odgovori = odgovorViewModel.getOdgovoriKviz(kvizovi[position].id)
+                        pitanja = pitanjeKvizViewModel.getPitanja(kvizovi[position].id)
+                    }
+
+
+                    if(odgovori.size == pitanja!!.size){ //ako su odgovorena sva pitanja i ako je predan kviz
                         holder.kvizPoints.text = pokusaj.osvojeniBodovi.toString()
                         val ldt = LocalDate.parse(pokusaj.datumRada!!).atStartOfDay()
                         datumRadaCalendar = GregorianCalendar.from(
@@ -181,15 +204,15 @@ class KvizAdapter(
                 holder.imageView.setImageResource(R.drawable.plava)
                 holder.imageView.tag = R.drawable.plava
             }
-
             holder.predmetName.text = predmetiStringovi.dropLast(1)
 
 
             holder.itemView.setOnClickListener {
                 if (spinnerTekst != "Svi kvizovi") {
                     scope.launch {
+                        pitanjeKvizViewModel.setContext(context)
                         val lista = pitanjeKvizViewModel.getPitanjaIzBaze(kvizovi[position].id)
-
+                        println(lista)
                         if (lista.isNotEmpty() && holder.imageView.tag != R.drawable.crvena) {
                             val transaction = manager?.beginTransaction()
                             var fragment =
