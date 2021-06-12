@@ -186,12 +186,10 @@ class KvizAdapter(
             holder.itemView.setOnClickListener {
                 if (spinnerTekst != "Svi kvizovi") {
                     scope.launch {
-
                         pitanjeKvizViewModel.setContext(context)
                         val lista = pitanjeKvizViewModel.getPitanjaIzBaze(kvizovi[position].id)
-                        println("P  A  I  N")
+
                         if (lista.isNotEmpty() && holder.imageView.tag != R.drawable.crvena) {
-                            println("P  A  I  N")
                             val transaction = manager?.beginTransaction()
                             var fragment =
                                 manager?.findFragmentByTag("Kviz" + kvizovi[position].naziv)
@@ -206,11 +204,11 @@ class KvizAdapter(
                                 bundle.putBoolean("uradjenKviz", false)
                             }
 
-
+                            predmetIGrupaViewModel.setContext(context)
                             //TODO DOBAVLJANJE GRUPA I PREDMETA I UPISANIH BLA BLA IZ BAZE
                             val grupe = predmetIGrupaViewModel.getGrupeZaKviz(kvizovi[position].id)
                             val predmet = predmetIGrupaViewModel.getPredmetById(grupe!![0].predmetId)
-                            val upisanaGrupa = predmetIGrupaViewModel.getUpisaneGrupe()!!
+                            val upisanaGrupa = predmetIGrupaViewModel.getGrupeIzBaze() //upisane grupe se svakako nalaze u bazi
                                 .find { grupa -> grupa.predmetId == predmet!!.id }
 
                             bundle.putString("grupaNaziv", upisanaGrupa!!.naziv)

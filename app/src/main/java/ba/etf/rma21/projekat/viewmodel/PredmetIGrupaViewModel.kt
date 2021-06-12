@@ -1,5 +1,6 @@
 package ba.etf.rma21.projekat.viewmodel
 
+import android.content.Context
 import ba.etf.rma21.projekat.data.models.Grupa
 import ba.etf.rma21.projekat.data.models.Predmet
 import ba.etf.rma21.projekat.data.repositories.PredmetIGrupaRepository
@@ -11,6 +12,14 @@ class PredmetIGrupaViewModel {
 
     suspend fun getGrupe(): List<Grupa> {
         return PredmetIGrupaRepository.getGrupe()
+    }
+
+    suspend fun getGrupeIzBaze(): List<Grupa>{
+        return PredmetIGrupaRepository.getGrupe()
+    }
+
+    fun setContext(context: Context){
+        PredmetIGrupaRepository.setContext(context)
     }
 
     suspend fun getGrupeZaPredmet(idPredmeta: Int): List<Grupa>? {

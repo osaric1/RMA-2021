@@ -15,4 +15,7 @@ interface GrupaDao {
 
     @Query("SELECT id FROM grupa WHERE id==:id")
     suspend fun checkDuplicate(id: Int): Int?
+
+    @Query("SELECT * FROM grupa")
+    suspend fun getGrupeIzBaze(): List<Grupa>
 }
