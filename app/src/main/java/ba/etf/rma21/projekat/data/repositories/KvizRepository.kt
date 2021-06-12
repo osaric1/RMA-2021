@@ -68,7 +68,6 @@ class KvizRepository() {
                 try {
                     val db = AppDatabase.getInstance(context)
                     val kvizovi = db.kvizDao().getUpisaneIzBaze()
-                    println("i thought alot about it: " + kvizovi)
                     return@withContext kvizovi
                 } catch (error: Exception) {
                     return@withContext listOf<Kviz>()

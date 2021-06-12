@@ -89,11 +89,11 @@ class KvizAdapter(
                     val idevi = grupaKvizViewModel.getGrupeZaKvizBaza(kvizovi[position].id).map { grupaKviz -> grupaKviz.grupaId  }
                     for(id in idevi){
                         val nova = predmetIGrupaViewModel.getGrupa(id)
-                        if(nova != null)
-                            grupe.add(nova)
+                        if(nova == null)
+                            grupe.add(predmetIGrupaViewModel.getGrupeZaKviz(kvizovi[position].id)!!.find {grupa1 -> grupa1.id == id && !grupe.contains(grupa1) }!!)
+                        else grupe.add(nova)
                     }
                 }
-                //TODO DOBAVLJANJE POKUSAJA IZ BAZE
                 else{
                     pokusaji = takeKvizViewModel.getPocetiKvizovi()
                     grupe = (predmetIGrupaViewModel.getGrupeZaKviz(kvizovi[position].id) as MutableList<Grupa>?)!!
@@ -101,10 +101,12 @@ class KvizAdapter(
 
                 var tekst: String
                 for(grupa in grupe){
-                    //TODO BAZA
                     if(spinnerTekst != "Svi kvizovi") {
-                        tekst = predmetIGrupaViewModel.getPredmetByIdIzBaze(grupa.predmetId).toString()
-                        println("TEKST: " + tekst + " vel: " + grupe.size)
+                        val predmet = predmetIGrupaViewModel.getPredmetByIdIzBaze(grupa.predmetId)
+
+                        if(predmet != null)
+                            tekst = predmet.toString()
+                        else tekst = predmetIGrupaViewModel.getPredmetById(grupa.predmetId).toString()
                     }
                     else
                         tekst = predmetIGrupaViewModel.getPredmetById(grupa.predmetId).toString()
@@ -263,7 +265,6 @@ class KvizAdapter(
     fun updateKvizovi(kvizovi: List<Kviz>) {
         this.kvizovi = kvizovi
         Collections.sort(this.kvizovi, Comparator { kviz1, kviz2 ->
-            println(kviz1.datumPocetka)
             val df: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
             val datumPocetkaFirst = LocalDate.parse(kviz1.datumPocetka, df).atStartOfDay()

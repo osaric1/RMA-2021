@@ -44,7 +44,6 @@ class PitanjeKvizRepository {
                 try {
                     val db = AppDatabase.getInstance(context)
                     val pitanja = db.pitanjeDao().getPitanjaZaKviz(idKviza)
-                    println(pitanja)
                     return@withContext pitanja
 
                 }

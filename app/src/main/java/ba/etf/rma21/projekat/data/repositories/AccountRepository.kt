@@ -85,8 +85,10 @@ class AccountRepository {
                         val grupeIDs = PredmetIGrupaRepository.getGrupeZaKviz(kviz.id)
 
                         if(grupeIDs != null){
-                            for(grp in grupeIDs)
-                                db.grupaKvizDao().insert(GrupaKviz((if(db.grupaKvizDao().najveciId() == null) 0 else db.grupaKvizDao().najveciId()!!) + 1,grp.id, kviz.id))
+                            for(grp in grupeIDs){
+                                if(db.grupaKvizDao().checkDuplicate(grp.id,kviz.id) == null)
+                                    db.grupaKvizDao().insert(GrupaKviz((if(db.grupaKvizDao().najveciId() == null) 0 else db.grupaKvizDao().najveciId()!!) + 1,grp.id, kviz.id))
+                            }
                         }
 
                         val pitanja = PitanjeKvizRepository.getPitanja(kviz.id)
@@ -104,8 +106,10 @@ class AccountRepository {
                         novaPitanja.addAll(pitanja)
                     }
 
-                    db.kvizDao().insertAll(noviKvizovi)
-
+                    for(noviKviz in noviKvizovi) {
+                        if(db.kvizDao().checkDuplicate(noviKviz.id) == null)
+                            db.kvizDao().insert(noviKviz)
+                    }
                     if(noviPokusaji != null)
                     db.kvizTakenDao().insertAll(noviPokusaji)
 

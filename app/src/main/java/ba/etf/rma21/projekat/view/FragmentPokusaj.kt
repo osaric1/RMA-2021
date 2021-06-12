@@ -100,7 +100,6 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.pokusaj_fragment, container, false)
-        println("OVO JE PROBLEM")
         navigationView = view.findViewById(R.id.navigacijaPitanja)
         bottomNavigation = activity?.findViewById(R.id.bottomNav)!!
 

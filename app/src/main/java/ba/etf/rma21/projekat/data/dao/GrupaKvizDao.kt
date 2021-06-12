@@ -19,4 +19,7 @@ interface GrupaKvizDao {
 
     @Query("DELETE FROM grupakviz")
     suspend fun deleteAll()
+
+    @Query("SELECT id,grupaId,kvizId FROM grupakviz WHERE grupaId==:grupaId AND kvizId==:kvizId")
+    suspend fun checkDuplicate(grupaId: Int, kvizId: Int): GrupaKviz?
 }
