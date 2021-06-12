@@ -55,7 +55,7 @@ class FragmentKvizovi: Fragment() {
         )
 
         spinner.setSelection(0)
-        kvizAdapter = KvizAdapter(listOf(), activity?.supportFragmentManager, spinner.selectedItem.toString())
+        kvizAdapter = KvizAdapter(listOf(), activity?.supportFragmentManager, spinner.selectedItem.toString(), requireActivity().applicationContext)
 
         if(arguments != null){
 

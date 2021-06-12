@@ -1,6 +1,7 @@
 package ba.etf.rma21.projekat.data.repositories
 
 import android.content.Context
+import androidx.room.ColumnInfo
 import ba.etf.rma21.projekat.ApiAdapter
 import ba.etf.rma21.projekat.data.AppDatabase
 import ba.etf.rma21.projekat.data.models.Account
@@ -57,6 +58,7 @@ class AccountRepository {
                     var novaPitanja: MutableList<Pitanje> = mutableListOf()
                     for(kviz in noviKvizovi){
                         val pitanja = PitanjeKvizRepository.getPitanja(kviz.id)
+                        pitanja.forEach { pitanje -> pitanje.KvizId = kviz.id }
                         novaPitanja.addAll(pitanja)
                     }
 

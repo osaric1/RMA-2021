@@ -16,10 +16,7 @@ import ba.etf.rma21.projekat.data.AppDatabase
 import ba.etf.rma21.projekat.data.models.Grupa
 import ba.etf.rma21.projekat.data.models.Predmet
 import ba.etf.rma21.projekat.data.repositories.AccountRepository
-import ba.etf.rma21.projekat.viewmodel.GrupaViewModel
-import ba.etf.rma21.projekat.viewmodel.KvizViewModel
-import ba.etf.rma21.projekat.viewmodel.PredmetIGrupaViewModel
-import ba.etf.rma21.projekat.viewmodel.PredmetViewModel
+import ba.etf.rma21.projekat.viewmodel.*
 import kotlinx.coroutines.*
 
 class FragmentPredmeti() : Fragment() {
@@ -31,6 +28,7 @@ class FragmentPredmeti() : Fragment() {
     private var predmetIGrupaViewModel  = PredmetIGrupaViewModel()
     private var grupaViewModel  = GrupaViewModel()
     private var kvizViewModel = KvizViewModel()
+    private var pitanjeKvizViewModel = PitanjeKvizViewModel()
 
     val scope = CoroutineScope(Job() + Dispatchers.Main)
 
@@ -78,17 +76,23 @@ class FragmentPredmeti() : Fragment() {
 
 
                         val upisaniKvizovi = kvizViewModel.getUpisani()
-                        println(upisaniKvizovi)
-                        val pronadjenPredmet =
-                            predmetIGrupaViewModel.getPredmetById(pronadjenaGrupa.predmetId)
+                        val pronadjenPredmet = predmetIGrupaViewModel.getPredmetById(pronadjenaGrupa.predmetId)
                         val db = AppDatabase.getInstance(requireContext())
 
                         if (db.grupaDao().checkDuplicate(pronadjenaGrupa.id) == null)
                             db.grupaDao().insert(pronadjenaGrupa)
 
                         for (upisaniKviz in upisaniKvizovi) {
-                            if (db.kvizDao().checkDuplicate(upisaniKviz.id) == null)
+                            val novaPitanja = pitanjeKvizViewModel.getPitanja(upisaniKviz.id)
+                            novaPitanja.forEach { novoPitanje -> novoPitanje.KvizId = upisaniKviz.id }
+
+                            if (db.kvizDao().checkDuplicate(upisaniKviz.id) == null) {
                                 db.kvizDao().insert(upisaniKviz)
+                                for(novoPitanje in novaPitanja){
+                                    if(db.pitanjeDao().checkDuplicate(novoPitanje.id) == null)
+                                        db.pitanjeDao().insert(novoPitanje)
+                                }
+                            }
                         }
 
 
@@ -197,15 +201,6 @@ class FragmentPredmeti() : Fragment() {
         }
         super.onPause()
     }
-
-//    override fun onDestroyView() {
-//        super.onDestroyView()
-//        savedState.putInt("presetGodina", odabirGodine.selectedItemPosition)
-//        if(!zavrsenUpis){
-//            savedState.putInt("presetGrupa", odabirGodine.selectedItemPosition)
-//            savedState.putInt("presetPredmet", odabirGodine.selectedItemPosition)
-//        }
-//    }
 
 
 

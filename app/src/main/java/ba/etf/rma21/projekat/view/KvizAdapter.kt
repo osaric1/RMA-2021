@@ -1,8 +1,11 @@
 package ba.etf.rma21.projekat.view
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,7 +35,8 @@ import java.util.*
 class KvizAdapter(
     private var kvizovi: List<Kviz>,
     private var manager: FragmentManager?,
-    private var spinnerTekst: String
+    private var spinnerTekst: String,
+    private var context: Context
 ): RecyclerView.Adapter<KvizAdapter.KvizViewHolder>(){
 
     private var predmetIGrupaViewModel = PredmetIGrupaViewModel()
@@ -75,7 +79,6 @@ class KvizAdapter(
             datumPocetkaCalendar.get(Calendar.MONTH),
             datumPocetkaCalendar.get(Calendar.DAY_OF_MONTH)
         )
-
 
         scope.launch {
 
@@ -179,13 +182,16 @@ class KvizAdapter(
 
             holder.predmetName.text = predmetiStringovi.dropLast(1)
 
+
             holder.itemView.setOnClickListener {
                 if (spinnerTekst != "Svi kvizovi") {
                     scope.launch {
-                        //TODO DOBAVLJANJE PITANJA IZ BAZE
-                        val lista = pitanjeKvizViewModel.getPitanja(kvizovi[position].id)
 
+                        pitanjeKvizViewModel.setContext(context)
+                        val lista = pitanjeKvizViewModel.getPitanjaIzBaze(kvizovi[position].id)
+                        println("P  A  I  N")
                         if (lista.isNotEmpty() && holder.imageView.tag != R.drawable.crvena) {
+                            println("P  A  I  N")
                             val transaction = manager?.beginTransaction()
                             var fragment =
                                 manager?.findFragmentByTag("Kviz" + kvizovi[position].naziv)

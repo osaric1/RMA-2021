@@ -115,14 +115,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-//            supportFragmentManager.popBackStackImmediate(supportFragmentManager.getBackStackEntryAt(0).name, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-//            if(bundle != null){//posto skidamo sa stacka fragmente sve dok ne dodjemo do main fragmenta, kako ne bi stvorili dvije instance izbrisemo postojecu i proslijedimo argumente novoj
-//                supportFragmentManager.popBackStack()
-//                val kvizovi = FragmentKvizovi.newInstance()
-//                setFragmentArguments(kvizovi)
-//                openFragment(kvizovi)
-//            }
-
         if(supportFragmentManager.backStackEntryCount > 0){
             val index = supportFragmentManager.backStackEntryCount -1
             val fragment = supportFragmentManager.findFragmentByTag("kviz")
@@ -154,6 +146,7 @@ class MainActivity : AppCompatActivity() {
 
         val intent = intent
         val payload = intent?.getStringExtra("payload")
+
 
         if(payload != null) {
             scope.launch {

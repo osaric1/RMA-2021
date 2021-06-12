@@ -39,6 +39,21 @@ class PitanjeKvizRepository {
             }!!
         }
 
+        suspend fun getPitanjaIzBaze(idKviza: Int): List<Pitanje>{
+            return withContext(Dispatchers.IO){
+                try {
+                    val db = AppDatabase.getInstance(context)
+                    val pitanja = db.pitanjeDao().getPitanjaZaKviz(idKviza)
+                    println(pitanja)
+                    return@withContext pitanja
+
+                }
+                catch(error: Exception){
+                    return@withContext listOf<Pitanje>()
+                }
+            }
+        }
+
 //        suspend fun getPitanjaIzBaze(idKviza: Int): List<Pitanje>{
 //            return withContext(Dispatchers.IO){
 //                try {
