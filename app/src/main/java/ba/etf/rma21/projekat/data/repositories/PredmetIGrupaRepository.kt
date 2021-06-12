@@ -99,6 +99,19 @@ class PredmetIGrupaRepository {
             }
         }
 
+        suspend fun getPredmetByIdIzBaze(predmetId: Int): Predmet?{
+            return withContext(Dispatchers.IO) {
+                try {
+                    val db = AppDatabase.getInstance(context)
+                    val predmet = db.predmetDao().getPredmetByIdIzBaze(predmetId)
+                    return@withContext predmet
+                }
+                catch(error: Exception){
+                    return@withContext null
+                }
+            }
+        }
+
         suspend fun getGrupeIzBaze(): List<Grupa>{
             return withContext(Dispatchers.IO){
                 try {

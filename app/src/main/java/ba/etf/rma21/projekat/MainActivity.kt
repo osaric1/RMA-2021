@@ -2,20 +2,22 @@ package ba.etf.rma21.projekat
 
 //import ba.etf.rma21.projekat.view.FragmentPredmeti
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.*
+import ba.etf.rma21.projekat.data.AppDatabase
 import ba.etf.rma21.projekat.data.models.KvizTaken
 import ba.etf.rma21.projekat.data.repositories.AccountRepository
+import ba.etf.rma21.projekat.data.repositories.DBRepository.Companion.updateNow
 import ba.etf.rma21.projekat.view.FragmentKvizovi
 import ba.etf.rma21.projekat.view.FragmentPoruka
 import ba.etf.rma21.projekat.view.FragmentPredmeti
 import ba.etf.rma21.projekat.viewmodel.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import java.lang.Exception
 
 
 class MainActivity : AppCompatActivity() {
@@ -29,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     private var takeKvizViewModel = TakeKvizViewModel()
     private var kvizViewModel = KvizViewModel()
     private var accountViewModel = AccountViewModel()
+    private var DBViewnodel = DBViewModel()
 
     private val myOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when(item.itemId){
@@ -138,11 +141,34 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        DBViewnodel.setContext(applicationContext)
+        accountViewModel.setContext(applicationContext)
+
+        scope.launch {
+            val result = async {
+                val lista = accountViewModel.getAll()
+                if(lista.isEmpty()){
+                    val account = accountViewModel.getUser()
+                    try {
+                        val db = AppDatabase.getInstance(applicationContext)
+                        db.accountDao().insertAccount(account!!)
+                    }
+                    catch(error: Exception){
+                        println(error)
+                    }
+                }
+            }
+            result.await()
 
 
+            if(DBViewnodel.updateNow())
+                accountViewModel.updateData()
+
+        }
 
         val intent = intent
         val payload = intent?.getStringExtra("payload")

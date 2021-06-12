@@ -80,6 +80,8 @@ class FragmentKvizovi: Fragment() {
             ) {
                 
                     scope.launch{
+                        DBViewModel.setContext(requireActivity().applicationContext)
+                        accountViewModel.setContext(requireActivity().applicationContext)
 
                         if(DBViewModel.updateNow())
                             accountViewModel.updateData()

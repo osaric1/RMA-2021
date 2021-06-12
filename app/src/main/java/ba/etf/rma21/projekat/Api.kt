@@ -1,11 +1,8 @@
 package ba.etf.rma21.projekat
 
 import ba.etf.rma21.projekat.data.models.*
-import okhttp3.RequestBody
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
-import java.time.LocalDateTime
 
 interface Api {
     @POST("/student/{id}/kviz/{kid}")
@@ -54,7 +51,7 @@ interface Api {
     suspend fun getPredmetById(@Path("id") predmetId: Int): Response<Predmet>
 
     @GET("/account/{id}")
-    suspend fun updateNow(@Path("id") hashStudenta: String, @Query("lastUpdate") lastUpdate: String) : Response<Change>
+    suspend fun updateNow(@Path("id") hashStudenta: String, @Query("lastUpdate") lastUpdate: String?) : Response<Change>
 
     @GET("/student/{id}")
     suspend fun getAccount(@Path("id") hashStudenta: String): Response<Account>

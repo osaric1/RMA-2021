@@ -79,6 +79,8 @@ class FragmentPredmeti() : Fragment() {
                         val pronadjenPredmet = predmetIGrupaViewModel.getPredmetById(pronadjenaGrupa.predmetId)
                         val db = AppDatabase.getInstance(requireContext())
 
+                        println(pronadjenaGrupa)
+                        println(pronadjenPredmet)
                         if (db.grupaDao().checkDuplicate(pronadjenaGrupa.id) == null)
                             db.grupaDao().insert(pronadjenaGrupa)
 
@@ -91,6 +93,10 @@ class FragmentPredmeti() : Fragment() {
                                 for(novoPitanje in novaPitanja){
                                     if(db.pitanjeDao().checkDuplicate(novoPitanje.id) == null)
                                         db.pitanjeDao().insert(novoPitanje)
+                                    else{
+                                        novoPitanje.id = db.pitanjeDao().najveciId() + 1
+                                        db.pitanjeDao().insert(novoPitanje)
+                                    }
                                 }
                             }
                         }

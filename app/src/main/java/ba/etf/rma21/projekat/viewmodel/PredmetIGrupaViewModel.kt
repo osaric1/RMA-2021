@@ -41,4 +41,8 @@ class PredmetIGrupaViewModel {
     suspend fun getPredmetById(predmetId: Int): Predmet?{
         return PredmetIGrupaRepository.getPredmetById(predmetId)
     }
+
+    suspend fun getPredmetByIdIzBaze(predmetId: Int): Predmet?{
+        return PredmetIGrupaRepository.getPredmetByIdIzBaze(predmetId)
+    }
 }

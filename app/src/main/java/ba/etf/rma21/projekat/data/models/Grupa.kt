@@ -11,7 +11,8 @@ import com.google.gson.annotations.SerializedName
 data class Grupa(
     @PrimaryKey @SerializedName("id") val id: Int,
     @ColumnInfo(name="naziv") @SerializedName("naziv") val naziv: String,
-    @ColumnInfo(name="predmetId") @SerializedName("PredmetId") val predmetId: Int) {
+    @ColumnInfo(name="predmetId") @SerializedName("PredmetId") val predmetId: Int,
+    @ColumnInfo(name="KvizId") @SerializedName("KvizId") val KvizId: Int ){
     override fun toString(): String {
         return naziv
     }

@@ -54,17 +54,20 @@ class PitanjeKvizRepository {
             }
         }
 
-//        suspend fun getPitanjaIzBaze(idKviza: Int): List<Pitanje>{
-//            return withContext(Dispatchers.IO){
-//                try {
-//                    val db = AppDatabase.getInstance(context)
-//
-//                }
-//                catch(error: Exception){
-//                    return@withContext listOf<Pitanje>()
-//                }
-//            }
-//        }
+        suspend fun najveciId(): Int{
+            return withContext(Dispatchers.IO){
+                try {
+                    val db = AppDatabase.getInstance(context)
+                    val id = db.pitanjeDao().najveciId()
+                    return@withContext id
+
+                }
+                catch(error: Exception){
+                    //TODO MOZDA JE PROBLEM VIDJET CEMO
+                    return@withContext 0
+                }
+            }
+        }
 
     }
 

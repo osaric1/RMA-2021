@@ -9,6 +9,7 @@ import ba.etf.rma21.projekat.data.models.Change
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.Exception
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class DBRepository {
@@ -28,14 +29,12 @@ class DBRepository {
                     val db = AppDatabase.getInstance(context)
                     val datum = db.accountDao().getLastUpdate(AccountRepository.getHash())
 
-                    if(datum == null) return@withContext true
-
                     val response = ApiAdapter.retrofit.updateNow(AccountRepository.getHash(), datum) //mozda bude problema
                     val responseBody = response.body()
                     when(responseBody){
                         is Change -> {
-                            if(responseBody.changed){
-                                db.accountDao().setLastUpdate(AccountRepository.getHash(), datum.format(DateTimeFormatter.ISO_DATE_TIME))
+                            if(responseBody.changed || datum == null){
+                                db.accountDao().setLastUpdate(AccountRepository.getHash(), LocalDateTime.now().withNano(0).format(DateTimeFormatter.ISO_DATE_TIME))
                             }
                             return@withContext responseBody.changed
                         }

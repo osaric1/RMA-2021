@@ -16,4 +16,8 @@ interface PredmetDao {
 
     @Query("SELECT id FROM predmet WHERE id==:id")
     suspend fun checkDuplicate(id: Int): Int?
+
+    @Query("SELECT * FROM predmet WHERE id==:id")
+    suspend fun getPredmetByIdIzBaze(id: Int): Predmet
+
 }

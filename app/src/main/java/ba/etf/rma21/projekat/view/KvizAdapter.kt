@@ -84,16 +84,18 @@ class KvizAdapter(
 
             var predmetiStringovi: String =""
             val result = async {
+                predmetIGrupaViewModel.setContext(context)
+                takeKvizViewModel.setContext(context)
 
                 //TODO DOBAVLJANJE POKUSAJA IZ BAZE
-                pokusaji = takeKvizViewModel.getPocetiKvizovi()
+                pokusaji = takeKvizViewModel.getPocetiKvizoviIzBaze()
                 grupe = predmetIGrupaViewModel.getGrupeZaKviz(kvizovi[position].id)!!
 
                 for(grupa in grupe){
 
 
                     //TODO BAZA
-                    val tekst = predmetIGrupaViewModel.getPredmetById(grupa.predmetId).toString()
+                    val tekst = predmetIGrupaViewModel.getPredmetByIdIzBaze(grupa.predmetId).toString()
 
                     if(!predmetiStringovi.contains(tekst)) {
                         predmetiStringovi += tekst +","
@@ -117,7 +119,7 @@ class KvizAdapter(
 
                     //TODO BAZA
                     val odgovori = odgovorViewModel.getOdgovoriKviz(kvizovi[position].id)
-                    if(odgovori.size == pitanjeKvizViewModel.getPitanja(kvizovi[position].id).size){ //ako su odgovorena sva pitanja i ako je predan kviz
+                    if(odgovori.size == pitanjeKvizViewModel.getPitanjaIzBaze(kvizovi[position].id).size){ //ako su odgovorena sva pitanja i ako je predan kviz
                         holder.kvizPoints.text = pokusaj.osvojeniBodovi.toString()
                         val ldt = LocalDate.parse(pokusaj.datumRada!!).atStartOfDay()
                         datumRadaCalendar = GregorianCalendar.from(
@@ -186,7 +188,6 @@ class KvizAdapter(
             holder.itemView.setOnClickListener {
                 if (spinnerTekst != "Svi kvizovi") {
                     scope.launch {
-                        pitanjeKvizViewModel.setContext(context)
                         val lista = pitanjeKvizViewModel.getPitanjaIzBaze(kvizovi[position].id)
 
                         if (lista.isNotEmpty() && holder.imageView.tag != R.drawable.crvena) {
@@ -204,10 +205,9 @@ class KvizAdapter(
                                 bundle.putBoolean("uradjenKviz", false)
                             }
 
-                            predmetIGrupaViewModel.setContext(context)
                             //TODO DOBAVLJANJE GRUPA I PREDMETA I UPISANIH BLA BLA IZ BAZE
                             val grupe = predmetIGrupaViewModel.getGrupeZaKviz(kvizovi[position].id)
-                            val predmet = predmetIGrupaViewModel.getPredmetById(grupe!![0].predmetId)
+                            val predmet = predmetIGrupaViewModel.getPredmetByIdIzBaze(grupe!![0].predmetId)
                             val upisanaGrupa = predmetIGrupaViewModel.getGrupeIzBaze() //upisane grupe se svakako nalaze u bazi
                                 .find { grupa -> grupa.predmetId == predmet!!.id }
 

@@ -45,6 +45,30 @@ class AccountRepository {
             return acHash
         }
 
+        suspend fun getAll() : List<Account>{
+            return withContext(Dispatchers.IO){
+                try {
+                    var db = AppDatabase.getInstance(context)
+                    val accounts = db.accountDao().getAll()
+                    return@withContext accounts
+                }
+                catch(error:Exception){
+                    return@withContext listOf<Account>()
+                }
+            }
+        }
+
+        suspend fun getUser(): Account?{
+            return withContext(Dispatchers.IO){
+                val response = ApiAdapter.retrofit.getAccount(AccountRepository.getHash())
+
+                when(response.body()){
+                    is Account -> return@withContext response.body()
+                    else -> return@withContext null
+                }
+            }
+        }
+
         suspend fun updateData(){
             return withContext(Dispatchers.IO){
                 try {
@@ -59,11 +83,22 @@ class AccountRepository {
                     for(kviz in noviKvizovi){
                         val pitanja = PitanjeKvizRepository.getPitanja(kviz.id)
                         pitanja.forEach { pitanje -> pitanje.KvizId = kviz.id }
+                        for(novoPitanje in pitanja){
+                            if(db.pitanjeDao().checkDuplicate(novoPitanje.id) == null)
+                                db.pitanjeDao().insert(novoPitanje)
+                            else{
+                                novoPitanje.id = db.pitanjeDao().najveciId() + 1
+                                println(novoPitanje.id)
+                                db.pitanjeDao().insert(novoPitanje)
+                            }
+                        }
                         novaPitanja.addAll(pitanja)
                     }
 
                     db.kvizDao().insertAll(noviKvizovi)
-                    db.kvizTakenDao().insertAll(noviPokusaji!!)
+
+                    if(noviPokusaji != null)
+                    db.kvizTakenDao().insertAll(noviPokusaji)
 
                     for(noviPredmet in noviPredmeti){
                         db.predmetDao().insert(noviPredmet)
@@ -77,7 +112,7 @@ class AccountRepository {
 
                 }
                 catch(error: Exception){
-                    println("Desila se greska tokom azuriranja")
+                    println(error.printStackTrace())
                 }
             }
         }

@@ -22,4 +22,7 @@ interface PitanjeDao {
 
     @Insert
     suspend fun insert(pitanje: Pitanje)
+
+    @Query("SELECT MAX(id) FROM pitanje")
+    suspend fun najveciId(): Int
 }
