@@ -35,7 +35,6 @@ class TakeKvizRepository {
                             return@withContext responseBody
                         }
                         catch(error: Exception){
-                            println(error.printStackTrace())
                             return@withContext null
                         }
                     }

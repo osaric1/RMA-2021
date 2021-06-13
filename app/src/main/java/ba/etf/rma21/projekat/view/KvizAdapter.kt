@@ -236,7 +236,6 @@ class KvizAdapter(
                                 bundle.putBoolean("uradjenKviz", false)
                             }
 
-                            //TODO DOBAVLJANJE GRUPA I PREDMETA I UPISANIH BLA BLA IZ BAZE
                             val idevi = grupaKvizViewModel.getGrupeZaKvizBaza(kvizovi[position].id).map { grupaKviz -> grupaKviz.grupaId  }
                             val noveGrupe: MutableList<Grupa> = mutableListOf()
                             for(id in idevi) {

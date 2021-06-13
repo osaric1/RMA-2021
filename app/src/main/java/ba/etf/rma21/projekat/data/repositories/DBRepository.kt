@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import ba.etf.rma21.projekat.ApiAdapter
 import ba.etf.rma21.projekat.data.AppDatabase
+import ba.etf.rma21.projekat.data.models.Account
 import ba.etf.rma21.projekat.data.models.Change
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -26,10 +27,20 @@ class DBRepository {
         suspend fun updateNow(): Boolean {
             return withContext(Dispatchers.IO) {
                 try {
-
                     val db = AppDatabase.getInstance(context)
-                    val datum = db.accountDao().getLastUpdate(AccountRepository.getHash())
 
+                    var list = db.accountDao().getAll()
+                    if(list.isEmpty()){
+                        val account = AccountRepository.getUser()
+                        try {
+                            db.accountDao().insertAccount(account!!)
+                        }
+                        catch(error: Exception){
+                            println(error)
+                        }
+
+                    }
+                    val datum = db.accountDao().getLastUpdate(AccountRepository.getHash())
                     val response = ApiAdapter.retrofit.updateNow(AccountRepository.getHash(), datum.toString()) //mozda bude problema
                     val responseBody = response.body()
                     when(responseBody){
@@ -43,7 +54,7 @@ class DBRepository {
                     }
                 }
                 catch(error:Exception){
-                   return@withContext false //doslo je do greske, nece biti promjena
+                   return@withContext false
                 }
             }
 

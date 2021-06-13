@@ -16,4 +16,10 @@ interface OdgovorDao {
     @Query("SELECT * FROM odgovor WHERE idKviz==:idKviz")
     suspend fun getOdgovoreZaKvizIzBaze(idKviz: Int): List<Odgovor>
 
+    @Query("SELECT id,odgovoreno,PitanjeId,idKviz FROM odgovor WHERE odgovoreno==:odgovoreno AND PitanjeId==:PitanjeId AND idKviz==:idKviz")
+    suspend fun checkDuplicate(odgovoreno: Int, PitanjeId: Int, idKviz: Int):Odgovor?
+
+    @Query("DELETE FROM odgovor")
+    suspend fun deleteAll()
+
 }

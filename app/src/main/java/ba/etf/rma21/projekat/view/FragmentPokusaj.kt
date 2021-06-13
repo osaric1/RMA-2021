@@ -167,6 +167,7 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
             }
             else{
                 try {
+                    takeKvizViewModel.setContext(requireActivity().applicationContext)
                     pokusajKviza = takeKvizViewModel.zapocniKviz(idKviza)
                 }
                 catch(e: NullPointerException){

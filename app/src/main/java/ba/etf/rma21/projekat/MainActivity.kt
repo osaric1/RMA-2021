@@ -1,6 +1,7 @@
 package ba.etf.rma21.projekat
 
 //import ba.etf.rma21.projekat.view.FragmentPredmeti
+import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -148,6 +149,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         DBViewnodel.setContext(applicationContext)
         accountViewModel.setContext(applicationContext)
+        takeKvizViewModel.setContext(applicationContext)
 
         scope.launch {
             val result = async {
@@ -163,6 +165,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+            AccountRepository.izbrisiIzBaze()
             result.await()
         }
 
@@ -203,6 +206,8 @@ class MainActivity : AppCompatActivity() {
                 bundle = null
             }
         }
+
+
     }
 
 }

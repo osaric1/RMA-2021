@@ -44,21 +44,36 @@ class OdgovorRepository {
         suspend fun postaviOdgovorKviz(idKvizTaken: Int, idPitanje: Int, odgovor: Int): Int {
             return withContext(Dispatchers.IO) {
                 try {
-                    val pokusajKviza = TakeKvizRepository.getPocetiKvizoviIzBaze()!!.find{ kvizTaken -> kvizTaken.id == idKvizTaken  }
+                    var pokusajKviza = TakeKvizRepository.getPocetiKvizoviIzBaze().find{ kvizTaken -> kvizTaken.id == idKvizTaken  }
+
+                    if(pokusajKviza == null){
+                        pokusajKviza = TakeKvizRepository.getPocetiKvizovi()!!.find{ kvizTaken -> kvizTaken.id == idKvizTaken  }
+                    }
                     var bodovi: Float = pokusajKviza!!.osvojeniBodovi
 
-                    val pitanje = PitanjeKvizRepository.getPitanjaIzBaze(pokusajKviza.KvizId).find { pitanje -> pitanje.id == idPitanje  }
+                    var pitanje = PitanjeKvizRepository.getPitanjaIzBaze(pokusajKviza.KvizId).find { pitanje1 -> pitanje1.id == idPitanje  }
 
+                    if(pitanje == null){
+                        pitanje = PitanjeKvizRepository.getPitanja(pokusajKviza.KvizId).find { pitanje1 -> pitanje1.id == idPitanje  }
+                    }
 
-                    if(pitanje!!.tacan == odgovor)
-                        bodovi += 50.0f
                     val db = AppDatabase.getInstance(context)
-                    db.odgovorDao().insert(Odgovor((if(db.odgovorDao().najveciId() == null) 0 else db.odgovorDao().najveciId())!! + 1,odgovor, idPitanje,pokusajKviza.KvizId ))
-                    db.kvizTakenDao().updateBodovi(bodovi, idKvizTaken)
+
+                    if(db.odgovorDao().checkDuplicate(odgovor, idPitanje, pokusajKviza.KvizId) == null) {
+                        if(pitanje!!.tacan == odgovor)
+                            bodovi += 50.0f
+
+                        db.odgovorDao().insert(
+                            Odgovor(
+                                (if (db.odgovorDao().najveciId() == null) 0 else db.odgovorDao()
+                                    .najveciId())!! + 1, odgovor, idPitanje, pokusajKviza.KvizId
+                            )
+                        )
+                        db.kvizTakenDao().updateBodovi(bodovi, idKvizTaken)
+                    }
                     return@withContext bodovi.toInt()
                 }
                 catch(error: Exception){
-                    println(error.printStackTrace())
                     return@withContext -1
                 }
             }

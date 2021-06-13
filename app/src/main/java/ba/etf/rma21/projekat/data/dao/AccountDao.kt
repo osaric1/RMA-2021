@@ -24,7 +24,7 @@ interface AccountDao {
     suspend fun changeUser(id: Int, student: String, acHash: String, stariId: String)
 
     @Query("UPDATE account SET lastUpdate=:lastUpdate WHERE acHash==:acHash")
-    suspend fun setLastUpdate(acHash: String, lastUpdate: String)
+    suspend fun setLastUpdate(acHash: String, lastUpdate: String?)
 
     @Query("SELECT * FROM account")
     suspend fun getAll(): List<Account>

@@ -17,6 +17,8 @@ class AccountRepository {
 
         fun setContext(_context:Context){
             context=_context
+
+            TakeKvizRepository.setContext(context)
         }
         var acHash: String = "e6aba651-b4ba-4b26-85b8-c15fe9eededd"
 
@@ -37,6 +39,7 @@ class AccountRepository {
                     return@withContext false
                 }
                 catch(error:Exception){
+                    println(error.printStackTrace())
                     return@withContext false
                 }
             }
@@ -114,11 +117,13 @@ class AccountRepository {
                     db.kvizTakenDao().insertAll(noviPokusaji)
 
                     for(noviPredmet in noviPredmeti){
-                        db.predmetDao().insert(noviPredmet)
+                        if(db.predmetDao().checkDuplicate(noviPredmet.id) == null)
+                            db.predmetDao().insert(noviPredmet)
                     }
 
                     for(novaGrupa in noveGrupe!!){
-                        db.grupaDao().insert(novaGrupa)
+                        if(db.grupaDao().checkDuplicate(novaGrupa.id) == null)
+                            db.grupaDao().insert(novaGrupa)
                     }
 
                 }
@@ -138,10 +143,12 @@ class AccountRepository {
                     db.pitanjeDao().deleteAll()
                     db.grupaDao().deleteAll()
                     db.grupaKvizDao().deleteAll()
+                    db.odgovorDao().deleteAll()
                 } catch (error: Exception) {
                     println("Desila se greska tokom brisanja")
                 }
             }
         }
+
     }
 }
