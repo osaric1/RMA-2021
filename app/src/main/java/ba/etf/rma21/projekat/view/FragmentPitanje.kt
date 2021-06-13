@@ -77,14 +77,10 @@ class FragmentPitanje(var pitanje: Pitanje): Fragment() {
             var odgovor: Odgovor?
             if(kvizTaken != null) {
                 result = async {
-                    if(!kviz!!.predan) {
-                        odgovor = odgovorViewModel.getOdgovoriKviz(idKviza)
+
+                    odgovor = odgovorViewModel.getOdgovoreZaKvizIzBaze(idKviza)
                             .find { odgovor1 -> odgovor1.PitanjeId == pitanje.id }
-                    }
-                    else{
-                        odgovor = odgovorViewModel.getOdgovoreZaKvizIzBaze(idKviza)
-                            .find { odgovor1 -> odgovor1.PitanjeId == pitanje.id }
-                    }
+
                     if (odgovor != null) {
                         enabled = false
 

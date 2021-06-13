@@ -19,6 +19,7 @@ import ba.etf.rma21.projekat.data.AppDatabase
 import ba.etf.rma21.projekat.data.models.KvizTaken
 import ba.etf.rma21.projekat.data.models.Odgovor
 import ba.etf.rma21.projekat.data.models.Pitanje
+import ba.etf.rma21.projekat.viewmodel.KvizViewModel
 import ba.etf.rma21.projekat.viewmodel.OdgovorViewModel
 import ba.etf.rma21.projekat.viewmodel.TakeKvizViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -51,6 +52,7 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
 
     private var takeKvizViewModel = TakeKvizViewModel()
     private var odgovorViewModel = OdgovorViewModel()
+    private var kvizViewmodel = KvizViewModel()
 
     private val mOnNavigationItemSelectedListener = NavigationView.OnNavigationItemSelectedListener { item ->
         if(item.title.toString() != "Rezultat") {
@@ -128,12 +130,23 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
         scope.launch{
 
             takeKvizViewModel.setContext(requireActivity().applicationContext)
-            pokusajKviza = takeKvizViewModel.getPocetiKvizoviIzBaze()?.find { kvizTaken -> kvizTaken.KvizId == idKviza  }
+            pokusajKviza = takeKvizViewModel.getPocetiKvizoviIzBaze().find { kvizTaken -> kvizTaken.KvizId == idKviza  }
             val listaOdgovora: List<Odgovor>
-            if(pokusajKviza != null) {
+            kvizViewmodel.setContext(requireActivity().applicationContext)
+            val kviz = kvizViewmodel.getById(idKviza)
 
+
+            if(pokusajKviza != null) {
                 //TODO BAZA
-                listaOdgovora = odgovorViewModel.getOdgovoriKviz(idKviza)
+                odgovorViewModel.setContext(requireActivity().applicationContext)
+
+
+                if(kviz!!.predan)
+                    listaOdgovora = odgovorViewModel.getOdgovoriKviz(idKviza)
+
+                else
+                    listaOdgovora = odgovorViewModel.getOdgovoreZaKvizIzBaze(idKviza)
+
                 if (listaOdgovora.isNotEmpty()) {
                     for (odgovor in listaOdgovora) {
                         val pitanje = pitanja.find { pitanje -> pitanje.id == odgovor.PitanjeId }
@@ -200,7 +213,6 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
         setFragmentResultListener("odgovoreno") { _, bundle ->
             val result:Boolean = bundle.getBoolean("odgovor")
             scope.launch {
-                //TODO UMJESTO OVOGA MORAM SAMO STAVITI DA INSERTA ODGOVOR U BAZU
                 odgovorViewModel.setContext(requireActivity().applicationContext)
                 odgovorViewModel.postaviOdgovorKviz(pokusajKviza!!.id, pitanja[indeks-1].id, bundle.getInt("position"))
             }

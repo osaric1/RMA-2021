@@ -86,7 +86,6 @@ class FragmentKvizovi: Fragment() {
                         kvizViewModel.setContext(requireContext().applicationContext)
 
                         if(DBViewModel.updateNow()) {
-                            println("what 2")
                             accountViewModel.updateData()
                         }
                         if(spinner.selectedItem.toString() == "Svi kvizovi"){

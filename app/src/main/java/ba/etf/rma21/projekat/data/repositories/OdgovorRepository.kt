@@ -24,6 +24,7 @@ class OdgovorRepository {
                 val pokusajKviza = TakeKvizRepository.getPocetiKvizovi()!!.find{ kvizTaken -> kvizTaken.KvizId == idKviza  }
 
                 if(pokusajKviza != null) {
+                    println("4234234234")
                     var response =
                         ApiAdapter.retrofit.getOdgovoriKviz(
                             AccountRepository.getHash(),
@@ -59,7 +60,7 @@ class OdgovorRepository {
 
                     val db = AppDatabase.getInstance(context)
 
-                    if(db.odgovorDao().checkDuplicate(odgovor, idPitanje, pokusajKviza.KvizId) == null) {
+                    if(db.odgovorDao().checkDuplicate(idPitanje, pokusajKviza.KvizId) == null) {
                         if(pitanje!!.tacan == odgovor)
                             bodovi += 50.0f
 
@@ -108,7 +109,7 @@ class OdgovorRepository {
                         }
                     }
 
-                    if(odgovori.size -1 == brojac){
+                    if(odgovori.size == brojac){
                         db.kvizDao().updatePredan(true, idKviza)
                     }
                 }
