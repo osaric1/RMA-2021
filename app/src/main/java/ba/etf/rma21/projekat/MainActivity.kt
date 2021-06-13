@@ -87,7 +87,8 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                     }
-                    kviz!!.predan = true
+                    odgovorViewModel.setContext(applicationContext)
+                    odgovorViewModel.predajOdgovore(idKviza)
                     openFragment(porukaFragment)
                 }
                 return@OnNavigationItemSelectedListener true

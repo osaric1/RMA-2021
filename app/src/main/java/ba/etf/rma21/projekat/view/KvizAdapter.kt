@@ -131,20 +131,27 @@ class KvizAdapter(
 
                 if(pokusaj != null) {
 
-                    //TODO BAZA
                     var odgovori: List<Odgovor> = listOf()
                     var pitanja : List<Pitanje>? = null
-                    if(spinnerTekst != "Svi kvizovi"){
+
+                    odgovorViewModel.setContext(context)
+                    pitanjeKvizViewModel.setContext(context)
+
+                    if(!kvizovi[position].predan)
                         odgovori = odgovorViewModel.getOdgovoriKviz(kvizovi[position].id)
+
+                    else
+                        odgovori = odgovorViewModel.getOdgovoreZaKvizIzBaze(kvizovi[position].id)
+                    if(spinnerTekst != "Svi kvizovi"){
                         pitanja = pitanjeKvizViewModel.getPitanjaIzBaze(kvizovi[position].id)
                     }
                     else{
-                        odgovori = odgovorViewModel.getOdgovoriKviz(kvizovi[position].id)
+                        //TODO BAZA
                         pitanja = pitanjeKvizViewModel.getPitanja(kvizovi[position].id)
                     }
 
 
-                    if(odgovori.size == pitanja!!.size){ //ako su odgovorena sva pitanja i ako je predan kviz
+                    if(odgovori.size == pitanja.size){ //ako su odgovorena sva pitanja i ako je predan kviz
                         holder.kvizPoints.text = pokusaj.osvojeniBodovi.toString()
                         val ldt = LocalDate.parse(pokusaj.datumRada!!).atStartOfDay()
                         datumRadaCalendar = GregorianCalendar.from(
@@ -230,8 +237,15 @@ class KvizAdapter(
                             }
 
                             //TODO DOBAVLJANJE GRUPA I PREDMETA I UPISANIH BLA BLA IZ BAZE
-                            val grupe = predmetIGrupaViewModel.getGrupeZaKviz(kvizovi[position].id)
-                            val predmet = predmetIGrupaViewModel.getPredmetByIdIzBaze(grupe!![0].predmetId)
+                            val idevi = grupaKvizViewModel.getGrupeZaKvizBaza(kvizovi[position].id).map { grupaKviz -> grupaKviz.grupaId  }
+                            val noveGrupe: MutableList<Grupa> = mutableListOf()
+                            for(id in idevi) {
+                                val nova = predmetIGrupaViewModel.getGrupa(id)
+                                if (nova == null)
+                                    noveGrupe.add(predmetIGrupaViewModel.getGrupeZaKviz(kvizovi[position].id)!!.find { grupa1 -> grupa1.id == id && !noveGrupe.contains(grupa1) }!!)
+                                else noveGrupe.add(nova)
+                            }
+                            val predmet = predmetIGrupaViewModel.getPredmetByIdIzBaze(noveGrupe[0].predmetId)
                             val upisanaGrupa = predmetIGrupaViewModel.getGrupeIzBaze() //upisane grupe se svakako nalaze u bazi
                                 .find { grupa -> grupa.predmetId == predmet!!.id }
 

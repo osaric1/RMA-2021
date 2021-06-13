@@ -16,4 +16,9 @@ interface KvizTakenDao {
     @Insert
     suspend fun insertAll(kvizTaken: List<KvizTaken>)
 
+    @Insert
+    suspend fun insert(kvizTaken: KvizTaken)
+
+    @Query("UPDATE kviztaken SET osvojeniBodovi=:bodovi WHERE id==:id")
+    suspend fun updateBodovi(bodovi: Float, id: Int)
 }

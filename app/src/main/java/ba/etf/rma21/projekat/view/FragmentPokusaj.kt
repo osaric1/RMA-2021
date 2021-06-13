@@ -15,6 +15,7 @@ import androidx.core.view.get
 import androidx.fragment.app.*
 import ba.etf.rma21.projekat.MainActivity
 import ba.etf.rma21.projekat.R
+import ba.etf.rma21.projekat.data.AppDatabase
 import ba.etf.rma21.projekat.data.models.KvizTaken
 import ba.etf.rma21.projekat.data.models.Odgovor
 import ba.etf.rma21.projekat.data.models.Pitanje
@@ -130,6 +131,8 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
             pokusajKviza = takeKvizViewModel.getPocetiKvizoviIzBaze()?.find { kvizTaken -> kvizTaken.KvizId == idKviza  }
             val listaOdgovora: List<Odgovor>
             if(pokusajKviza != null) {
+
+                //TODO BAZA
                 listaOdgovora = odgovorViewModel.getOdgovoriKviz(idKviza)
                 if (listaOdgovora.isNotEmpty()) {
                     for (odgovor in listaOdgovora) {
@@ -196,7 +199,8 @@ class FragmentPokusaj(var pitanja: List<Pitanje>): Fragment() {
         setFragmentResultListener("odgovoreno") { _, bundle ->
             val result:Boolean = bundle.getBoolean("odgovor")
             scope.launch {
-
+                //TODO UMJESTO OVOGA MORAM SAMO STAVITI DA INSERTA ODGOVOR U BAZU
+                odgovorViewModel.setContext(requireActivity().applicationContext)
                 odgovorViewModel.postaviOdgovorKviz(pokusajKviza!!.id, pitanja[indeks-1].id, bundle.getInt("position"))
             }
 

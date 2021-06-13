@@ -26,11 +26,24 @@ class TakeKvizRepository {
                 var response = ApiAdapter.retrofit.zapocniKviz(AccountRepository.getHash(), idKviza)
                 val responseBody = response.body()
                 when(responseBody){
-                    is KvizTaken -> return@withContext responseBody
+                    is KvizTaken -> {
+                        try {
+                            val db = AppDatabase.getInstance(context)
+                            responseBody.KvizId = idKviza
+                            db.kvizTakenDao().insert(responseBody)
+
+                            return@withContext responseBody
+                        }
+                        catch(error: Exception){
+                            println(error.printStackTrace())
+                            return@withContext null
+                        }
+                    }
                     else -> return@withContext null
                 }
             }
         }
+
 
         suspend fun getPocetiKvizovi(): List<KvizTaken>? {
             return withContext(Dispatchers.IO){

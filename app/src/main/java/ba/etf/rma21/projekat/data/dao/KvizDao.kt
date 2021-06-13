@@ -24,4 +24,7 @@ interface KvizDao {
     @Insert
     suspend fun insert(kviz: Kviz)
 
+    @Query("UPDATE kviz SET predan=:predan WHERE id=:id")
+    suspend fun updatePredan(predan: Boolean, id: Int)
+
 }
