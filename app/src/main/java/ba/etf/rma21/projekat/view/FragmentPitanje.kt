@@ -22,6 +22,7 @@ import androidx.fragment.app.setFragmentResultListener
 import ba.etf.rma21.projekat.R
 import ba.etf.rma21.projekat.data.models.Odgovor
 import ba.etf.rma21.projekat.data.models.Pitanje
+import ba.etf.rma21.projekat.viewmodel.KvizViewModel
 import ba.etf.rma21.projekat.viewmodel.OdgovorViewModel
 import ba.etf.rma21.projekat.viewmodel.TakeKvizViewModel
 import kotlinx.coroutines.*
@@ -41,6 +42,7 @@ class FragmentPitanje(var pitanje: Pitanje): Fragment() {
 
     private var takeKvizViewModel = TakeKvizViewModel()
     private var odgovorViewModel = OdgovorViewModel()
+    private var kvizViewModel = KvizViewModel()
 
     private var idKviza = -1
     private var savedOdgovor: Int = -1
@@ -66,13 +68,23 @@ class FragmentPitanje(var pitanje: Pitanje): Fragment() {
 
         lateinit var result: Deferred<Unit>
         scope.launch {
-            val kvizTaken = takeKvizViewModel.getPocetiKvizovi()?.find { kvizTaken -> kvizTaken.KvizId == idKviza  }
+            takeKvizViewModel.setContext(requireActivity().applicationContext)
+            odgovorViewModel.setContext(requireActivity().applicationContext)
+            kvizViewModel.setContext(requireContext().applicationContext)
+
+            val kvizTaken = takeKvizViewModel.getPocetiKvizoviIzBaze().find { kvizTaken -> kvizTaken.KvizId == idKviza  }
+            val kviz = kvizViewModel.getById(idKviza)
             var odgovor: Odgovor?
             if(kvizTaken != null) {
                 result = async {
-                    odgovor = odgovorViewModel.getOdgovoriKviz(idKviza)
-                        .find { odgovor1 -> odgovor1.PitanjeId == pitanje.id }
-
+                    if(!kviz!!.predan) {
+                        odgovor = odgovorViewModel.getOdgovoriKviz(idKviza)
+                            .find { odgovor1 -> odgovor1.PitanjeId == pitanje.id }
+                    }
+                    else{
+                        odgovor = odgovorViewModel.getOdgovoreZaKvizIzBaze(idKviza)
+                            .find { odgovor1 -> odgovor1.PitanjeId == pitanje.id }
+                    }
                     if (odgovor != null) {
                         enabled = false
 

@@ -1,5 +1,6 @@
 package ba.etf.rma21.projekat.viewmodel
 
+import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -15,6 +16,10 @@ class KvizViewModel() {
     }
 
      */
+
+    fun setContext(context: Context){
+        KvizRepository.setContext(context)
+    }
 
     suspend fun getUpisaneIzBaze() : List<Kviz>{
         return KvizRepository.getUpisaneIzBaze()

@@ -24,7 +24,7 @@ class KvizRepository() {
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
-        val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+        val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
         //dobavi sve sa web servisa
         suspend fun getAll(): List<Kviz> {
@@ -84,7 +84,7 @@ class KvizRepository() {
             val rezultat: MutableList<Kviz> = mutableListOf()
 
             if (zapocetiKvizovi != null) {
-                zapocetiKvizovi.filter { it.datumRada != null && LocalDateTime.parse(it.datumRada, formatter) <= LocalDateTime.now()}
+                zapocetiKvizovi.filter { it.datumRada != null && LocalDate.parse(it.datumRada, formatter) <= LocalDate.now()}
                 for (kviz in zapocetiKvizovi) {
                     for (mojKviz in myKvizovi) {
                         if (kviz.KvizId == mojKviz.id) rezultat.add(mojKviz)

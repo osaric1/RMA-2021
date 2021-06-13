@@ -83,6 +83,7 @@ class FragmentKvizovi: Fragment() {
                     scope.launch{
                         DBViewModel.setContext(requireActivity().applicationContext)
                         accountViewModel.setContext(requireActivity().applicationContext)
+                        kvizViewModel.setContext(requireContext().applicationContext)
 
                         if(DBViewModel.updateNow()) {
                             println("what 2")
